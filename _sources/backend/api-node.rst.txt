@@ -1,0 +1,3148 @@
+API Task Learn     
+==============
+
+.. image:: /logos/logo-node-express-mongo.png
+    :scale: 30%
+    :alt: Logo NodeJS
+    :align: center
+
+.. |date| date::
+.. |time| date:: %H:%M
+
+Servicio API Rest para listado de tareas creada con Nodejs + Express + MongoDB 
+
+- Repositorio proyecto completo: https://github.com/Fullcoder-Learning/task-learning-api/tree/master
+- Collección Postman: https://drive.google.com/file/d/14F3SxSIUBy0eh4fpJbvY3WWt0WIL18zq/view?usp=sharing 
+- Variables de entorno Postman: https://drive.google.com/file/d/1yFmZUS1Pb5yYy4W8ju5dAEGh6BGoSnNH/view?usp=sharing
+ 
+
+.. contents:: Índice
+ 
+
+Fase 1: Sistema de Tareas 
+#########################
+
+En esta fase se va a crear la base del proyecto y todo el CRUD de tareas.
+
+Paso 1: Instalaciones
+*********************
+
+En Windows
+++++++++++
+
+- Instalar NodeJS desde su sitio oficial: https://nodejs.org/es/
+- Instalar MongoDB desde su sitio oficial:  https://www.mongodb.com/try/download/community
+- (Interesante) Instalar Visual Studio Code desde su sitio oficial: https://code.visualstudio.com/download
+- (Interesante) Instalar Postman desde su sitio oficial: https://www.postman.com/downloads/
+- (Interesante) Instalar Robo3T o Studio3T desde su sitio oficial: https://robomongo.org/
+
+.. attention::
+    Studio 3T Free tiene una capa gratuita, pese a que comience con un periodo de prueba. Luego es totalmente funcional limitando algunas características de pago.
+
+Paso 2: Preparar proyecto 
+*************************
+
+- Crear una carpeta para el proyecto con el nombre por ejemplo: **task-learn-api**.
+- Crear un repositorio en github, gitlab o simil.
+- ejecutar ``npm init`` para iniciar el proyecto.
+- instalar express: ``npm install express --save``
+- instalar mongoose: ``npm install mongoose --save``
+- instalar nodemon: ``npm install nodemon --save-dev``
+- Instalar cors: ``npm install cors --save``
+- crear archivos **index.js** y **app.js**
+- crear carpetas **controllers**, **routes**, y **models**
+- Crear archivo **.gitignore** y añadir la siguiente línea:
+
+.. code-block::
+
+    node_modules/
+
+- Añadir el comando **start** en el índice **scripts** de **packages.json**:
+
+.. code-block:: javascript 
+
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node index.js" // añadir esta línea para poder ejecutar servidor con npm start
+    },
+
+- Inicializar repositorio: ``git init``
+- Añadir repositorio remoto: ``git remote add origin https://github.com/Fullcoder-Learning/task-learning-api.git``
+- Añadir cambios: ``git add .``
+- Hacer primer commit: ``git commit -am "first commit"``
+- Subir cambios a repositorio remoto: ``git push origin master``
+- Crear rama desarrollo: ``git checkout -b developer``
+- Subir rama desarrollo: ``git push origin developer``
+- Crear rama feature a partir de developer: ``git checkout -b feature/phase-1-task-system``
+
+.. attention::
+    En el repositorio no se mostrarán las carpetas vacías ya que Git no las sube si no tienen nada. Para ello hay que añadir un archivo llamado **.gitkeep**
+    en cada carpeta vacía. No lo haremos en estos casos ya que no van a estarlo en breve.
+
+Paso 3: Archivo de rutas y dependencias
+***************************************
+
+- Editar **app.js**:
+
+.. code-block:: javascript 
+
+    // importar e inicializar express:
+    const express = require("express");
+    const app = express();
+
+    // importar cors:
+    const cors = require('cors');
+    // habilitar todas las peticiones cors:
+    app.use(cors());
+    // para trabajar con json se carga el modulo json de express:
+    app.use(express.json());
+    app.use(express.urlencoded({extended: true})); // también es necesaria la codificación
+
+
+    // exportar app para index.js:
+    module.exports = app;
+
+Paso 4: Archivo de entrada
+**************************
+
+- Editar **index.js**:
+
+.. code-block:: javascript 
+
+    // importa la constante app con express:
+    const app = require('./app');
+    // cargar el puerto en una variable:
+    const port = 5000;
+
+    // lanzar el escuchador con un mensaje para saber que funciona:
+    app.listen(port, () => {
+        console.log(`Servidor funcionando en: http://localhost:${port}`);
+    });
+
+- Ejecutar ``npm start`` y comprobar que muestra el mensaje de que se está ejecutando.
+
+Paso 5 (opcional): Ejecutar servidor en modo depuración
+*******************************************************
+
+Si estás usando **Visual Studio Code** presiona el botón con el icono que tiene un símbolo de **play** y un **bicho**:
+- Haz clic en el texto **cree un archivo launch.json** y selecciona la opción **node.js**. 
+- Modificar el archivo que se muestra para que trabaje con **nodemon** y pueda hacer fastReload:
+
+.. code-block:: javascript 
+
+    {
+        // Use IntelliSense para saber los atributos posibles.
+        // Mantenga el puntero para ver las descripciones de los existentes atributos.
+        // Para más información, visite: https://go.microsoft.com/fwlink/?linkid=830387
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "type": "pwa-node",
+                "request": "launch",
+                "name": "Launch Program",
+                "skipFiles": [
+                    "<node_internals>/**"
+                ],
+                // reemplazar la linea program por la ruta de nodemon y añadir la ruta de index.js en args:         
+                "program": "${workspaceFolder}/node_modules/nodemon/bin/nodemon.js",
+                "args": [
+                    "${workspaceFolder}\\index.js"
+                ]
+            }
+        ]
+    } 
+
+- Arriba a la izquierda presiona el botón verde con símbolo **play** junto al texto **Launch Program** para ejecutar servidor en modo depuración.
+
+De este modo podremos depurar punto a punto la aplicación.
+
+Paso 6: Crear controlador
+*************************
+
+- Crear un archivo llamado **taskController.js** dentro de la carpeta **controllers**:
+
+.. code-block:: javascript 
+
+    // se crea la función del controlador que recibe el request y la response:
+    function getTasks(req, res){
+        res.status(200).send({msg: "Task Controller it's OK"});
+    }
+
+    // exportar el módulo getTasks:
+    module.exports = {
+        getTasks
+    }; 
+
+Paso 7: Crear ruta a controlador 
+********************************
+
+- Crear un archivo llamado **taskRoutes.js** dentro de la carpeta **routes**:
+
+.. code-block:: javascript 
+
+    // se importa y carga el enrutador de express:
+    const express = require('express');
+    const api = express.Router();
+
+    // se importan los controladores para cada ruta:
+    const taskController = require("../controllers/taskController");
+
+    // se le pasa el controlador a la ruta:
+    api.get("/tasks", taskController.getTasks);
+
+    // se exporta el archivo de rutas:
+    module.exports = api;
+
+Paso 8 (opcional): Crear colección Postman 
+******************************************
+
+- Ejecutar Postman y pulsar el botón **+** para crear nueva colección con el nombre **Task learn API**.
+- Arriba a la derecha justo después del texto **No Envionment** pinchar en el icono que muestra un cuadro con un ojo y luego en el texto **Add** 
+- De este modo se crea un Entorno o **Envionment** para añadir variables en Postman. Lo llamamos **Task Learn Envionment**.
+- En el campo **VARIABLE** añadimos el texto **base_url**.
+- En los campos **INITIAL VALUE** y **CURRENT VALUE** añadimos la url del proyecto: http://localhost:3000/api 
+- Pulsamos el botón **Save** y ya podemos cerrar esta pestaña.
+- A partir de ahora en lugar de introducir la url: http://localhost:3000/api/tasks introducimos **{{url_base}}/tasks**
+
+.. attention::
+    Si presenta algún problema usando las variables de entorno. Comprueba que arriba a la derecha se encuentra el texto **Task Learn Envionment** en lugar de **No Envionment** u otro diferente.
+
+Paso 9: Cargar punto de ruta
+****************************
+
+- Hay que cargar el archivo de rutas en un nuevo punto de ruta en **app.js**:
+
+.. code-block:: javascript 
+
+    const express = require("express");
+    const app = express();
+    const cors = require('cors');
+    
+    app.use(cors());
+    app.use(express.json());
+    app.use(express.urlencoded({extended: true})); 
+
+
+    // importar modulo de las task routes: 
+    const taskRoutes = require('./routes/taskRoutes');
+
+    // crear punto de partida para las rutas de task:
+    app.use("/api", taskRoutes);
+
+    module.exports = app;
+
+- Añadir y comprobar en Postman que funciona la ruta tipo GET: http://localhost:3000/api/tasks o **{{url_base}}/tasks**
+
+.. note::
+    Recuerda guardar las rutas pulsando el botón **Save**.
+
+Paso 10: Conectar a base de datos MongoDB
+*****************************************
+
+- Editar el archivo **index.js**:
+
+.. code-block:: javascript 
+
+    // importar el modulo mongoose:
+    const mongoose = require('mongoose');
+    const app = require('./app');
+    const port = 5000;
+
+    // conectar mongoose a mongodb, en la ruta de la base de datos el /task-learn crear una nueva base de datos con dicho nombre:
+    mongoose.connect("mongodb://localhost:27017/task-learn", (err, res) =>{
+        // trabajar con try / catch por si la url no estuviese bien definida:    
+        try{
+            if(err){
+                throw err;
+            }else{
+                // si todo va bien avisamos por consola:
+                console.log("Se ha extablecido la conexión a la base de datos");
+            }
+        }catch(error){
+            console.error(error);
+        }
+    });
+
+    app.listen(port, () => {
+        console.log(`Servidor funcionando en: http://localhost:${port}`);
+    });
+
+- Al guardar el archivo, comprobamos en consola el mensaje: **Se ha extablecido la conexión a la base de datos**
+
+Paso 11: Crear modelo de datos 
+******************************
+
+- Crear un modelo de datos para las tareas en la carpeta **models** con el nombre **taskModel.js**:
+
+.. code-block:: javascript 
+
+    // se importa mongoose para mongodb y se inicializa el modulo schema para hacer un modelo:
+    const mongoose = require('mongoose');
+    const Schema = mongoose.Schema;
+
+    // se crea un schema del modelo:
+    const TaskSchema = Schema({ // todos los campos van a ser requeridos (require: true)
+        name: { // se crea un título de tipo cadena
+            type: String,
+            require: true
+        },
+        description: { // del mismo modo se crea la descripción
+            type: String,
+            require: true
+        },
+        is_complete: { // se crea un campo para verificar si se ha completado
+            type: Boolean,
+            require: true,
+            default: false // por defecto se asignará el valor false
+        },
+        date_created: { // se crea un campo para la fecha de creación
+            type: Date,
+            require: true,
+            default: Date.now // por defecto llevará la fecha de creación en el momento
+        },
+        date_finish: { // este campo define la fecha de finalización
+            type: Date,
+            require: true,
+            default: null // por defecto irá en nulo.
+        }
+    });
+
+    // se exporta el modelo añadiendo el nombre de la colección de MongoDB y el Schema:
+    module.exports = mongoose.model("tasks", TaskSchema);
+
+.. attention::
+    Cualquier nombre que pongas al modelo creará una colección e plural ej. task = tasks, gato = gatos.
+
+Paso 12: Crear tareas (controller)
+**********************************
+
+- Editamos el controlador **taskController.js** y añadimos una nueva función:
+
+.. code-block:: javascript 
+
+    // cargar el modelo de tasks:
+    const Task = require('../models/taskModel');
+
+    // nueva función asíncrona para crear tareas:
+    async function postTask(req, res){
+        // se crea una objeto del modelo:
+        const task = new Task();
+        // recuperar los parámetros del body:
+        const params = req.body;
+
+        // recuperar los datos del body y añadirlos al modelo:
+        task.name = params.name;
+        task.description = params.description;
+
+        // guardar datos:
+        try{
+            // guardar resultados en la base de datos:
+            const taskStore = await task.save(); // el proceso será lineal hasta llegar al await (evita ejecutar todo a la vez)
+
+            // revisar si no se ha guardado la tarea:
+            if(!taskStore){
+                res.status(400).send({msg: "Error: cannot create task"});
+            }else{
+                res.status(201).send({task: taskStore});
+            }
+        }catch (error){
+            // devolver error 500 si sale mal:
+            res.status(500).send(error);
+        }
+    }
+
+    function getTasks(req, res){
+        res.status(200).send({msg: "Task Controller it's OK"});
+    }
+
+    module.exports = {
+        postTask, // exportar modulo nuevo
+        getTasks
+    }; 
+
+.. attention::
+    Es importante controlar los parámetros que entran en nuestra aplicación. Por ello aquí solo necesitamos que se introduzcan los campos **title** y **description**. El resto ya son automáticos o funcionan con un update.
+
+Paso 13: Crear tareas (routes)
+******************************
+
+- Editamos el archivo de rutas **taskRoutes.js**:
+
+.. code-block:: javascript 
+
+    const express = require('express');
+    const api = express.Router();
+
+    const taskController = require("../controllers/taskController");
+
+    // añadir ruta para crear tareas:
+    api.post("/tasks", taskController.postTask);
+    api.get("/tasks", taskController.getTasks);
+
+    module.exports = api;
+
+- En Postman, crear nueva petición **POST**. Pinchamos en la opción **Body** y dentro en la opción **raw**. A la derecha cambiamos en el selector el valor **Text** por **Json** y añadimos una nueva tarea en la caja:
+
+.. code-block:: javascript 
+    
+    {
+        "name": "Ir al supermercado",
+        "description": "Ir al super a por galletas esta tarde"
+    }
+
+- Pinchamos en **Send** y si todo va bien retornará un objeto similar a este:
+
+.. code-block:: javascript 
+
+    {
+        "task": {
+            "is_complete": false,
+            "date_finish": null,
+            "_id": "630f3ef2cfbc14f7d61f79ab",
+            "date_created": "2022-08-31T10:58:58.819Z",
+            "name": "Ir al supermercado",
+            "description": "Ir al super a por galletas esta tarde",
+            "__v": 0
+        }
+    }
+
+Paso 14 (Opcional): Comprobar datos en Studio3T
+***********************************************
+
+- Abrimos el programa Studio3T y pinchamos en **New Connection** si es la primera vez que lo abrimos.
+- añadimos la ruta **mongodb://localhost:27017** y pinchamos en **Next**
+- Definimos el Connection name por ejemplo **mongo database** y pinchamos en **Save**.
+- Al acceder al servidor, si el paso anterior fue bien tendremos una base de datos **task-learn** creada y dentro una colección **tasks** con el documento que creamos en el paso anterior.
+
+.. note::
+    Mas adelante veremos como hacer lo mismo conectando una base de datos remota.
+
+Paso 15: Listar tareas (controller)
+***********************************
+
+- Editar la función **getTasks** del archivo **taskController.js** 
+
+.. code-block:: javascript 
+
+    const Task = require('../models/taskModel');
+
+    async function postTask(req, res){
+        const task = new Task();
+        const params = req.body;
+
+        task.name = params.name;
+        task.description = params.description;
+
+        try{
+            const taskStore = await task.save(); 
+
+            if(!taskStore){
+                res.status(400).send({msg: "Error: cannot create task"});
+            }else{
+                res.status(201).send({task: taskStore});
+            }
+        }catch (error){
+            res.status(500).send(error);
+        }
+    }
+
+    // editar función para listar tareas, definir como asincrona:
+    async function getTasks(req, res){
+        try{
+            // recuperar tareas de base de datos:
+            const tasks = await Task.find().sort({create_at: -1}); // opcional: ordenar resultados con sort por un parámetro seleccionado.
+            // Agregar condición dentro de find: const tasks = await Task.find({completed: false}).sort({create_at: -1}); 
+
+            // comprobar si hay tareas:
+            if(!tasks){
+                res.status(400).send({msg: "Error: Cannot get tasks"});
+            }else {
+                res.status(200).send(tasks);
+            }
+        }catch(error){
+            res.status(500).send(error);
+        }
+    }
+
+    module.exports = {
+        postTask, 
+        getTasks
+    }; 
+
+- Ya teníamos creada la ruta, nos vamos a Postman y ejecutamos la petición GET.
+- Creamos mas tareas y volvemos a listar para comprobar que aparecen todas.
+
+Paso 16: Mostrar una tarea (controller)
+***************************************
+
+- Para recuperar una tarea por su id, creamos la tarea **getTask** en el archivo **taskController.js** 
+
+.. code-block:: javascript 
+
+    const Task = require('../models/taskModel');
+
+    async function postTask(req, res){
+        const task = new Task();
+        const params = req.body;
+
+        task.name = params.name;
+        task.description = params.description;
+
+        try{
+            const taskStore = await task.save();
+
+            if(!taskStore){
+                res.status(400).send({msg: "Error: cannot create task"});
+            }else{
+                res.status(201).send({task: taskStore});
+            }
+        }catch (error){
+            res.status(500).send(error);
+        }
+    }
+
+    async function getTasks(req, res){
+        try{
+            const tasks = await Task.find().sort({create_at: -1}); 
+
+            if(!tasks){
+                res.status(400).send({msg: "Error: Cannot get tasks"});
+            }else {
+                res.status(200).send(tasks);
+            }
+        }catch(error){
+            res.status(500).send(error);
+        }
+    }
+
+    // recuperar una sola tarea:
+    async function getTask(req, res){
+        // recuperar el id:
+        const taskId = req.params.id;
+
+        try{
+            // se hace un findById con el id recibido por request:
+            const task = await Task.findById(taskId);
+
+            if(!task){
+                res.status(400).send({msg: "Error: Task doesn't exists"});
+            }else{
+                res.status(200).send(task);
+            }
+        }catch(error){
+            res.status(500).send(error);
+        }
+    }
+
+    module.exports = {
+        postTask, 
+        getTasks,
+        getTask // exportar modulo
+    }; 
+
+Paso 17: Mostrar una tarea (router)
+***********************************
+
+- Añadir la ruta al archivo **taskRouter.js** 
+
+.. code-block:: javascript 
+
+    const express = require('express');
+    const api = express.Router();
+
+    const taskController = require("../controllers/taskController");
+
+    api.post("/tasks", taskController.postTask);
+    api.get("/tasks", taskController.getTasks);
+    // listar una tarea:
+    api.get("/tasks/:id", taskController.getTask);
+
+    module.exports = api;
+
+- Crear una nueva request en Postman y pasarle una nueva variable **{{task_id}}** con el campo **_id** de una tarea.
+
+Paso 18: Actualizar datos de una tarea (controller)
+****************************************************
+
+- Ahora se va a añadir la función **putTask** para modificar los datos de la tarea, editamos **taskController.js**:
+
+.. code-block:: javascript 
+
+    const Task = require('../models/taskModel');
+
+    async function postTask(req, res){
+        const task = new Task();
+        const params = req.body;
+
+        task.name = params.name;
+        task.description = params.description;
+
+        try{
+            const taskStore = await task.save();
+
+            if(!taskStore){
+                res.status(400).send({msg: "Error: cannot create task"});
+            }else{
+                res.status(201).send({task: taskStore});
+            }
+        }catch (error){
+            res.status(500).send(error);
+        }
+    }
+
+    async function getTasks(req, res){
+        try{
+            const tasks = await Task.find().sort({create_at: -1}); 
+
+            if(!tasks){
+                res.status(400).send({msg: "Error: Cannot get tasks"});
+            }else {
+                res.status(200).send(tasks);
+            }
+        }catch(error){
+            res.status(500).send(error);
+        }
+    }
+
+    async function getTask(req, res){
+        const taskId = req.params.id;
+
+        try{
+            const task = await Task.findById(taskId);
+
+            if(!task){
+                res.status(400).send({msg: "Error: Task doesn't exists"});
+            }else{
+                res.status(200).send(task);
+            }
+        }catch(error){
+            res.status(500).send(error);
+        }
+    }
+
+    // crear la función (no asincrona) para actualizar tareas:
+    function putTask(req, res){
+        // recuperar el id:
+        const taskId = req.params.id;
+        // recuperar parametros a actualizar:
+        const params = req.body;
+
+        try{
+            // recuperar la tarea y ejecutar un callback:
+            Task.findById(taskId, (err, taskData)=>{
+
+                // comprobar si hay errores al recuperar tarea:
+                if(err){
+                    res.status(500).send({msg: "Server status error"});
+                }else{
+                    if(!taskData){
+                        res.status(400).send({msg: "Error: Task doesn't exists"});
+                    }else{
+                    
+                        // recuperar parametros a modificar:
+                        taskData.name = params.name;
+                        taskData.description = params.description;
+
+                        // si todo va bien, actualizar tarea y ejecutar un callback:
+                        Task.findByIdAndUpdate(taskId, taskData, (err, result)=>{
+                            if(err){
+                                res.status(404).send({msg: err});
+                            }else if(!result){
+                                res.status(404).send({msg: "Error: task doesn't exists"});
+                            }else{
+                                res.status(201).send({task: taskData});
+                            }
+                        });
+                    }
+                }
+            });
+
+        }catch(error){
+            res.status(500).send(error);
+        }
+    }
+
+    module.exports = {
+        postTask, 
+        getTasks,
+        getTask,
+        putTask // exportar modulo
+    }; 
+
+Paso 19: Actualizar datos de una tarea (router)
+************************************************
+
+- Crear una nueva ruta en **taskRoutes.js**:
+
+.. code-block:: javascript 
+
+    const express = require('express');
+    const app = require('../app');
+    const api = express.Router();
+
+    const taskController = require("../controllers/taskController");
+
+    api.post("/tasks", taskController.postTask);
+    api.get("/tasks", taskController.getTasks);
+    api.get("/tasks/:id", taskController.getTask);
+    // actualizar una tarea:
+    api.put("/tasks/:id", taskController.putTask);
+
+    module.exports = api;
+
+- En Postman, crear nueva petición **PUT** con el id de una tarea. Pinchamos en la opción **Body** y dentro en la opción **raw**. A la derecha cambiamos en el selector el valor **Text** por **Json** y añadimos una nueva tarea en la caja:
+
+.. code-block:: javascript 
+    
+    {
+        "name": "Cambiar aceite del coche",
+        "description": "Llevar coche al taller a que le cambien el aceite"
+    }
+
+Paso 18: Eliminar una tarea (controller)
+****************************************
+
+- Ahora se va a añadir la función **deleteTask** para eliminar la tarea, editamos **taskController.js**:
+
+.. code-block:: javascript 
+
+    const Task = require('../models/taskModel');
+
+    async function postTask(req, res){
+        const task = new Task();
+        const params = req.body;
+
+        task.name = params.name;
+        task.description = params.description;
+
+        try{
+            const taskStore = await task.save();
+
+            if(!taskStore){
+                res.status(400).send({msg: "Error: cannot create task"});
+            }else{
+                res.status(201).send({task: taskStore});
+            }
+        }catch (error){
+            res.status(500).send(error);
+        }
+    }
+
+    async function getTasks(req, res){
+        try{
+            const tasks = await Task.find().sort({create_at: -1}); 
+
+            if(!tasks){
+                res.status(400).send({msg: "Error: Cannot get tasks"});
+            }else {
+                res.status(200).send(tasks);
+            }
+        }catch(error){
+            res.status(500).send(error);
+        }
+    }
+
+    async function getTask(req, res){
+        const taskId = req.params.id;
+
+        try{
+            const task = await Task.findById(taskId);
+
+            if(!task){
+                res.status(400).send({msg: "Error: Task doesn't exists"});
+            }else{
+                res.status(200).send(task);
+            }
+        }catch(error){
+            res.status(500).send(error);
+        }
+    }
+
+    function putTask(req, res){
+        const taskId = req.params.id;
+        const params = req.body;
+
+        try{
+            Task.findById(taskId, (err, taskData)=>{
+
+                if(err){
+                    res.status(500).send({msg: "Server status error"});
+                }else{
+
+                    if(!taskData){
+                        res.status(400).send({msg: "Error: Task doesn't exists"});
+                    }else{
+                        taskData.name = params.name;
+                        taskData.description = params.description;
+
+                        Task.findByIdAndUpdate(taskId, taskData, (err, result)=>{
+                            if(err){
+                                res.status(404).send({msg: err});
+                            }else if(!result){
+                                res.status(404).send({msg: "Error: task doesn't exists"});
+                            }else{
+                                res.status(201).send({task: taskData});
+                            }
+                        });
+                    }
+                }
+            });
+
+        }catch(error){
+            res.status(500).send(error);
+        }
+    }
+
+    // función para eliminar tarea:
+    async function deleteTask(req, res){
+        // recuperar el id:
+        const taskId = req.params.id;
+
+        try{
+            // realizar delete:
+            const task = await Task.findByIdAndDelete(taskId); 
+
+            if(!task){
+                res.status(400).send({msg: "Error: Task doesn't exists"});
+            }else{
+                res.status(200).send({msg: "Task successfully deleted"});
+            }
+        }catch(error){
+            res.status(500).send(error);
+        }
+    }
+
+    module.exports = {
+        postTask, 
+        getTasks,
+        getTask,
+        putTask,
+        deleteTask  // exportar modulo
+    }; 
+
+Paso 19: Eliminar una tarea (router)
+************************************
+
+- Crear una nueva ruta en **taskRoutes.js**:
+
+.. code-block:: javascript 
+
+    const express = require('express');
+    const app = require('../app');
+    const api = express.Router();
+
+    const taskController = require("../controllers/taskController");
+
+    api.post("/tasks", taskController.postTask);
+    api.get("/tasks", taskController.getTasks);
+    api.get("/tasks/:id", taskController.getTask);
+    api.put("/tasks/:id", taskController.putTask);
+    // ruta para borrar tareas:
+    api.delete("/tasks/:id", taskController.deleteTask);
+
+    module.exports = api;
+
+- Crear nueva request en Postman de tipo DELETE y ejecutar ruta con el id de una Tarea.
+- Si repetimos nos debería dar error porque ya no existe. De igual forma podemos listar tareas y recuperar tarea. Si la respuesta da un mensaje de error es que se ha borrado la tarea.
+- También se puede verificar desde Studio3T si ya no existe.
+
+Paso 20: Cambiar estado de tarea (controller)
+*********************************************
+
+- Cambiar estado de tarea a terminada y su fecha de finalización, editar **taskRoutes.js**:
+
+.. code-block:: javascript 
+
+    const Task = require('../models/taskModel');
+
+    async function postTask(req, res){
+        const task = new Task();
+        const params = req.body;
+
+        task.name = params.name;
+        task.description = params.description;
+
+        try{
+            const taskStore = await task.save();
+
+            if(!taskStore){
+                res.status(400).send({msg: "Error: cannot create task"});
+            }else{
+                res.status(201).send({task: taskStore});
+            }
+        }catch (error){
+            res.status(500).send(error);
+        }
+    }
+
+    async function getTasks(req, res){
+        try{
+            const tasks = await Task.find().sort({create_at: -1}); 
+
+            if(!tasks){
+                res.status(400).send({msg: "Error: Cannot get tasks"});
+            }else {
+                res.status(200).send(tasks);
+            }
+        }catch(error){
+            res.status(500).send(error);
+        }
+    }
+
+    async function getTask(req, res){
+        const taskId = req.params.id;
+
+        try{
+            const task = await Task.findById(taskId);
+
+            if(!task){
+                res.status(400).send({msg: "Error: Task doesn't exists"});
+            }else{
+                res.status(200).send(task);
+            }
+        }catch(error){
+            res.status(500).send(error);
+        }
+    }
+
+    function putTask(req, res){
+        const taskId = req.params.id;
+        const params = req.body;
+
+        try{
+            Task.findById(taskId, (err, taskData)=>{
+
+                if(err){
+                    res.status(500).send({msg: "Server status error"});
+                }else{
+                    if(!taskData){
+                        res.status(400).send({msg: "Error: Task doesn't exists"});
+                    }else{
+                        
+                        taskData.name = params.name;
+                        taskData.description = params.description;
+
+                        Task.findByIdAndUpdate(taskId, taskData, (err, result)=>{
+                            if(err){
+                                res.status(404).send({msg: err});
+                            }else if(!result){
+                                res.status(404).send({msg: "Error: task doesn't exists"});
+                            }else{
+                                res.status(201).send({task: taskData});
+                            }
+                        });
+                    }
+                }
+            });
+
+        }catch(error){
+            res.status(500).send(error);
+        }
+    }
+
+    async function deleteTask(req, res){
+        const taskId = req.params.id;
+
+        try{
+            const task = await Task.findByIdAndDelete(taskId); 
+
+            if(!task){
+                res.status(400).send({msg: "Error: Task doesn't exists"});
+            }else{
+                res.status(200).send({msg: "Task successfully deleted"});
+            }
+        }catch(error){
+            res.status(500).send(error);
+        }
+    }
+
+    // cambiar estado de tarea:
+    function changeTask(req, res){
+        // recuperar id de la tarea:
+        const taskId = req.params.id;
+
+        try{
+            // buscar tarea a modificar y ejecutar callback:
+            Task.findById(taskId, (err, taskData)=>{
+
+                if(err){
+                    res.status(500).send({msg: "Server status error"});
+                }else{
+                    if(!taskData){
+                        res.status(400).send({msg: "Error: Task doesn't exists"});
+                    }else{
+                        // si existe la tarea cambiar campos is_complete y date_finish
+                        taskData.is_complete = true;
+                        taskData.date_finish = Date.now();
+                        // realizar cambios: 
+                        Task.findByIdAndUpdate(taskId, taskData, (err, result)=>{
+                            if(err){
+                                res.status(404).send({msg: err});
+                            }else if(!result){
+                                res.status(404).send({msg: "Error: user doesn't exists"});
+                            }else{
+                                res.status(201).send({task: taskData});
+                            }
+                        });
+                    }
+                }
+            });
+
+        }catch(error){
+            res.status(500).send(error);
+        }
+    }
+
+    module.exports = {
+        postTask, 
+        getTasks,
+        getTask,
+        putTask,
+        deleteTask,
+        changeTask  // exportar modulo
+    }; 
+
+Paso 21: Cambiar estado de tarea (router)
+*****************************************
+
+- Crear una nueva ruta en **taskRoutes.js**:
+
+.. code-block:: javascript 
+
+    const express = require('express');
+    const app = require('../app');
+    const api = express.Router();
+
+    const taskController = require("../controllers/taskController");
+
+    api.post("/tasks", taskController.postTask);
+    api.get("/tasks", taskController.getTasks);
+    api.get("/tasks/:id", taskController.getTask);
+    api.put("/tasks/:id", taskController.putTask);
+    api.delete("/tasks/:id", taskController.deleteTask);
+    // ruta para actualizar tareas:
+    api.patch("/tasks/:id", taskController.changeTask);
+
+    module.exports = api;
+
+- Crear una nueva request con Postman de tipo PATCH y pasarle el id de una tarea. (Si estas usando variables deberás cambiar la última que usaste ya que seguro que es la tarea que borraste).
+
+Paso 22: Subir cambios a GitHub  
+*******************************
+
+- Parar depuración de Visual studio code.
+- Añadir cambios: ``git add .``
+- Realizar un commit: ``git commit -am "Phase 1 complete"``
+- Subir cambios a Github con el nombre de la rama actual: ``git push origin feature/phase-1-task-system``
+- Desde gitHub presionar botón **Compare & pull request**.
+- cambiar rama base **master** por **developer** y pulsar **Create pull request**
+- Pulsar en **Merge pull request** y a continuación en **Confirm merge**.
+- Una vez terminado volvemos a local y cambiamos de rama a developer: ``git checkout developer``
+- Actualizamos rama developer: ``git pull origin developer``
+
+Y con esto concluye la primera fase del proyecto.
+
+.. raw:: html 
+
+    <hr><br>
+
+
+Fase 2: Usuarios y securización 
+###############################
+
+En esta fase se va a crear el CRUD de usuarios, la autenticación vía JWT, securizar los endpoints y establecer
+una relación entre tareas y usuarios para saber que tareas pertenece a cada usuario.
+
+Paso 1: Preparar proyecto 
+*************************
+
+- Desde la rama **developer** crear rama **git checkout -b feature/auth-jwt-and-securize-tasks**
+- Se instalará `moment` para controlar las fechas: ``npm install moment --save``
+- Se instalará `jsonwebtoken` para trabajar con JWT: ``npm install jsonwebtoken --save``
+- Se instalará `bcryptjs` para encriptación de contraseñas: ``npm install bcryptjs -- save``
+- Se instalará `dotenv` para trabajar con variables de entorno: ``npm install dotenv --save``
+
+Paso 2: Crear modelo de usuarios 
+********************************
+
+- En la carpeta **models** crear el archivo **userModel.js**:
+
+.. code-block:: javascript 
+    :linenos:
+
+    const mongoose = require('mongoose');
+    const Schema = mongoose.Schema;
+
+    const UserSchema = Schema({
+        name: {
+            type: String,
+            require: false
+        },
+        lastname: {
+            type: String,
+            require: false 
+        }, // email y password serán obligatorios:
+        email: {
+            type: String,
+            require: true,
+            unique: true,
+        },
+        password: {
+            type: String,
+            require: true 
+        }
+    });
+
+    module.exports = mongoose.model('users', UserSchema);
+
+Paso 3: Registro de usuarios (controller)
+*****************************************
+
+- Crear un nuevo controlador en la carpeta **controllers** llamado **userController.js**:
+
+.. code-block:: javascript 
+
+    // importar el encriptador de contraseñas: 
+    const bcryptjs = require('bcryptjs');
+    const User = require('../models/userModel');
+
+    // Registro de usuarios:
+    async function postUser(req, res){
+        const params = req.body;
+        const user = new User(params);
+
+        try{
+            // comprobar que los campos email y password:
+            if(!params.email) throw{msg: "Error: email cannot be null"};
+            if(!params.password) throw{msg: "Error: password cannot be null"};
+
+            // revisar si el email esta en uso:
+            const emailExists = await User.findOne({email: params.email});
+            if(emailExists) throw {msg: "Error: Email already exists"};
+
+            // configurar el salt de bcrypt: 
+            const salt = bcryptjs.genSaltSync(10);
+            // cifrar la contraseña:
+            user.password = await bcryptjs.hash(params.password, salt);
+            
+            user.save();
+            res.status(201).send({user: user});
+            
+        }catch(error){
+            res.status(500).send(error);
+        }
+    }
+
+    module.exports = {
+        postUser,
+    }
+
+Paso 4: Registro de usuarios (router)
+*************************************
+
+- Crear archivo para las rutas en **routes** llamado **userRoutes.js**:
+
+.. code-block:: javascript 
+
+    // añadir todo el contenido:
+    const express = require("express");
+    const userController = require('../controllers/userController');
+
+    const api = express.Router();
+
+    // Cargar ruta registro usuarios:
+    api.post("/register", userController.postUser);
+
+
+    module.exports = api;
+
+Paso 5: Registrar rutas de usuarios 
+***********************************
+
+- Editar **app.js** y añadir el archivo de rutas:
+
+.. code-block:: javascript 
+
+    const express = require("express");
+    const app = express();
+    const cors = require('cors');
+
+    app.use(express.json());
+    app.use(express.urlencoded({extended: true})); 
+    app.use(cors());
+
+    const taskRoutes = require('./routes/taskRoutes');
+    // cargar modulo rutas de usuarios:
+    const userRoutes = require('./routes/userRoutes');
+
+    app.use("/api", taskRoutes);
+    // cargar rutas de usuarios:
+    app.use("/api", userRoutes);
+
+    module.exports = app;
+
+- En la colección postman crear un nuevo directorio para **Tasks** y mover todas las request a el.
+- Crear un nuevo directorio llamado **Users** y una nueva petición POST para crear un usuario con la siguiente información en el body:
+
+.. code-block:: javascript 
+
+    {
+        "email": "pytonicus@gmail.com",
+        "password": "1234"
+    }
+
+- Nos devolverá una respuesta similar a esta: 
+
+.. code-block:: javascript 
+    
+    {
+        "user": {
+            "email": "pytonicus@gmail.com",
+            "password": "$2a$10$7hUP0JSQWAMjeEMGxw4fMO36p/s20g8.EYJmLo4vuGqIv4Moi.h/K",
+            "_id": "630f6fddb525ceda80fd8e64"
+        }
+    }
+
+Paso 6: Crear variables de entorno
+**********************************
+
+- Antes de poder crear variables de entorno, hay que configurar dotenv. Editamos **index.js**:
+
+.. code-block:: javascript 
+
+    const mongoose = require('mongoose');
+    // cargar dotenv: 
+    const dotenv = require('dotenv');
+    const app = require('./app');
+    const port = 5000;
+
+    // ejecutar variables de entorno:
+    dotenv.config()
+
+
+    mongoose.connect("mongodb://localhost:27017/task-learn", (err, res) =>{
+        try{
+            if(err){
+                throw err;
+            }else{
+                console.log("Se ha extablecido la conexión a la base de datos");
+            }
+        }catch(error){
+            console.error(error);
+        }
+    });
+
+    app.listen(port, () => {
+        console.log(`Servidor funcionando en: http://localhost:${port}`);
+    });
+
+- A continuación creamos un archivo en la raiz llamado **.env** y otro archivo **.env.dist** que utilizaremos en el siguiente paso. 
+- El primer archivo guardará nuestras variables de entorno y el segundo serivrá de referencia ya que **.env** posee información sensible y no va a subirse al repo.
+- Añade **.env** en una línea del archivo **.gitignore**:
+
+.. code-block:: 
+
+    node_modules/
+    .env
+
+Paso 7: Crear servicio JWT
+**************************
+
+Para poder hacer login vamos a crear un nuevo servicio que maneje JWT:
+
+- Editamos el archivo **.env**:
+
+.. code-block:: javascript 
+
+    SECRET_KEY = "2ha9df238dhha87d8vaq"
+
+- En la raiz del proyecto crear carpeta **services**
+- Dentro de **services** crear archivo **jwtService.js** y editar:
+
+.. code-block:: javascript 
+
+    // importar jwt:
+    const jwt = require("jsonwebtoken");
+
+    // crear token:
+    function createToken(user, expiresIn){
+        // recuperamos el id y el email del objeto user:
+        const {id, email} = user;
+        // y lo añadimos al payload:
+        const payload = {id, email}
+
+        // utilizamos el payload para retornar el token tras iniciar sesión junto a la secret key de nuestras variables de entorno:
+        return jwt.sign(payload, process.env.SECRET_KEY, {expiresIn: expiresIn});
+    }
+
+    // crear uan función para decodificar el token:
+    function decodeToken(token){
+        return jwt.decode(token, process.env.SECRET_KEY);
+    }
+
+    // exportar las dos funciones para crear y decodificar token:
+    module.exports = {
+        createToken,
+        decodeToken
+    }
+
+Paso 8: Crear login (controller)
+********************************
+
+- Crear una función **login** en **userController.js**:
+
+.. code-block:: javascript 
+
+    const bcryptjs = require('bcryptjs');
+    const User = require('../models/userModel');
+    // importar servicio jwt:
+    const jwt = require('../services/jwtService');
+
+    async function postUser(req, res){
+        const params = req.body;
+        const user = new User(params);
+
+        try{
+            if(!params.email) throw{msg: "Error: email cannot be null"};
+            if(!params.password) throw{msg: "Error: password cannot be null"};
+
+            const emailExists = await User.findOne({email: params.email});
+            if(emailExists) throw {msg: "Error: Email already exists"};
+
+            const salt = bcryptjs.genSaltSync(10);
+            user.password = await bcryptjs.hash(params.password, salt);
+            
+            user.save();
+            res.status(201).send({user: user});
+            
+        }catch(error){
+            res.status(500).send(error);
+        }
+    }
+
+    // crear función para hacer login:
+    async function login(req, res){
+        // recuperar el email y password del body:
+        const {email, password} = req.body;
+
+        try {
+            // buscamos si existe el usuario por su email haciendo un callback asincrono:
+            User.findOne({email: email}, async (err, userData) =>{
+                // si el usuario no existe se lanza un mensaje de error:
+                if(err){
+                    res.status(500).send({msg: "Server status error"});
+                }else{
+                    if(!userData){
+                        res.status(400).send({msg: "Error: email doesn't exists"});
+                    }else{
+                        // comprobar la contraseña recibida con la contraseña encriptada:
+                        const passwordCorrect = await bcryptjs.compare(password, userData.password);
+                        // si la contraseña no es correcta avisar:
+                        if(!passwordCorrect){
+                            res.status(403).send({msg: "Error: incorrect password"});
+                        }else{
+                            // creamos el token que lleva el usuario la fecha de expiración del token (12 horas):
+                            token =  await jwt.createToken(userData, "24h");
+
+                            // se responde con  el token: 
+                            res.status(200).send({token: token});
+                        }
+
+                    }
+                }
+            });
+
+            
+
+
+        }catch(error){
+            req.status(500).send(error);
+        }
+
+    }
+
+    module.exports = {
+        postUser,
+        login // exportar modulo
+    }
+
+Paso 9: Crear login (router)
+****************************
+
+- Crear la ruta **login** en **userRoutes.js**:
+
+.. code-block:: javascript 
+
+    const express = require("express");
+    const userController = require('../controllers/userController');
+
+    const api = express.Router();
+
+    api.post("/register", userController.postUser);
+    // crear ruta login:
+    api.post("/login", userController.login);
+
+
+    module.exports = api;
+
+- Ahora creamos en Postman una request tipo POST con la información de nuestro usuario en el body:
+
+.. code-block:: javascript
+
+    {
+        "email": "pytonicus@gmail.com",
+        "password": "1234"
+    }
+
+- Esto devolverá una respuesta similar a esta:
+
+.. code-block:: javascript 
+
+    {
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMGY2ZmRkYjUyNWNlZGE4MGZkOGU2NCIsImVtYWlsIjoicHl0b25pY3VzQGdtYWlsLmNvbSIsImlhdCI6MTY2MTk1NzE1NywiZXhwIjoxNjYyMDQzNTU3fQ.V_L-gxc6poL-FqAYbGllkkXJgzvUPwKCDpMNPgfDYlo"
+    }
+
+- Se puede comprobar el token en la página http://jwt.io pegando el resultado de nuestro token mas abajo nos dirá los datos del usuario que hemos usado para generar dicho token.
+
+Paso 10: Crear middleware para securizar rutas 
+**********************************************
+
+- Para securizar las rutas del proyectos creamos una carpeta en la raiz llamada **middlewares** y dentro de ella el archivo **authMiddleware.js**:
+
+.. code-block:: javascript 
+    
+    // importamos moment para las fechas:
+    const moment = require('moment');
+    // importamos el servicio que hemos creado con jwt:
+    const jwt = require('../services/jwtService');
+
+    // crear una función (next es una función que continuará el proceso si todo va bien):
+    function secureRoute(req, res, next){
+        // si no recibimos el token por el apartado autorización del header:
+        if(!req.headers.authorization){
+            // damos error de autorización:
+            return res.status(403).send({msg: "Error: authentication credentials are missing"});
+        }
+
+        // si tenemos la cabecera con el token lo guardamos:
+        const token = req.headers.authorization.replace(/['"]+/g, ""); // reemplazar las comillas simples por nada
+
+        try {
+            // decodificamos el token:
+            const payload = jwt.decodeToken(token, process.env.SECRET_KEY);
+
+            // si el token ha caducado respondemos con error:
+            if(payload.exp <= moment().unix()){
+                return res.status(400).send({msg: "Error: token has expired"});
+            }
+
+            // si todo va bien le pasamos el payload al usuario y avanzamos a la función ext:
+            req.user = payload;
+            next();
+        }catch(error){
+            return res.status(404).send({msg: "Error: Invalid token"});
+        }
+    }
+
+    // exportar la función:
+    module.exports = {
+        secureRoute
+    }
+
+Paso 11: Proteger endpoints de tareas
+*************************************
+
+- Añadir el middleware a cada endpoint en **taskRoutes.js**:
+
+.. code-block:: javascript 
+
+    const express = require('express');
+    const app = require('../app');
+    const api = express.Router();
+    // importar el middleware:
+    const authMiddleware = require("../middlewares/authMiddleware");
+
+    const taskController = require("../controllers/taskController");
+
+    // añadir el middleware a todas las rutas:
+    api.post("/tasks", [authMiddleware.secureRoute], taskController.postTask);
+    api.get("/tasks", [authMiddleware.secureRoute], taskController.getTasks);
+    api.get("/tasks/:id", [authMiddleware.secureRoute], taskController.getTask);
+    api.put("/tasks/:id", [authMiddleware.secureRoute], taskController.putTask);
+    api.delete("/tasks/:id", [authMiddleware.secureRoute], taskController.deleteTask);
+    api.patch("/tasks/:id", [authMiddleware.secureRoute], taskController.changeTask);
+
+    module.exports = api;
+
+- Probar a recuperar listado de tareas en Postman, si muestra el mensaje **Error: authentication credentials are missing** todo va bien.
+- Creamos una variable en **Task Learn Envionment** llamada **auth_token** y pegamos el token que nos devolvió login. (cambiar CURRENT VALUE cuando esté caducado).
+-  En cada request de la carpeta **Tasks**, pinchamos en la pestaña **Authorization**  y seleccionamos en **Type** la opción **API Key**. 
+- En **Key** escribimos: Authorization y en **Value** pegamos la variable **{{auth_token}}** o el token que nos devolvió el login.
+
+Ahora están todas las rutas aseguradas. Será necesario tener un token válido para poder trabajar con ellas.
+
+Paso 12: Relacionar tareas con usuarios 
+***************************************
+
+Relacionar colección de tareas con la de usuarios de modo que cada usuario tenga sus propias tareas:
+- Editar modelo **taskModel.js**:
+
+.. code-block:: javascript 
+
+    // se importa mongoose para mongodb y se inicializa el modulo schema para hacer un modelo:
+    const mongoose = require('mongoose');
+    const Schema = mongoose.Schema;
+    // importar el tipo ObjectId para trabajar con ids
+    const ObjectId = Schema.ObjectId;
+
+    const TaskSchema = Schema({ 
+        name: { 
+            type: String,
+            require: true
+        },
+        description: { 
+            type: String,
+            require: true
+        },
+        is_complete: { 
+            type: Boolean,
+            require: true,
+            default: false
+        },
+        date_created: { 
+            type: Date,
+            require: true,
+            default: Date.now
+        },
+        date_finish: { 
+            type: Date,
+            require: true,
+            default: null 
+        },
+        owner: { // crear el campo propietario y hacerlo de tipo ObjectId:
+            type: ObjectId,
+            require: true,
+        }
+    });
+
+    module.exports = mongoose.model("tasks", TaskSchema);
+
+Paso 13: Crear middleware para recuperar usuario 
+************************************************
+
+Para poder aprovechar el token y los datos que ofrece, especialmente el ID de usuario. Vamos a añadir la función **getUser** al archivo **authMiddleware.js**:
+
+.. code-block:: javascript 
+
+    const moment = require('moment');
+    const jwt = require('../services/jwtService');
+
+    function secureRoute(req, res, next){
+        if(!req.headers.authorization){
+            return res.status(403).send({msg: "Error: authentication credentials are missing"});
+        }
+
+        const token = req.headers.authorization.replace(/['"]+/g, ""); // reemplazar las comillas simples por nada
+
+        try {
+            const payload = jwt.decodeToken(token, process.env.SECRET_KEY);
+
+            if(payload.exp <= moment().unix()){
+                return res.status(400).send({msg: "Error: token has expired"});
+            }
+
+            req.user = payload;
+            next();
+        }catch(error){
+            return res.status(404).send({msg: "Error: Invalid token"});
+        }
+    }
+
+    // crear función para recuperar usuarios:
+    function getUser(req, res){
+        // recuperar token:
+        const token = req.headers.authorization.replace(/['"]+/g, "");
+        // decodificar token:
+        const payload = jwt.decodeToken(token, process.env.SECRET_KEY);
+        // retornar el payload:
+        return payload;
+    }
+
+    module.exports = {
+        secureRoute,
+        getUser // exportar modulo
+    }
+
+
+Paso 14: Modificar modulos de controlador task
+**********************************************
+
+Ahora se va a modificar el controlador **taskController.js** para validar el propietario:
+
+.. code-block:: javascript
+
+    const Task = require('../models/taskModel');
+    // cargar middleware authMiddleware:
+    const authMiddleware = require('../middlewares/authMiddleware');
+
+    async function postTask(req, res){
+        // recuperar usuario actual a través del token:
+        const user = await authMiddleware.getUser(req, res);
+
+        const task = new Task();
+        const params = req.body;
+
+        task.name = params.name;
+        task.description = params.description;
+        // añadir el owner:
+        task.owner = user.id;
+
+        try{
+            const taskStore = await task.save();
+
+            if(!taskStore){
+                res.status(400).send({msg: "Error: cannot create task"});
+            }else{
+                res.status(201).send({task: taskStore});
+            }
+        }catch (error){
+            res.status(500).send(error);
+        }
+    }
+
+    async function getTasks(req, res){
+        // recuperar usuario actual a través del token:
+        const user = await authMiddleware.getUser(req, res);
+
+        try{
+            const tasks = await Task.find({owner: user.id}).sort({create_at: -1}); 
+
+            if(!tasks){
+                res.status(400).send({msg: "Error: Cannot get tasks"});
+            }else {
+                res.status(200).send(tasks);
+            }
+        }catch(error){
+            res.status(500).send(error);
+        }
+    }
+
+    async function getTask(req, res){
+        const taskId = req.params.id;
+        // recuperar usuario actual a través del token:
+        const user = await authMiddleware.getUser(req, res);
+
+        try{
+            const task = await Task.findById(taskId);
+
+            if(!task){
+                res.status(400).send({msg: "Error: Task doesn't exists"});
+            }else if(task.owner != user.id){ // añadir validación para comprobar que somos el propietario sino dará 403:
+                res.status(403).send({msg: "Forbidden - Access to this resource on the server is denied!"});
+            }else{
+                res.status(200).send(task);
+            }
+        }catch(error){
+            res.status(500).send(error);
+        }
+    }
+
+    // convertir esta función en asincrona para el middleware:
+    async function putTask(req, res){
+        const taskId = req.params.id;
+        const params = req.body;
+        // recuperar usuario actual a través del token:
+        const user = await authMiddleware.getUser(req, res);
+
+        try{
+            Task.findById(taskId, (err, taskData)=>{
+
+                if(err){
+                    res.status(500).send({msg: "Server status error"});
+                }else{
+                    if(!taskData){
+                        res.status(400).send({msg: "Error: Task doesn't exists"});
+                    }else{
+                        
+                        taskData.name = params.name;
+                        taskData.description = params.description;
+
+                        Task.findByIdAndUpdate(taskId, taskData, (err, result)=>{
+                            if(err){
+                                res.status(404).send({msg: err});
+                            }else if(!result){
+                                res.status(404).send({msg: "Error: task doesn't exists"});
+                            }else if(taskData.owner != user.id){ // añadir validación para comprobar que somos el propietario sino dará 403:
+                                res.status(403).send({msg: "Forbidden - Access to this resource on the server is denied!"});
+                            }else{
+                                res.status(201).send({task: taskData});
+                            }
+                        });
+                    }
+                }
+            });
+
+        }catch(error){
+            res.status(500).send(error);
+        }
+    }
+
+    async function deleteTask(req, res){
+        const taskId = req.params.id;
+        // recuperar usuario actual a través del token:
+        const user = await authMiddleware.getUser(req, res);
+
+        try{
+            // mejorar la seguridad a la hora de eliminar con un callback:
+            Task.findById(taskId, (err, taskData)=>{
+                if(err){
+                    res.status(500).send({msg: "Server status error"});
+                }else{
+                    if(!taskData){
+                        res.status(400).send({msg: "Error: Task doesn't exists"});
+                    }else if(taskData.owner != user.id){ // añadir validación para comprobar que somos el propietario sino dará 403:
+                        res.status(403).send({msg: "Forbidden - Access to this resource on the server is denied!"});
+                    }else{
+                        Task.findByIdAndDelete(taskId, (err, result) => {
+                            if(err){
+                                res.status(500).send({msg: "Server status error"});
+                            }else if(!result){
+                                res.status(404).send({msg: "Error: task doesn't exists"});
+                            }else{
+                                res.status(200).send({msg: "Task successfully deleted"});
+                            }
+                        }); 
+                        
+                    }
+                }
+            }); 
+
+            
+        }catch(error){
+            res.status(500).send(error);
+        }
+    }
+
+    // convertir esta función en asíncrona:
+    async function changeTask(req, res){
+        const taskId = req.params.id;
+        // recuperar usuario actual a través del token:
+        const user = await authMiddleware.getUser(req, res);
+
+        try{
+            Task.findById(taskId, (err, taskData)=>{
+
+                if(err){
+                    res.status(500).send({msg: "Server status error"});
+                }else{
+                    if(!taskData){
+                        res.status(400).send({msg: "Error: Task doesn't exists"});
+                    }else if(taskData.owner != user.id){ // añadir validación para comprobar que somos el propietario sino dará 403:
+                        res.status(403).send({msg: "Forbidden - Access to this resource on the server is denied!"});
+                    }else{
+                        taskData.is_complete = true;
+                        taskData.date_finish = Date.now();
+                        Task.findByIdAndUpdate(taskId, taskData, (err, result)=>{
+                            if(err){
+                                res.status(404).send({msg: err});
+                            }else if(!result){
+                                res.status(404).send({msg: "Error: task doesn't exists"});
+                            }else if(taskData.owner != user.id){ // añadir validación para comprobar que somos el propietario sino dará 403:
+                                res.status(403).send({msg: "Forbidden - Access to this resource on the server is denied!"});
+                            }else{
+                                res.status(201).send({task: taskData});
+                            }
+                        });
+                    }
+                }
+            });
+
+        }catch(error){
+            res.status(500).send(error);
+        }
+    }
+
+    module.exports = {
+        postTask, 
+        getTasks,
+        getTask,
+        putTask,
+        deleteTask,
+        changeTask  // exportar modulo
+    }; 
+
+- Ahora las tareas que vayas creando tendrán tu id de usuario.
+- Si intentas ver otra tarea, actualizarla o borrarla te dará un error 403.
+
+Paso 15: Subir cambios a GitHub  
+*******************************
+
+- Parar depuración de Visual studio code.
+- Añadir cambios: ``git add .``
+- Realizar un commit: ``git commit -am "Phase 2 complete"``
+- Subir cambios a Github con el nombre de la rama actual: ``git push origin feature/auth-jwt-and-securize-tasks``
+- Desde gitHub presionar botón **Compare & pull request**.
+- cambiar rama base **master** por **developer** y pulsar **Create pull request**
+- Pulsar en **Merge pull request** y a continuación en **Confirm merge**.
+- Una vez terminado volvemos a local y cambiamos de rama a developer: ``git checkout developer``
+- Actualizamos rama developer: ``git pull origin developer`` 
+
+Y con esto concluye la segunda fase del proyecto.
+
+.. raw:: html 
+
+    <hr><br>
+
+Fase 3: Recuperación de contraseñas  
+###################################
+
+En esta fase se va a crear un endpoint para recuperar contraseñas usando el email del usuario.
+
+Paso 2: Preparar proyecto 
+*************************
+
+- Desde la rama **developer** crear rama **git checkout -b feature/create-recovery-method**
+- Instalar nodemailer: ``npm install nodemailer --save``
+- Crear cuenta en: https://mailtrap.io 
+
+Paso 3: Enviar email (controller)
+*********************************
+
+- Lo primero será editar las variables de entorno y añadir los datos de nuestro servidor de email:
+
+.. code-block:: 
+
+    SECRET_KEY = "2ha9df238dhha87d8vaq"
+    # Añadir datos de configuración de servicio email:
+    EMAIL_HOST = "smtp.mailtrap.io"
+    EMAIL_USER = "6c40b325c9a698"
+    EMAIL_PASS = "53a66737d4e53f"
+
+- Hacemos lo propio con el archivo **.env.dist**:
+
+.. code-block:: 
+
+    SECRET_KEY = "add your random secret key"
+    # Añadir datos de configuración de servicio email:
+    EMAIL_HOST = "smtp email server"
+    EMAIL_USER = "email user"
+    EMAIL_PASS = "email password"
+
+- Para enviar el email creamos una nueva función llamada **forgot** en **userController.js**: 
+
+.. code-block:: javascript
+
+    const bcryptjs = require('bcryptjs');
+    // importar modulo nodemailer:
+    const nodemailer = require('nodemailer');
+    const User = require('../models/userModel');
+    const jwt = require('../services/jwtService');
+
+    async function postUser(req, res){
+        const params = req.body;
+        const user = new User(params);
+
+        try{
+            if(!params.email) throw{msg: "Error: email cannot be null"};
+            if(!params.password) throw{msg: "Error: password cannot be null"};
+
+            const emailExists = await User.findOne({email: params.email});
+            if(emailExists) throw {msg: "Error: Email already exists"};
+
+            const salt = bcryptjs.genSaltSync(10);
+            user.password = await bcryptjs.hash(params.password, salt);
+            
+            user.save();
+            res.status(201).send({user: user});
+            
+        }catch(error){
+            res.status(500).send(error);
+        }
+    }
+
+    async function login(req, res){
+        const {email, password} = req.body;
+
+        try {
+            User.findOne({email: email}, async (err, userData) =>{
+                if(err){
+                    res.status(500).send({msg: "Server status error"});
+                }else{
+                    if(!userData){
+                        res.status(400).send({msg: "Error: email doesn't exists"});
+                    }else{
+                        const passwordCorrect = await bcryptjs.compare(password, userData.password);
+                        if(!passwordCorrect){
+                            res.status(403).send({msg: "Error: incorrect password"});
+                        }else{
+                            token =  await jwt.createToken(userData, "24h");
+
+                            res.status(200).send({token: token});
+                        }
+
+                    }
+                }
+            });
+
+        }catch(error){
+            req.status(500).send(error);
+        }
+
+    }
+
+    // crear función para recuperar password:
+    function forgot(req, res){
+        // recibir parámetros:
+        const email = req.body.email;
+        // si no llega email por parámetros dar error:
+        if(!email)throw{msg: "Error: email cannot be null"}
+
+        try{
+            // recuperar usuario:
+            User.findOne({email: email}, async (err, userData)=>{
+                if(err){
+                    res.status(400).send({msg: "Error: email doesn't exists"});
+                }else{
+                    // crear un token para 1 hora:
+                    token =  await jwt.createToken(userData, "1h");
+                    // preparar el email:
+                    const transporter = nodemailer.createTransport({
+                        host: process.env.EMAIL_HOST, 
+                        port: 2525,
+                        auth: {
+                            user: process.env.EMAIL_USER,
+                            pass: process.env.EMAIL_PASS
+                        }
+                    });
+
+
+                    // preparar las opciones del correo:
+                    const mailOptions = { // mailtrap no nos da una dirección así que usaremos aquella con la que nos registramos:
+                        from: 'pytonicus@gmail.com',
+                        to: userData.email,
+                        subject: 'Reestablecer contraseña | Task Learn',
+                        // ruta del frontend para resetear password:
+                        text: `http://localhost:3000/reset/${userData.id}/${token}` // ruta del frontend
+                    };
+
+                    // enviar email:
+                    transporter.sendMail(mailOptions, (err, response)=>{
+                        if(err){
+                            res.status(500).send({msg: "Server status error"});
+                        }else{
+                            res.status(200).send({msg: "Email has send"});
+                        }
+                    });
+                }
+            });
+        }catch(error){
+            req.status(500).send(error);
+        }
+    }
+
+    // TODO: Crear función para cambiar password haciendo update solo del password.
+
+
+    module.exports = {
+        postUser,
+        login,
+        forgot // exportar modulo
+    }
+
+Paso 4: Enviar email (router)
+*****************************
+
+- Crear el endpoint en el archivo **userRoutes.js**:
+
+.. code-block:: javascript
+
+    const express = require("express");
+    const userController = require('../controllers/userController');
+
+    const api = express.Router();
+
+    api.post("/register", userController.postUser);
+    api.post("/login", userController.login);
+    // cargar la ruta para recuperar:
+    api.post("/forgot", userController.forgot);
+
+
+    module.exports = api;
+
+- Crear nueva request en Postman y probar a enviar un correo en el body:
+
+.. code-block:: javascript 
+
+    {
+        "email": "pytonicus@gmail.com"
+    }
+
+- Si la respuesta es buena el correo se ha enviado, es probable que nuestro servicio de correo bloquee este email. Por tanto nos vamos a Mailtrap dentro del apartado **Sandbox** abrimos **Inboxes** y comprobamos que el correo se ha enviado con un enlace. Este enlace vamos a trabajarlo en el siguiente paso.
+
+Paso 5: Reestablecer contraseña (controller)
+********************************************
+
+- Vamos a crear la función para reestablecer contraseña en el controlador **userController.js**:
+
+.. code-block:: javascript 
+
+    const bcryptjs = require('bcryptjs');
+    const nodemailer = require('nodemailer');
+    // importar momentjs:
+    const moment = require('moment');
+    const User = require('../models/userModel');
+    const jwt = require('../services/jwtService');
+
+    async function postUser(req, res){
+        const params = req.body;
+        const user = new User(params);
+
+        try{
+            if(!params.email) throw{msg: "Error: email cannot be null"};
+            if(!params.password) throw{msg: "Error: password cannot be null"};
+
+            const emailExists = await User.findOne({email: params.email});
+            if(emailExists) throw {msg: "Error: Email already exists"};
+
+            const salt = bcryptjs.genSaltSync(10);
+            user.password = await bcryptjs.hash(params.password, salt);
+            
+            user.save();
+            res.status(201).send({user: user});
+            
+        }catch(error){
+            res.status(500).send(error);
+        }
+    }
+
+    async function login(req, res){
+        const {email, password} = req.body;
+
+        try {
+            User.findOne({email: email}, async (err, userData) =>{
+                if(err){
+                    res.status(500).send({msg: "Server status error"});
+                }else{
+                    if(!userData){
+                        res.status(400).send({msg: "Error: email doesn't exists"});
+                    }else{
+                        const passwordCorrect = await bcryptjs.compare(password, userData.password);
+                        if(!passwordCorrect){
+                            res.status(403).send({msg: "Error: incorrect password"});
+                        }else{
+                            token =  await jwt.createToken(userData, "24h");
+
+                            res.status(200).send({token: token});
+                        }
+
+                    }
+                }
+            });
+
+        }catch(error){
+            req.status(500).send(error);
+        }
+
+    }
+
+    function forgot(req, res){
+        const email = req.body.email;
+        if(!email)throw{msg: "Error: email cannot be null"}
+
+        try{
+            User.findOne({email: email}, async (err, userData)=>{
+                if(err){
+                    res.status(400).send({msg: "Error: email doesn't exists"});
+                }else{
+                    token =  await jwt.createToken(userData, "1h");
+
+                    const transporter = nodemailer.createTransport({
+                        host: process.env.EMAIL_HOST, 
+                        port: 2525,
+                        auth: {
+                            user: process.env.EMAIL_USER,
+                            pass: process.env.EMAIL_PASS
+                        }
+                    });
+
+
+                    const mailOptions = { 
+                        from: 'pytonicus@gmail.com',
+                        to: userData.email,
+                        subject: 'Reestablecer contraseña | Task Learn',
+                        text: `http://localhost:3000/reset/${userData.id}/${token}` // ruta del frontend
+                    };
+
+                    transporter.sendMail(mailOptions, (err, response)=>{
+                        if(err){
+                            res.status(500).send({msg: "Server status error"});
+                        }else{
+                            res.status(200).send({msg: "Email has send"});
+                        }
+                    });
+                }
+            });
+        }catch(error){
+            req.status(500).send(error);
+        }
+    }
+
+    async function resetPassword(req, res){
+        // recuperar el id y token de usuario:
+        const {id, token} = req.params;
+        // recuperamos la contraseña por partida doble:
+        const {newPassword, repitePassword} = req.body;
+
+        // decodificar token:
+        const user_token = jwt.decodeToken(token, process.env.SECRET_KEY);
+
+
+        // comprobar si las contraseñas son diferentes o el token ha caducado o el id son distintos:
+        if(user_token.exp <= moment().unix()){
+            res.status(400).send({msg: "Error: token has expired"});
+        }else if(user_token.id !== id || newPassword !== repitePassword){
+            res.status(403).send({msg: "Error: unauthorized request"});
+        }else{
+            // codificar contraseña:
+            const salt = bcryptjs.genSaltSync(10);
+            const password = await bcryptjs.hash(newPassword, salt);
+            // actualizar contraseña nueva:
+            User.findByIdAndUpdate(id, {password: password}, (err, result) =>{
+                if(err){
+                    res.status(500).send({msg: "Server status error"});
+                }else if(!result){
+                    res.status(404).send({msg: "Error: user doesn't exists"});
+                }else{
+                    res.status(200).send({msg: "Password change successfully"});
+                }
+            });
+        }
+
+    }
+
+    module.exports = {
+        postUser,
+        login,
+        forgot,
+        resetPassword // exportar modulo
+    }
+
+Paso 6: Reestablecer contraseña (router)
+****************************************
+
+- Ahora hay que crear la ruta que recibirá dos parámetros en **userController.js**:
+
+.. code-block:: javascript 
+
+    const express = require("express");
+    const userController = require('../controllers/userController');
+
+    const api = express.Router();
+
+    api.post("/register", userController.postUser);
+    api.post("/login", userController.login);
+    api.post("/forgot", userController.forgot);
+    // cargar ruta para cambiar contraseña:
+    api.put("/reset/:id/:token", userController.resetPassword);
+
+
+    module.exports = api;
+
+- Copiamos los valores de la url que nos envió mailtrap y lo pegamos en dos variables de entorno en Postman.
+- Creamos una nueva request para recuperar contraseña de tipo PUT con los siguientes valores en el body:
+
+.. code-block:: javascript 
+
+    {
+        "newPassword": "5678",
+        "repitePassword": "5678"
+    }
+
+Si todo ha ido bien ahora se podrá hacer login con la nueva contraseña.
+
+Paso 7: Subir cambios a GitHub  
+*******************************
+
+- Parar depuración de Visual studio code.
+- Añadir cambios: ``git add .``
+- Realizar un commit: ``git commit -am "Phase 3 complete"``
+- Subir cambios a Github con el nombre de la rama actual: ``git push origin feature/create-recovery-method``
+- Desde gitHub presionar botón **Compare & pull request**.
+- cambiar rama base **master** por **developer** y pulsar **Create pull request**
+- Pulsar en **Merge pull request** y a continuación en **Confirm merge**.
+- Una vez terminado volvemos a local y cambiamos de rama a developer: ``git checkout developer``
+- Actualizamos rama developer: ``git pull origin developer`` 
+
+Y con esto concluye la tercera fase del proyecto.
+
+.. raw:: html 
+
+    <hr><br>
+
+Fase 4: Manejo de archivos  
+##########################
+
+En esta fase vamos a trabajar con archivos de cara al servidor. Se va a añadir las funcionalidades de mostrar datos de usuario y actualizarlos, incluido un avatar.
+
+Paso 1: Preparar proyecto 
+*************************
+
+- Desde la rama **developer** crear rama **git checkout -b feature/upload-data-service**
+- Se instalará **multipary** para trabajar con archivos y formularios: ``npm install connect-multiparty --save``
+
+Paso 2: Editar modelo usuarios 
+******************************
+
+- Se va a añadir un nuevo campo al modelo de usuarios llamado **avatar**, editamos **userModel.js**:
+
+.. code-block:: javascript 
+
+    const mongoose = require('mongoose');
+    const Schema = mongoose.Schema;
+
+    const UserSchema = Schema({
+        name: {
+            type: String,
+            require: false
+        },
+        lastname: {
+            type: String,
+            require: false 
+        }, 
+        email: {
+            type: String,
+            require: true,
+            unique: true,
+        },
+        password: {
+            type: String,
+            require: true 
+        },
+        avatar: { // el avatar será de tipo string ya que solo guardamos el nombre del archivo
+            type: String,
+            require: false
+        }
+    });
+
+    module.exports = mongoose.model('users', UserSchema);
+
+Paso 3: Recuperar usuario y actualizar imagen de usuario (controller)
+*********************************************************************
+
+- Para la lógica de esta aplicación, el usuario cambia su imagen solo después de registrarse. Así que haremos una función esclusiva para este fin. Editamos **userController.js**:
+
+.. code-block:: javascript 
+    :linenos:
+
+    const bcryptjs = require('bcryptjs');
+    const nodemailer = require('nodemailer');
+    const moment = require('moment');
+    // importar path:
+    const path = require('path');
+    const User = require('../models/userModel');
+    const jwt = require('../services/jwtService');
+    // importar auth middleware:
+    const authMiddleware = require('../middlewares/authMiddleware');
+
+    async function postUser(req, res){
+        const params = req.body;
+        const user = new User(params);
+
+        try{
+            if(!params.email) throw{msg: "Error: email cannot be null"};
+            if(!params.password) throw{msg: "Error: password cannot be null"};
+
+            const emailExists = await User.findOne({email: params.email});
+            if(emailExists) throw {msg: "Error: Email already exists"};
+
+            const salt = bcryptjs.genSaltSync(10);
+            user.password = await bcryptjs.hash(params.password, salt);
+            
+            user.save();
+            res.status(201).send({user: user});
+            
+        }catch(error){
+            res.status(500).send(error);
+        }
+    }
+
+    async function login(req, res){
+        const {email, password} = req.body;
+
+        try {
+            User.findOne({email: email}, async (err, userData) =>{
+                if(err){
+                    res.status(500).send({msg: "Server status error"});
+                }else{
+                    if(!userData){
+                        res.status(400).send({msg: "Error: email doesn't exists"});
+                    }else{
+                        const passwordCorrect = await bcryptjs.compare(password, userData.password);
+                        if(!passwordCorrect){
+                            res.status(403).send({msg: "Error: incorrect password"});
+                        }else{
+                            token =  await jwt.createToken(userData, "24h");
+
+                            res.status(200).send({token: token});
+                        }
+
+                    }
+                }
+            });
+
+        }catch(error){
+            req.status(500).send(error);
+        }
+
+    }
+
+    function forgot(req, res){
+        const email = req.body.email;
+        if(!email)throw{msg: "Error: email cannot be null"}
+
+        try{
+            User.findOne({email: email}, async (err, userData)=>{
+                if(err){
+                    res.status(400).send({msg: "Error: email doesn't exists"});
+                }else{
+                    token =  await jwt.createToken(userData, "1h");
+
+                    const transporter = nodemailer.createTransport({
+                        host: process.env.EMAIL_HOST, 
+                        port: 2525,
+                        auth: {
+                            user: process.env.EMAIL_USER,
+                            pass: process.env.EMAIL_PASS
+                        }
+                    });
+
+
+                    const mailOptions = { 
+                        from: 'pytonicus@gmail.com',
+                        to: userData.email,
+                        subject: 'Reestablecer contraseña | Task Learn',
+                        text: `http://localhost:3000/reset/${userData.id}/${token}` // ruta del frontend
+                    };
+
+                    transporter.sendMail(mailOptions, (err, response)=>{
+                        if(err){
+                            res.status(500).send({msg: "Server status error"});
+                        }else{
+                            res.status(200).send({msg: "Email has send"});
+                        }
+                    });
+                }
+            });
+        }catch(error){
+            req.status(500).send(error);
+        }
+    }
+
+    async function resetPassword(req, res){
+        const {id, token} = req.params;
+        const {newPassword, repitePassword} = req.body;
+
+        const user_token = jwt.decodeToken(token, process.env.SECRET_KEY);
+
+
+        if(user_token.exp <= moment().unix()){
+            res.status(400).send({msg: "Error: token has expired"});
+        }else if(user_token.id !== id || newPassword !== repitePassword){
+            res.status(403).send({msg: "Error: unauthorized request"});
+        }else{
+            const salt = bcryptjs.genSaltSync(10);
+            const password = await bcryptjs.hash(newPassword, salt);
+            User.findByIdAndUpdate(id, {password: password}, (err, result) =>{
+                if(err){
+                    res.status(500).send({msg: "Server status error"});
+                }else if(!result){
+                    res.status(404).send({msg: "Error: user doesn't exists"});
+                }else{
+                    res.status(200).send({msg: "Password change successfully"});
+                }
+            });
+        }
+
+    }
+
+    // se va a crear una ruta para recuperar el usuario:
+    async function getUser(req, res){
+        const user_token = await authMiddleware.getUser(req, res);
+
+        try{
+            const user = await User.findById(user_token.id);
+
+            if(!user){
+                res.status(400).send({msg: "Error: user doesn't exists"});
+            }else if(user._id != user_token.id){ 
+                res.status(403).send({msg: "Forbidden - Access to this resource on the server is denied!"});
+            }else{
+                // quitar password por seguridad:
+                user.password = null;
+                res.status(200).send({user: user});
+            }
+        }catch(error){
+            res.status(500).send(error);
+        }
+    }
+
+    // se crea una función para subir avatar:
+    async function putUser(req, res){
+        // recuperar id:
+        const userId = req.params.id;
+        // recuperar todos los parámetros:
+        const params = req.body;
+        
+        const user_token = await authMiddleware.getUser(req, res);
+
+        try{
+            // se recupera el  usuario:
+            User.findById(userId, async (err, userData) => {
+                // si da error lanzamos un 500:
+                if(err){
+                    res.status(500).send({msg: "Server status error"});
+                }else{
+                    // si no tiene datos o no encuentra el usuario lanzamos 404:
+                    if(!userData){
+                        res.status(404).send({msg: "Error: user doesn't exists"});
+                    }else if(user_token.id !== userData._id){
+                        res.status(403).send({msg: "Error: unauthorized request"});
+                    }else{
+                        // añadir el salt para el password:
+                        const salt = bcryptjs.genSaltSync(10);
+                        // actualizar la información por aquella recibida de parametros:
+                        userData.name = params.name;
+                        userData.lastname = params.lastname;
+                        userData.email = params.email; 
+                        
+                        // verificar que nos llegue un password para que no quede en blanco este campo:
+                        if(params.password){
+                            userData.password = await bcryptjs.hash(params.password, salt);
+                        }
+
+                        // si tenemos el campo avatar de tipo file seguimos adelante:
+                        if(req.files.avatar){
+                            // obtener el path del fichero:
+                            const filePath = req.files.avatar.path;
+                            // separar el id del archivo de la ruta upload:
+                            let fileSplit = path.resolve(filePath).split(path.sep);
+                            // sacamos el id unico del archivo para usarlo como nombre:
+                            let filename = fileSplit[fileSplit.length-1];
+
+                            // filtar el tipo de fichero a subir:
+                            let fileExt = filename.split("."); // separar la extensión
+                            if(fileExt[fileExt.length-1] !== "jpg" && fileExt[fileExt.length-1] !== "jpeg" && fileExt[fileExt.length-1] !== "png"){
+                                // se borra el archivo recien subido al servidor si no cumple con la extensión:
+                                fs.unlink(filePath, (err)=>{
+                                    if (err) throw console.error(err);
+                                    console.error("Only extension can be JPG or PNG");
+                                });
+                            }else{
+                                // comprobar si existe ya un avatar lo eliminamos:
+                                if(userData.avatar){
+                                    const old_path = `./uploads/avatars/${userData.avatar}`;
+                                    fs.unlink(old_path, (err)=>{
+                                        if (err) throw console.error(err);
+                                    });
+                                }
+                                // le pasamos al objeto user el nombre del archivo:
+                                userData.avatar = filename;
+                            }
+                        }
+
+                        // actualizar el nombre del archivo en la base de datos:
+                        User.findByIdAndUpdate(userId, userData, (err, result) => {
+                            // si hay errores un 500:
+                            if(err){
+                                res.status(500).send({msg: "Server status error"});
+                            // verificar si no existe le usuario:
+                            }else if(!result){
+                                res.status(404).send({msg: "Error: user doesn't exists"});
+                            }else{
+                                res.status(201).send({user: userData});
+                            }
+                        });
+
+                    }
+                }
+            });
+        }catch(error){
+            console.error(error);
+        }
+    }
+
+    module.exports = {
+        postUser,
+        login,
+        forgot,
+        resetPassword,
+        getUser, // exportar modulo
+        putUser  // exportar modulo
+    }
+
+
+Paso 4: Recuperar usuario y actualizar imagen de usuario (router)
+*****************************************************************
+
+- Añadir la nueva ruta a **userRoutes.js**:
+
+.. code-block:: javascript 
+    :linenos:
+
+    const express = require("express");
+    // importar multiparty:
+    const multiparty = require("connect-multiparty");
+    const userController = require('../controllers/userController');
+    // cargar auth middleware: 
+    const authMiddleware = require('../middlewares/authMiddleware');
+    // crear middleware con multipary:
+    const uploadAvatarMiddleware = multiparty({uploadDir: './uploads/avatars'});
+
+    const api = express.Router();
+
+    api.post("/register", userController.postUser);
+    api.post("/login", userController.login);
+    api.post("/forgot", userController.forgot);
+    api.put("/reset/:id/:token", userController.resetPassword);
+    // cargar ruta para mostrar usuario:
+    api.get("/users", [authMiddleware.secureRoute], userController.getUser);
+    // añadimos la ruta que se utilizará para subir el avatar (el token primero ya que respeta orden):
+    api.put("/users/:id", [authMiddleware.secureRoute, uploadAvatarMiddleware], userController.putUser);
+
+
+    module.exports = api;
+    
+- Crear carpeta **uploads** y dentro de ella **avatars**. 
+- añadir la línea **uploads/** al archivo **.gitignore**.
+- Crear dentro de cada carpeta de las anteriores un archivo llamado **.gitkeep**
+
+.. important::
+    Debes crear las carpetas anteriores o multiparty dará error.
+
+- Ahora se crean dos request en postman, una tipo GET para recuperar el usuario y una tipo PUT para actualizarlo.
+- A partir de ahora usaremos en **Body** la opción **form-data** para enviar cada uno de los campos. Para el campo **avatar** podemos pinchar a la derecha de la misma celda en **text** y cambiarlo por **file** para poder cargar un archivo.
+
+
+paso 5: Recuperar avatar (controller)
+*************************************
+
+- Ahora vamos a recuperar una imagen guardada en el servidor. Editamos **userController.js**:
+
+.. code-block:: javascript 
+
+    const bcryptjs = require('bcryptjs');
+    const nodemailer = require('nodemailer');
+    const moment = require('moment');
+    const path = require('path');
+    // importar la api interna filesystem:
+    const fs = require('fs');
+    const User = require('../models/userModel');
+    const jwt = require('../services/jwtService');
+    const authMiddleware = require('../middlewares/authMiddleware');
+
+    async function postUser(req, res){
+        const params = req.body;
+        const user = new User(params);
+
+        try{
+            if(!params.email) throw{msg: "Error: email cannot be null"};
+            if(!params.password) throw{msg: "Error: password cannot be null"};
+
+            const emailExists = await User.findOne({email: params.email});
+            if(emailExists) throw {msg: "Error: Email already exists"};
+
+            const salt = bcryptjs.genSaltSync(10);
+            user.password = await bcryptjs.hash(params.password, salt);
+            
+            user.save();
+            res.status(201).send({user: user});
+            
+        }catch(error){
+            res.status(500).send(error);
+        }
+    }
+
+    async function login(req, res){
+        const {email, password} = req.body;
+
+        try {
+            User.findOne({email: email}, async (err, userData) =>{
+                if(err){
+                    res.status(500).send({msg: "Server status error"});
+                }else{
+                    if(!userData){
+                        res.status(400).send({msg: "Error: email doesn't exists"});
+                    }else{
+                        const passwordCorrect = await bcryptjs.compare(password, userData.password);
+                        if(!passwordCorrect){
+                            res.status(403).send({msg: "Error: incorrect password"});
+                        }else{
+                            token =  await jwt.createToken(userData, "24h");
+
+                            res.status(200).send({token: token});
+                        }
+
+                    }
+                }
+            });
+
+        }catch(error){
+            req.status(500).send(error);
+        }
+
+    }
+
+    function forgot(req, res){
+        const email = req.body.email;
+        if(!email)throw{msg: "Error: email cannot be null"}
+
+        try{
+            User.findOne({email: email}, async (err, userData)=>{
+                if(err){
+                    res.status(400).send({msg: "Error: email doesn't exists"});
+                }else{
+                    token =  await jwt.createToken(userData, "1h");
+
+                    const transporter = nodemailer.createTransport({
+                        host: process.env.EMAIL_HOST, 
+                        port: 2525,
+                        auth: {
+                            user: process.env.EMAIL_USER,
+                            pass: process.env.EMAIL_PASS
+                        }
+                    });
+
+
+                    const mailOptions = { 
+                        from: 'pytonicus@gmail.com',
+                        to: userData.email,
+                        subject: 'Reestablecer contraseña | Task Learn',
+                        text: `http://localhost:3000/reset/${userData.id}/${token}` // ruta del frontend
+                    };
+
+                    transporter.sendMail(mailOptions, (err, response)=>{
+                        if(err){
+                            res.status(500).send({msg: "Server status error"});
+                        }else{
+                            res.status(200).send({msg: "Email has send"});
+                        }
+                    });
+                }
+            });
+        }catch(error){
+            req.status(500).send(error);
+        }
+    }
+
+    async function resetPassword(req, res){
+        const {id, token} = req.params;
+        const {newPassword, repitePassword} = req.body;
+
+        const user_token = jwt.decodeToken(token, process.env.SECRET_KEY);
+
+
+        if(user_token.exp <= moment().unix()){
+            res.status(400).send({msg: "Error: token has expired"});
+        }else if(user_token.id !== id || newPassword !== repitePassword){
+            res.status(403).send({msg: "Error: unauthorized request"});
+        }else{
+            const salt = bcryptjs.genSaltSync(10);
+            const password = await bcryptjs.hash(newPassword, salt);
+            User.findByIdAndUpdate(id, {password: password}, (err, result) =>{
+                if(err){
+                    res.status(500).send({msg: "Server status error"});
+                }else if(!result){
+                    res.status(404).send({msg: "Error: user doesn't exists"});
+                }else{
+                    res.status(200).send({msg: "Password change successfully"});
+                }
+            });
+        }
+
+    }
+
+    async function getUser(req, res){
+        const user_token = await authMiddleware.getUser(req, res);
+
+        try{
+            const user = await User.findById(user_token.id);
+
+            if(!user){
+                res.status(400).send({msg: "Error: user doesn't exists"});
+            }else if(user._id != user_token.id){ 
+                res.status(403).send({msg: "Forbidden - Access to this resource on the server is denied!"});
+            }else{
+                user.password = null;
+                res.status(200).send({user: user});
+            }
+        }catch(error){
+            res.status(500).send(error);
+        }
+    }
+
+    async function putUser(req, res){
+        const userId = req.params.id;
+        const params = req.body;
+        
+        const user_token = await authMiddleware.getUser(req, res);
+
+        try{
+            User.findById(userId, async (err, userData) => {
+                if(err){
+                    res.status(500).send({msg: "Server status error"});
+                }else{
+                    if(!userData){
+                        res.status(404).send({msg: "Error: user doesn't exists"});
+                    }else if(user_token.id !== userData.id){
+                        res.status(403).send({msg: "Error: unauthorized request"});
+                    }else{
+                        const salt = bcryptjs.genSaltSync(10);
+                        userData.name = params.name;
+                        userData.lastname = params.lastname;
+                        userData.email = params.email; 
+                        
+                        if(params.password){
+                            userData.password = await bcryptjs.hash(params.password, salt);
+                        }
+
+                        if(req.files.avatar){
+                            const filePath = req.files.avatar.path;
+                            let fileSplit = path.resolve(filePath).split(path.sep);
+                            let filename = fileSplit[fileSplit.length-1];
+
+                            let fileExt = filename.split("."); 
+                            if(fileExt[fileExt.length-1] !== "jpg" && fileExt[fileExt.length-1] !== "jpeg" && fileExt[fileExt.length-1] !== "png"){
+                                fs.unlink(filePath, (err)=>{
+                                    if (err) throw console.error(err);
+                                    console.error("Only extension can be JPG or PNG");
+                                });
+                            }else{
+                                if(userData.avatar){
+                                    const old_path = `./uploads/avatars/${userData.avatar}`;
+                                    fs.unlink(old_path, (err)=>{
+                                        if (err) throw console.error(err);
+                                    });
+                                }
+                                userData.avatar = filename;
+                            }
+                        }
+
+                        User.findByIdAndUpdate(userId, userData, (err, result) => {
+                            if(err){
+                                res.status(500).send({msg: "Server status error"});
+                            }else if(!result){
+                                res.status(404).send({msg: "Error: user doesn't exists"});
+                            }else{
+                                res.status(201).send({user: userData});
+                            }
+                        });
+
+                    }
+                }
+            });
+        }catch(error){
+            console.error(error);
+        }
+    }
+
+    // crear función para leer archivo:
+    function getAvatar(req, res){
+        // recuperar el nombre del avatar:
+        const avatarName = req.params.avatarName;
+        // se prepara la ruta del archivo:
+        const filePath = `./uploads/avatars/${avatarName}`;
+
+        // comprobar que existe el fichero:
+        fs.stat(filePath, (err, stat)=>{
+            // si no existe 404:
+            if(err){
+                res.status(404).send({msg: "Error: Avatar doesn't exists"});
+            }else{
+                // si existe lo recuperamos:
+                res.sendFile(path.resolve(filePath));
+            }
+        });
+    }
+
+    module.exports = {
+        postUser,
+        login,
+        forgot,
+        resetPassword,
+        getUser,
+        putUser,
+        getAvatar // exportar modulo
+    }
+
+
+paso 6: Recuperar avatar (router)
+*********************************
+
+- Ahora vamos a crear el endpoint para recuperar el avatar en **userRoutes.js**:
+
+.. code-block:: javascript 
+
+    const express = require("express");
+    const multiparty = require("connect-multiparty");
+    const userController = require('../controllers/userController');
+    const authMiddleware = require('../middlewares/authMiddleware');
+    const uploadAvatarMiddleware = multiparty({uploadDir: './uploads/avatars'});
+
+    const api = express.Router();
+
+    api.post("/register", userController.postUser);
+    api.post("/login", userController.login);
+    api.post("/forgot", userController.forgot);
+    api.put("/reset/:id/:token", userController.resetPassword);
+    api.get("/users", [authMiddleware.secureRoute], userController.getUser);
+    api.put("/users/:id", [authMiddleware.secureRoute, uploadAvatarMiddleware], userController.putUser);
+    // recuperar avatar a traves de esta ruta:
+    api.get("/users/avatar/:avatarName", userController.getAvatar);
+
+    module.exports = api;
+
+Paso 7: Eliminar usuario (controller)
+*************************************
+
+- Vamos a crear una función para eliminar usuarios llamada **deleteUser** en **userController.js**:
+
+.. code-block:: javascript
+
+    const bcryptjs = require('bcryptjs');
+    const nodemailer = require('nodemailer');
+    const moment = require('moment');
+    const path = require('path');
+    const fs = require('fs');
+    // importar has de underscore para comprobar que existe una clave en un objeto:
+    const {has} = require('underscore');
+    const {_} = require('underscore');
+
+    const User = require('../models/userModel');
+    const jwt = require('../services/jwtService');
+    const authMiddleware = require('../middlewares/authMiddleware');
+
+    async function postUser(req, res){
+        const params = req.body;
+        const user = new User(params);
+
+        try{
+            if(!params.email) throw{msg: "Error: email cannot be null"};
+            if(!params.password) throw{msg: "Error: password cannot be null"};
+
+            const emailExists = await User.findOne({email: params.email});
+            if(emailExists) throw {msg: "Error: Email already exists"};
+
+            const salt = bcryptjs.genSaltSync(10);
+            user.password = await bcryptjs.hash(params.password, salt);
+            
+            user.save();
+            res.status(201).send({user: user});
+            
+        }catch(error){
+            res.status(500).send(error);
+        }
+    }
+
+    async function login(req, res){
+        const {email, password} = req.body;
+
+        try {
+            User.findOne({email: email}, async (err, userData) =>{
+                if(err){
+                    res.status(500).send({msg: "Server status error"});
+                }else{
+                    if(!userData){
+                        res.status(400).send({msg: "Error: email doesn't exists"});
+                    }else{
+                        const passwordCorrect = await bcryptjs.compare(password, userData.password);
+                        if(!passwordCorrect){
+                            res.status(403).send({msg: "Error: incorrect password"});
+                        }else{
+                            token =  await jwt.createToken(userData, "24h");
+
+                            res.status(200).send({token: token});
+                        }
+
+                    }
+                }
+            });
+
+        }catch(error){
+            req.status(500).send(error);
+        }
+
+    }
+
+    function forgot(req, res){
+        const email = req.body.email;
+        if(!email)throw{msg: "Error: email cannot be null"}
+
+        try{
+            User.findOne({email: email}, async (err, userData)=>{
+                if(err){
+                    res.status(400).send({msg: "Error: email doesn't exists"});
+                }else{
+                    token =  await jwt.createToken(userData, "1h");
+
+                    const transporter = nodemailer.createTransport({
+                        host: process.env.EMAIL_HOST, 
+                        port: 2525,
+                        auth: {
+                            user: process.env.EMAIL_USER,
+                            pass: process.env.EMAIL_PASS
+                        }
+                    });
+
+
+                    const mailOptions = { 
+                        from: 'pytonicus@gmail.com',
+                        to: userData.email,
+                        subject: 'Reestablecer contraseña | Task Learn',
+                        text: `http://localhost:3000/reset/${userData.id}/${token}` // ruta del frontend
+                    };
+
+                    transporter.sendMail(mailOptions, (err, response)=>{
+                        if(err){
+                            res.status(500).send({msg: "Server status error"});
+                        }else{
+                            res.status(200).send({msg: "Email has send"});
+                        }
+                    });
+                }
+            });
+        }catch(error){
+            req.status(500).send(error);
+        }
+    }
+
+    async function resetPassword(req, res){
+        const {id, token} = req.params;
+        const {newPassword, repitePassword} = req.body;
+
+        const user_token = jwt.decodeToken(token, process.env.SECRET_KEY);
+
+
+        if(user_token.exp <= moment().unix()){
+            res.status(400).send({msg: "Error: token has expired"});
+        }else if(user_token.id !== id || newPassword !== repitePassword){
+            res.status(403).send({msg: "Error: unauthorized request"});
+        }else{
+            const salt = bcryptjs.genSaltSync(10);
+            const password = await bcryptjs.hash(newPassword, salt);
+            User.findByIdAndUpdate(id, {password: password}, (err, result) =>{
+                if(err){
+                    res.status(500).send({msg: "Server status error"});
+                }else if(!result){
+                    res.status(404).send({msg: "Error: user doesn't exists"});
+                }else{
+                    res.status(200).send({msg: "Password change successfully"});
+                }
+            });
+        }
+
+    }
+
+    async function getUser(req, res){
+        const user_token = await authMiddleware.getUser(req, res);
+
+        try{
+            const user = await User.findById(user_token.id);
+
+            if(!user){
+                res.status(400).send({msg: "Error: user doesn't exists"});
+            }else if(user._id != user_token.id){ 
+                res.status(403).send({msg: "Forbidden - Access to this resource on the server is denied!"});
+            }else{
+                user.password = null;
+                res.status(200).send({user: user});
+            }
+        }catch(error){
+            res.status(500).send(error);
+        }
+    }
+
+    async function putUser(req, res){
+        const userId = req.params.id;
+        const params = req.body;
+        
+        const user_token = await authMiddleware.getUser(req, res);
+
+        try{
+            User.findById(userId, async (err, userData) => {
+                if(err){
+                    res.status(500).send({msg: "Server status error"});
+                }else{
+                    if(!userData){
+                        res.status(404).send({msg: "Error: user doesn't exists"});
+                    }else if(user_token.id !== userData.id){
+                        res.status(403).send({msg: "Error: unauthorized request"});
+                    }else{
+                        const salt = bcryptjs.genSaltSync(10);
+                        userData.name = params.name;
+                        userData.lastname = params.lastname;
+                        userData.email = params.email; 
+                        
+                        if(params.password){
+                            userData.password = await bcryptjs.hash(params.password, salt);
+                        }
+
+                        if(req.files.avatar){
+                            const filePath = req.files.avatar.path;
+                            let fileSplit = path.resolve(filePath).split(path.sep);
+                            let filename = fileSplit[fileSplit.length-1];
+
+                            let fileExt = filename.split(".");
+                            if(fileExt[fileExt.length-1] !== "jpg" && fileExt[fileExt.length-1] !== "jpeg" && fileExt[fileExt.length-1] !== "png"){
+                                fs.unlink(filePath, (err)=>{
+                                    if (err) throw console.error(err);
+                                    console.error("Only extension can be JPG or PNG");
+                                });
+                            }else{
+                                if(userData.avatar){
+                                    const old_path = `./uploads/avatars/${userData.avatar}`;
+                                    fs.unlink(old_path, (err)=>{
+                                        if (err) throw console.error(err);
+                                    });
+                                }
+                                userData.avatar = filename;
+                            }
+                        }
+
+                        User.findByIdAndUpdate(userId, userData, (err, result) => {
+                            if(err){
+                                res.status(500).send({msg: "Server status error"});
+                            }else{
+                                if(!result){
+                                    res.status(404).send({msg: "Error: user doesn't exists"});
+                                }else if(!result){
+                                    res.status(404).send({msg: "Error: user doesn't exists"});
+                                }else{
+                                    res.status(201).send({user: userData});
+                                }
+                            }
+                        });
+
+                    }
+                }
+            });
+        }catch(error){
+            console.error(error);
+        }
+    }
+
+    function getAvatar(req, res){
+        const avatarName = req.params.avatarName;
+        const filePath = `./uploads/avatars/${avatarName}`;
+
+        fs.stat(filePath, (err, stat)=>{
+            if(err){
+                res.status(404).send({msg: "Error: Avatar doesn't exists"});
+            }else{
+                res.sendFile(path.resolve(filePath));
+            }
+        });
+    }
+
+    // crear función para eliminar usuarios:
+    async function deleteUser(req, res){
+        // coger el parametro id:
+        const user_token = await authMiddleware.getUser(req, res);
+        const userId = req.params.id;
+
+        try{
+            // recuperar usuario a eliminar:
+            User.findById(userId, (err, userData)=>{
+                if(err){
+                    res.status(500).send({msg: "Server status error"});
+                }else if(user_token.id !== userData.id){
+                    res.status(403).send({msg: "Error: unauthorized request"});
+                }else{
+                    // evitar errores al cargar nombre de avatar:
+                    try{
+                        var avatar = userData.avatar;
+                    }catch{
+                        var avatar = null;
+                    }
+
+                    User.findByIdAndDelete(userId, (err, result)=>{
+                        if(err){
+                            res.status(500).send({msg: "Server status error"});
+                        }else if(!result){
+                            res.status(404).send({msg: "Error: User doesn't exist"});
+                        }else{
+                            // si existe un avatar lo eliminamos:
+                            if(avatar){
+                                const old_path = `./uploads/avatars/${avatar}`;
+                                fs.unlink(old_path, (err)=>{
+                                    if (err) throw console.error(err);
+                                });
+                            }
+                            res.status(200).send({msg: "User delete successfully"});
+                        }
+                    });
+                }
+            });
+        }catch(error){
+            res.status(500).send({msg: "Server status error"});
+        }
+    }
+
+    module.exports = {
+        postUser,
+        login,
+        forgot,
+        resetPassword,
+        getUser,
+        putUser,
+        getAvatar,
+        deleteUser // exportar modulo
+    }
+
+Paso 8: Eliminar usuario (router)
+*********************************
+
+- Ahora vamos a cargar la ruta para eliminar el usuario en **userRoutes.js**:
+
+.. code-block:: javascript 
+    :linenos:
+
+    const express = require("express");
+    const multiparty = require("connect-multiparty");
+    const userController = require('../controllers/userController');
+    const authMiddleware = require('../middlewares/authMiddleware');
+    const uploadAvatarMiddleware = multiparty({uploadDir: './uploads/avatars'});
+
+    const api = express.Router();
+
+    api.post("/register", userController.postUser);
+    api.post("/login", userController.login);
+    api.post("/forgot", userController.forgot);
+    api.put("/reset/:id/:token", userController.resetPassword);
+    api.get("/users", [authMiddleware.secureRoute], userController.getUser);
+    api.put("/users/:id", [authMiddleware.secureRoute, uploadAvatarMiddleware], userController.putUser);
+    api.get("/users/avatar/:avatarName", userController.getAvatar);
+    // ruta para eliminar usuarios:
+    api.delete("/users/:id", [authMiddleware.secureRoute], userController.deleteUser);
+
+    module.exports = api;
+
+- Ahora se puede crear el endpoint en Postman para eliminar usuarios.
+
+Paso 9: Subir cambios a GitHub  
+*******************************
+
+- Parar depuración de Visual studio code.
+- Añadir cambios: ``git add .``
+- Realizar un commit: ``git commit -am "Phase 4 complete"``
+- Subir cambios a Github con el nombre de la rama actual: ``git push origin feature/upload-data-service``
+- Desde gitHub presionar botón **Compare & pull request**.
+- cambiar rama base **master** por **developer** y pulsar **Create pull request**
+- Pulsar en **Merge pull request** y a continuación en **Confirm merge**.
+- Una vez terminado volvemos a local y cambiamos de rama a developer: ``git checkout developer``
+- Actualizamos rama developer: ``git pull origin developer`` 
+
+Y con esto concluye la cuarta fase del proyecto.
+
+.. raw:: html 
+
+    <hr><br>

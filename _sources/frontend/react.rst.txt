@@ -1,0 +1,2935 @@
+Frontend React Task Learn 
+=========================
+
+.. image:: /logos/logo-react.png
+    :scale: 35%
+    :alt: Logo Angular
+    :align: center
+
+.. |date| date::
+.. |time| date:: %H:%M
+
+Frontend aplicación listado de tareas desarrollada con React.
+
+- Repositorio proyecto completo: https://github.com/Fullcoder-Learning/-task-learning-frontend
+
+.. contents:: Índice
+  
+Fase 1: Diseño de la aplicación   
+###############################
+
+En esta fase se van a crear todas las pantallas de la aplicación. 
+
+Paso 1 (opcional): Instalar Dependencias  
+****************************************
+
+- Instalar NodeJS desde su sitio oficial: https://nodejs.org/es/
+- Instalar MongoDB desde su sitio oficial:  https://www.mongodb.com/try/download/community
+
+.. note::
+    este paso es opcional si ya tienes instalado tanto mongoDB como NodeJS.
+
+Paso 2: Preparar proyecto 
+*************************
+
+- Instalar React con npx desde la carpeta del proyecto: ``npx create-react-app task-learn-frontend`` 
+- Regresar a la raiz del proyecto **task-learn-frontend**.
+- Instalar bootstrap 5: ``npm install bootstrap --save``
+- Instalar react router: ``npm install react-router-dom --save``
+- Limpiar el archivo **App.css** y añadir la siguiente línea para cargar Bootstrap:
+
+.. code-block:: css 
+
+    @import 'bootstrap/dist/css/bootstrap.css';
+
+- Hacemos lo mismo con el archivo javascript en **App.js**:
+
+.. code-block::  
+
+    import './App.css';
+    // importar js de bootstrap:
+    import 'bootstrap/dist/js/bootstrap';
+
+    function App() {
+    return (
+        <div className="App">
+        <header className="App-header">
+            <img src={logo} className="App-logo" alt="logo" />
+            <p>
+            Edit <code>src/App.js</code> and save to reload.
+            </p>
+            <a
+            className="App-link"
+            href="https://reactjs.org"
+            target="_blank"
+            rel="noopener noreferrer"
+            >
+            Learn React
+            </a>
+        </header>
+        </div>
+    );
+    }
+
+    export default App;
+
+
+
+- Crear las siguientes carpetas dentro de **src**: **pages** y **common**.
+- Inicializar repositorio: ``git init`` 
+- Añadir repositorio remoto: ``git remote add origin https://github.com/Fullcoder-Learning/task-learning-frontend.git``
+- Añadir cambios: ``git add .``
+- Hacer primer commit: ``git commit -am "first commit"``
+- Subir cambios a repositorio remoto: ``git push origin master``
+- Crear rama desarrollo: ``git checkout -b developer``
+- Subir rama desarrollo: ``git push origin developer``
+- Crear rama feature a partir de developer: ``git checkout -b feature/phase-1-task-structure``
+- Arrancar proyecto desde la raiz: ``npm start``
+
+.. attention::
+    npx viene instalado con npm y es su versión en la nube. De modo que si necesitas un paquete y no deseas instalarlo en tu máquina utiliza npx en lugar de npm.
+
+Paso 3: Crear página de tareas
+******************************
+
+- En la carpeta **pages**, crear carpeta **tasks** y dentro el archivo **TasksPage.js**:
+
+.. code-block::  
+
+    // importar fragment de bootstrap:
+    import {Fragment} from 'react';
+
+    // crear función para listado de tareas:
+    function TaskPage(){
+        // retornar una cabecera de prueba:
+        return(
+            <Fragment>
+                <h1>Listado de tareas</h1>
+            </Fragment>
+        )
+    }
+    // Exportar pagina:
+    export default TaskPage;
+
+- Editar **App.js** para añadir esta página como la principal (provisional):
+
+.. code-block::  
+
+    import './App.css';
+    // importar componente página TaskPage:
+    import TaskPage from './pages/tasks/TaskPage';
+
+    function App() {
+        return (
+            <div className="App">
+            {/* Reemplazar contenido de App: */}
+            <TaskPage />
+            </div>
+        );
+    }
+
+    export default App;
+
+Paso 4: Crear componentes navbar
+********************************
+
+- Descargamos la siguiente imagen y la guardamos en una nueva carpeta dentro de **src** llamada **assets**: TODO...
+- Vamos a la carpeta **common** y creamos la hoja de estilos **NavbarCommon.css**:
+
+.. code-block:: css 
+
+    .avatar{
+        height: 40px;
+        width: 40px;
+    }
+
+- Vamos a la carpeta **common** y creamos el componente **NavbarCommon.js**:
+
+.. code-block::  
+
+    import {Fragment} from 'react';
+    // importar hoja de estilos:
+    import './NavbarCommon.css';
+
+    // cargar el avatar por defecto:
+    const avatar = require("../assets/avatar.png");
+
+    function NavBarCommon(){
+
+        return(
+            <Fragment>
+                <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+                    <div className="container-fluid">
+                        <a className="navbar-brand" href="test.html">Task Learn</a>
+                    </div>
+                    
+                    <ul className="navbar-nav mb-2 mb-lg-0">
+                        <li className="nav-item">
+                            <a className="nav-link text-center" href="test.html">
+                                <img className="avatar rounded img-thumbnail img-fluid" src={avatar} alt="foto"></img>
+                                <small>Usuario</small>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </Fragment>
+        )
+    }
+
+    export default NavBarCommon;
+
+- Cargar el componente en **TaskPage.js**:
+
+.. code-block::  
+
+    import {Fragment} from 'react';
+    // importar componentes navbar y footer:
+    import NavBarCommon from '../../common/NavbarCommon';
+
+    function TaskPage(){
+        return(
+            <Fragment>
+                {/* Cargar componentes: */}
+                <NavBarCommon />
+            </Fragment>
+        )
+    }
+    // Exportar pagina:
+    export default TaskPage;
+
+.. note::
+    Las rutas definidas en los enlaces son provisionales, cuando se instale React Router se irá configurando todo.
+
+Paso 5: Crear tabla para listar tareas 
+**************************************
+
+- Crear un nuevo componente en la carpeta **tasks** llamado **TaskTableComponent.js**:
+
+.. code-block:: 
+
+    function TaskTableComponent(){
+        // cargar datos de prueba:
+        const dummyData = [
+            {_id: 1, name: "Cocinar", description: "Cocinar galletas el sábado", date_created: "08/08/2022", is_complete: true, date_finish: "10/08/2022"},
+            {_id: 2, name: "Preparar proyecto", description: "Preparar proyecto para presentar en Septiembre", date_created: "15/08/2022", is_complete: false},
+            {_id: 3, name: "Estudiar Java", description: "Aprender Java para cubrir las especificaciones del proyecto", date_created: "19/08/2022", is_complete: false}
+        ]
+        // crear tabla:
+        return(
+            <div className="text-center container">
+                <table className="table mt-4">
+                    <thead>
+                        <tr>
+                            <th scope="col">Título</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Fecha creación</th>
+                            <th scope="col">Finalizada</th>
+                            <th scope="col">Fecha Finalización</th>
+                            <th scope="col">Operaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody className="text-start">
+                        {
+                            dummyData.map(data => {
+                                return(
+                                    <tr key={data._id}>
+                                        <td>{data.name}</td>
+                                        <td>{data.description}</td>
+                                        <td>{data.date_created}</td>
+                                        <td>{data.is_complete ? ('Si') : ('No')}</td>
+                                        <td>{data.date_finish ? (data.date_finish) : ('')}</td>
+                                        <td className="text-center">
+                                            <button class="btn btn-sm btn-primary me-2">finalizar tarea</button>
+                                            <button class="btn btn-sm btn-danger me-2">Eliminar tarea</button>
+                                        </td>
+                                    </tr>
+                                )
+                            })
+                        }
+                        
+                    </tbody>
+                </table>
+            </div>
+        )
+    }
+
+    export default TaskTableComponent;
+
+- Cargar componente en **TaskPage.js**:
+
+.. code-block::  
+
+    import {Fragment} from 'react';
+    import NavBarCommon from '../../common/NavbarCommon';
+    // cargar componente:
+    import TaskTableComponent from './TaskTableComponent';
+
+    function TaskPage(){
+        return(
+            <Fragment>
+                <NavBarCommon />
+                {/* Cargar componentes: */}
+                <TaskTableComponent />
+            </Fragment>
+        )
+    }
+
+    export default TaskPage;
+
+Paso 6: Crear modals
+********************
+
+- En la carpeta **tasks** crear un componente **FinishTaskComponent.js**:
+
+.. code-block:: 
+
+    // importar fragment:
+    import {Fragment} from 'react';
+
+    // recuperar campo id del hook:
+    function FinishTaskComponent({id, name}){
+        const taskId = id;
+        const taskName = name;
+
+        // crear modal:
+        return(
+            <Fragment>
+                <div className="modal fade" id="finishModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLabel">Se va a finalizar la siguiente tarea</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body">
+                            <p>{taskId} - {taskName}</p>
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" className="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </Fragment>
+        )
+    }
+
+    export default FinishTaskComponent;
+
+- Crear otro nuevo modal en **tasks** llamado **DeleteTaskModal.js**:
+
+.. code-block::  
+
+    // importar fragment:
+    import {Fragment} from 'react';
+
+    // recuperar campo id del hook:
+    function DeleteTaskModalComponent({id, name}){
+        const taskId = id;
+        const taskName = name;
+
+        // crear modal:
+        return(
+            <Fragment>
+                <div className="modal fade" id="deleteModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLabel">Se va a eliminar la siguiente tarea</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body">
+                            <p>{taskId} - {taskName}</p>
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" className="btn btn-danger" data-bs-dismiss="modal">Aceptar</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </Fragment>
+        )
+    }
+
+    export default DeleteTaskModalComponent;
+
+- Cargar el componente justo después de la tabla en **TaaskTableComponent.js**:
+
+.. code-block:: 
+
+    // importar hook usestate:
+    import {useState} from 'react';
+    import DeleteTaskModalComponent from './DeleteTaskModalComponent';
+    // cargar componente:
+    import FinishTaskModalComponent from './FinishTaskModalComponent';
+
+    function TaskTableComponent(){
+        // preparar hook para recuperar id y titulo:
+        const [id, setId] = useState(null);
+        const [name, setName] = useState(null);
+
+        // crear handle para id:
+        const dataHandle = (id, name) => {
+            return (e)=>{
+                setId(id);
+                setName(name);
+            }
+        }
+
+        const dummyData = [
+            {_id: 1, name: "Cocinar", description: "Cocinar galletas el sábado", date_created: "08/08/2022", is_complete: true, date_finish: "10/08/2022"},
+            {_id: 2, name: "Preparar proyecto", description: "Preparar proyecto para presentar en Septiembre", date_created: "15/08/2022", is_complete: false},
+            {_id: 3, name: "Estudiar Java", description: "Aprender Java para cubrir las especificaciones del proyecto", date_created: "19/08/2022", is_complete: false}
+        ]
+
+        return(
+            <div className="text-center container">
+                <table className="table mt-4">
+                    <thead>
+                        <tr>
+                            <th scope="col">Título</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Fecha creación</th>
+                            <th scope="col">Finalizada</th>
+                            <th scope="col">Fecha Finalización</th>
+                            <th scope="col">Operaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody className="text-start">
+                        {
+                            dummyData.map(data => {
+                                return(
+                                    <tr key={data._id}>
+                                        <td>{data.name}</td>
+                                        <td>{data.description}</td>
+                                        <td>{data.date_created}</td>
+                                        <td>{data.is_complete ? ('Si') : ('No')}</td>
+                                        <td>{data.date_finish ? (data.date_finish) : ('')}</td>
+                                        <td className="text-center">
+                                            <button type="button" onClick={dataHandle(data._id, data.name)} class="btn btn-sm btn-primary me-2" data-bs-toggle="modal" data-bs-target="#finishModal">finalizar tarea</button>
+                                            <button type="button" onClick={dataHandle(data._id, data.name)} class="btn btn-sm btn-danger me-2" data-bs-toggle="modal" data-bs-target="#deleteModal">Eliminar tarea</button>
+                                        </td>
+                                    </tr>
+                                )
+                            })
+                        }
+                        
+                    </tbody>
+                </table>
+                {/* Añadimos el componente y le pasamos el hook id: */}
+                <FinishTaskModalComponent id={id} name={name} />
+                <DeleteTaskModalComponent id={id} name={name} />
+            </div>
+        )
+    }
+
+    export default TaskTableComponent;
+
+
+Paso 7: Formulario para crear tareas 
+************************************
+
+- Seguimos editando el componente **TaskTableComponent.js**:
+
+.. code-block::  
+
+    // importar hook usestate:
+    import {useState} from 'react';
+    import DeleteTaskModalComponent from './DeleteTaskModalComponent';
+    // cargar componente:
+    import FinishTaskModalComponent from './FinishTaskModalComponent';
+
+    function TaskTableComponent(){
+        // creamos un hook con el contenido de la tabla:
+        const [dummyData, setDummyData] =  useState([
+            {_id: 1, name: "Cocinar", description: "Cocinar galletas el sábado", date_created: "08/08/2022", is_complete: true, date_finish: "10/08/2022"},
+            {_id: 2, name: "Preparar proyecto", description: "Preparar proyecto para presentar en Septiembre", date_created: "15/08/2022", is_complete: false},
+            {_id: 3, name: "Estudiar Java", description: "Aprender Java para cubrir las especificaciones del proyecto", date_created: "19/08/2022", is_complete: false}
+        ])
+
+        // preparar hook para recuperar id, titulo y descripción:
+        const [id, setId] = useState(null);
+        const [name, setName] = useState(null);
+        const [description, setDescription] = useState(null);
+
+        // crear handle para id:
+        const dataHandle = (id, name) => {
+            return (e)=>{
+                setId(id);
+                setName(name);
+            }
+        }
+
+        // crear handle para título:
+        const handleName = (e) => {
+            setName(e.target.value);
+        }
+
+        // crear handle para descripcion:
+        const handleDescription = (e) => {
+            setDescription(e.target.value);
+        }
+
+        // crear handle para formulario:
+        const handleForm = (e) => {
+            e.preventDefault();
+            setDummyData(task => [...task, {_id: 4, name: name, description: description}])
+
+        }
+
+        return(
+            <div className="text-center container">
+                <table className="table mt-4">
+                    <thead>
+                        <tr>
+                            <th scope="col">Título</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Fecha creación</th>
+                            <th scope="col">Finalizada</th>
+                            <th scope="col">Fecha Finalización</th>
+                            <th scope="col">Operaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody className="text-start">
+                        {
+                            dummyData.map(data => {
+                                return(
+                                    <tr key={data._id}>
+                                        <td>{data.name}</td>
+                                        <td>{data.description}</td>
+                                        <td>{data.date_created}</td>
+                                        <td className="text-center">{data.is_complete ? ('Si') : ('No')}</td>
+                                        <td>{data.date_finish ? (data.date_finish) : ('')}</td>
+                                        <td className="text-center">
+                                            <button type="button" onClick={dataHandle(data._id, data.name)} className="btn btn-sm btn-primary me-2 mb-1" data-bs-toggle="modal" data-bs-target="#finishModal">Finalizar</button>
+                                            <button type="button" onClick={dataHandle(data._id, data.name)} className="btn btn-sm btn-danger me-2" data-bs-toggle="modal" data-bs-target="#deleteModal">Eliminar</button>
+                                        </td>
+                                    </tr>
+                                )
+                            })
+                        }
+                        {/* Crear un formulario para añadir nuevas tareas: */}
+                        <tr className="text-center">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td colSpan="3" >
+                                <form className="row input-group-sm" onSubmit={handleForm}>
+                                    <input className="col me-2 form-control form-sm" type="text" placeholder="Título" onChange={handleName} />
+                                    <input className="col me-2 form-control" type="text" placeholder="Descripción"  onChange={handleDescription} />
+                                    <input className="col me-2 form-control btn btn-success" type="submit" value="Crear tarea" />
+                                </form>
+                            </td>
+                            
+                        </tr>
+                    </tbody>
+                </table>
+                {/* Añadimos el componente y le pasamos el hook id: */}
+                <FinishTaskModalComponent id={id} name={name} />
+                <DeleteTaskModalComponent id={id} name={name} />
+            </div>
+        )
+    }
+
+    export default TaskTableComponent;
+
+Ahora se pueden añadir tareas a la memoria dummy.
+
+Paso 8: Preparar rutas 
+**********************
+
+- Ahora vamos a preparar el router dentro de la carpeta **src** creamos el archivo **Router.js**:
+
+.. code-block::  
+
+    // importar funciones del modulo react router:
+    import {BrowserRouter, Route, Routes} from 'react-router-dom';
+    // importar fragment también:
+    import {Fragment} from 'react';
+
+    // importar los componentes de vista:
+    import TaskPage from './pages/tasks/TaskPage';
+
+    function Router(){
+        // retornar la estructura de rutas:
+        return(
+            <Fragment>  
+                <BrowserRouter>
+                    <Routes>
+                        <Route exact path="/" element={<TaskPage />} />
+                        {/* Ruta para urls no establecidas (error 404): */}
+                        <Route path="*" element={<h1>Error 404 - No se encuentra la página</h1>} />
+                    </Routes>
+                </BrowserRouter>
+            </Fragment>
+        )
+    }
+
+    export default Router;
+
+- Lo siguiente será reemplazar el componente por el de rutas en **App.js**:
+
+.. code-block::  
+
+    import './App.css';
+    import 'bootstrap/dist/js/bootstrap';
+    import Router from './Router';
+
+    function App() {
+        return (
+            <div className="App">
+            {/* Reemplazar contenido de App: */}
+            <Router />
+            </div>
+        );
+    }
+
+    export default App;
+
+- Probamos a introducir cualquier ruta para comprobar que funciona el error 404.
+
+Paso 9: Crear pagina de usuarios 
+********************************
+
+- Creamos una nueva carpeta en **pages** llamada **users**, ahora creamos un archivo llamado **UserPage.js**:
+
+.. code-block::  
+
+    import {Fragment} from 'react';
+    import NavBarCommon from '../../common/NavbarCommon';
+
+    function UserPage(){
+        return(
+            <Fragment>
+                <NavBarCommon />
+            </Fragment>
+        )
+    }
+
+    export default UserPage;
+
+- Creamos una nueva ruta para **users** en **Router.js**:
+
+.. code-block:: 
+
+    import {BrowserRouter, Route, Routes} from 'react-router-dom';
+    import {Fragment} from 'react';
+
+    import TaskPage from './pages/tasks/TaskPage';
+    // importar el componente user page:
+    import UserPage from './pages/users/UserPage';
+
+    function Router(){
+        return(
+            <Fragment>  
+                <BrowserRouter>
+                    <Routes>
+                        <Route exact path="/" element={<TaskPage />} />
+                        {/* Añadir ruta para editar usuario: */}
+                        <Route path="/users" element={<UserPage />} />
+                        <Route path="*" element={<h1>Error 404 - No se encuentra la página</h1>} />
+                    </Routes>
+                </BrowserRouter>
+            </Fragment>
+        )
+    }
+
+    export default Router;
+
+Paso 10: Añadir enlaces al navbar
+*********************************
+
+- Editamos el componente **NavbarCommon.js**: 
+
+.. code-block:: 
+
+    import {Fragment} from 'react';
+    //  importar elementos de react router:
+    import {NavLink} from 'react-router-dom';
+    import './NavbarCommon.css';
+
+    const avatar = require("../assets/avatar.png");
+
+    function NavBarCommon(){
+
+        return(
+            <Fragment>
+                    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+                        <div className="container-fluid">
+                            <NavLink to="/" className="navbar-brand">Task Learn</NavLink>
+                        </div>
+                        
+                        <ul className="navbar-nav mb-2 mb-lg-0">
+                            <li className="nav-item">
+                                <NavLink to="/users" className="nav-link text-center">
+                                    <img className="avatar rounded img-thumbnail img-fluid" src={avatar} alt="foto"></img>
+                                    <small>Usuario</small>
+                                </NavLink>
+                            </li>
+                        </ul>
+                    </nav>
+            </Fragment>
+        )
+    }
+
+    export default NavBarCommon;
+
+Paso 11: Crear componente para editar usuario 
+*********************************************
+
+- Crear una hoja de estilos en la carpeta **users** llamada **UserFormComponent.css**:
+
+.. code-block:: css 
+
+    .avatarEdit{
+        width: 200px;
+        height: 200px;
+    }
+
+- Crear un nuevo componente en la carpeta **users** llamado **UserFormComponent.js**:
+
+.. code-block::  
+
+    // importar hook:
+    import {useState} from 'react';
+
+    // cargar hoja de estilo:
+    import './UserFormComponent.css';
+    // importar avatar por defecto:
+    const avatar = require('../../assets/avatar.png');
+
+    function UserFormComponent(){
+        // crear hooks:
+        const [file, setFile] = useState("");
+        const [name, setName] = useState("");
+        const [lastname, setLastname] = useState("");
+        const [email, setEmail] = useState("");
+        const [password, setPassword] = useState("");
+
+        // crear handles para cambiar estado de hooks:
+        const handleFile = (e) =>{
+            setFile(e.target.files[0]);
+        }
+
+        const handleName = (e) =>{
+            setName(e.target.value);
+        }
+
+        const handleLastname = (e) =>{
+            setLastname(e.target.value);
+        }
+
+        const handleEmail = (e) =>{
+            setEmail(e.target.value);
+        }
+
+        const handlePassword = (e) =>{
+            setPassword(e.target.value);
+        }
+
+        // crear handle para formulario:
+        const handleForm = (e) =>{
+            e.preventDefault();
+            console.log(file);
+            console.log(name);
+            console.log(lastname);
+            console.log(email);
+            console.log(password);
+        }
+        
+        // cargar formulario:
+        return(
+            <div className="container mt-4 text-center">
+                <form onSubmit={handleForm}>
+                    <div className="row">
+                        <div className="col">
+                            <h3>Datos de usuario</h3>
+                            <hr />
+                            <img src={avatar} className="avatarEdit rounded img-thumbnail img-fluid"  alt="Avatar" />
+                            <input type="file" className="form-control mt-3" placeholder="Subir avatar" onChange={handleFile} />
+                            <input type="text" className="form-control mt-3" placeholder="Nombre" onChange={handleName} />   
+                            <input type="text" className="form-control mt-3" placeholder="Apellidos" onChange={handleLastname} />  
+                            <input type="text" className="form-control mt-3" placeholder="Email" onChange={handleEmail} />  
+                            <input type="text" className="form-control mt-3" placeholder="Contraseña" onChange={handlePassword} /> 
+                            <input type="submit" className="btn btn-success form-control mt-3" value="Actualizar datos" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        );
+    }
+
+    export default UserFormComponent;
+
+- Cargar componente en **UserPage.js**:
+
+.. code-block::  
+    :linenos:
+
+    import {Fragment} from 'react';
+    import NavBarCommon from '../../common/NavbarCommon';
+    // importar el formulario:
+    import UserFormComponent from './UserFormComponent';
+
+    function UserPage(){
+        return(
+            <Fragment>
+                <NavBarCommon />
+                {/* Cargar el componente: */}
+                <UserFormComponent />
+            </Fragment>
+        )
+    }
+
+    export default UserPage;
+
+Paso 12: Crear pantalla de Login 
+********************************
+
+- Crear una nueva carpeta en **pages** llamada **login** y dentro un archivo llamado **LoginPage.css**:
+
+.. code-block:: css 
+
+    html,
+    .bodystyle {
+    height: 100vh;
+    }
+
+    .bodystyle {
+    display: flex;
+    align-items: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background-color: #f5f5f5;
+    }
+
+    .form-signin {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
+    }
+
+    .form-signin .checkbox {
+    font-weight: 400;
+    }
+
+    .form-signin .form-floating:focus-within {
+    z-index: 2;
+    }
+
+    .form-signin input[type="email"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    }
+
+    .form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    }
+
+    .cursor{
+    border: 0px;
+    background: transparent;
+    }
+
+
+- Crear un archivo llamado **LoginPage.js**:
+
+.. code-block::  
+
+    import {Fragment} from 'react';
+    import './LoginPage.css';
+    // importar el componente modal:
+    import RegisterModalComponent from './RegisterModalComponent';
+
+    // Crear función para cargar página de inicio:
+    function LoginPage(){
+
+        // Cargar formulario de inicio:
+        return(
+            <Fragment>
+                <div className="bodystyle text-center" cz-shortcut-listen="true">
+                    <div className="form-signin text-center">
+                        <form>
+                            <h1>Por favor inicia sesión</h1>
+                            <div className="form-floating">
+                                <input type="email" className="form-control" id="floatingInput" placeholder="name@example.com" />
+                                <label htmlFor="floatingInput">Email</label>
+                            </div>
+                            <div className="form-floating">
+                                <input type="password" className="form-control" id="floatingPassword" placeholder="Password" />
+                                <label htmlFor="floatingPassword">Contraseña</label>
+                            </div>
+                            <div className="mb-3">
+                            <button type="button" className="cursor" data-bs-toggle="modal" data-bs-target="#registerUser">Crear usuario</button>
+                            </div>
+                            <div className="mb-3">
+                            <button type="button" className="cursor" data-bs-toggle="modal" data-bs-target="#resetPassword">¿has olvidado la contraseña?</button>
+                            </div>
+                            <button className="w-100 btn btn-lg btn-primary" type="submit">Iniciar sesión</button>
+                        </form>
+                    </div>
+                </div>
+                <RegisterModalComponent />
+            </Fragment>
+        )
+    }
+
+    export default LoginPage;
+
+- Cargar la ruta en **Router.js**:
+
+.. code-block::  
+
+    import {BrowserRouter, Route, Routes} from 'react-router-dom';
+    import {Fragment} from 'react';
+
+    import TaskPage from './pages/tasks/TaskPage';
+    import UserPage from './pages/users/UserPage';
+    // importar el componente login:
+    import LoginPage from './pages/login/LoginPage';
+
+    function Router(){
+        return(
+            <Fragment>  
+                <BrowserRouter>
+                    <Routes>
+                        <Route exact path="/" element={<TaskPage />} />
+                        <Route path="/users" element={<UserPage />} />
+                        {/* Añadir ruta para editar usuario: */}
+                        <Route path="/login" element={<LoginPage />} />
+                        <Route path="*" element={<h1>Error 404 - No se encuentra la página</h1>} />
+                    </Routes>
+                </BrowserRouter>
+            </Fragment>
+        )
+    }
+
+    export default Router;
+
+Paso 13: Crear modal para registrar usuarios 
+********************************************
+
+- Crear un nuevo componente en **login** llamado **RegisterModalComponent.js**:
+
+.. code-block:: 
+
+    // importar fragment:
+    import {Fragment} from 'react';
+    import {useState} from 'react';
+
+    // recuperar campo id del hook:
+    function RegisterModalComponent(){
+        const [email, setEmail] = useState("");
+        const [password, setPassword] = useState("");
+
+        const handleEmail = (e) =>{
+            setEmail(e.target.value);
+        }
+
+        const handlePassword = (e) =>{
+            setPassword(e.target.value);
+        }
+
+        // crear handle para formulario:
+        const handleForm = (e) =>{
+            e.preventDefault();
+            console.log(email);
+            console.log(password);
+        }
+
+        // crear modal:
+        return(
+            <Fragment>
+                <div className="modal fade" id="registerUser" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLabel">Registro</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body">
+                        <form onSubmit={handleForm}>
+                            <div className="row">
+                                <div className="col">
+                                    <input type="email" className="form-control mt-3" placeholder="Email" onChange={handleEmail} />  
+                                    <input type="password" className="form-control mt-3" placeholder="Contraseña" onChange={handlePassword} /> 
+                                    <input type="submit" className="btn btn-success form-control mt-3" value="Darse de alta" data-bs-dismiss="modal" />
+                                </div>
+                            </div>
+                        </form>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </Fragment>
+        )
+    }
+
+    export default RegisterModalComponent;
+
+- Cargar modal en **LoginPage.js**:
+
+.. code-block::  
+
+    import {Fragment} from 'react';
+    import './LoginPage.css';
+    import RegisterModalComponent from './RegisterModalComponent';
+
+    function LoginPage(){
+
+        return(
+            <Fragment>
+                <div className="bodystyle text-center" cz-shortcut-listen="true">
+                    <div className="form-signin text-center">
+                        <form>
+                            <h1>Por favor inicia sesión</h1>
+                            <div className="form-floating">
+                                <input type="email" className="form-control" id="floatingInput" placeholder="name@example.com" />
+                                <label htmlFor="floatingInput">Email</label>
+                            </div>
+                            <div className="form-floating">
+                                <input type="password" className="form-control" id="floatingPassword" placeholder="Password" />
+                                <label htmlFor="floatingPassword">Contraseña</label>
+                            </div>
+                            <div className="mb-3">
+                            <button type="button" className="cursor" data-bs-toggle="modal" data-bs-target="#registerUser">Crear usuario</button>
+                            </div>
+                            <div className="mb-3">
+                            <button type="button" className="cursor" data-bs-toggle="modal" data-bs-target="#resetPassword">¿has olvidado la contraseña?</button>
+                            </div>
+                            <button className="w-100 btn btn-lg btn-primary" type="submit">Iniciar sesión</button>
+                        </form>
+                    </div>
+                </div>
+                {/* cargar modal: */}
+                <RegisterModalComponent />
+            </Fragment>
+        )
+    }
+
+    export default LoginPage;
+
+Paso 14: Crear alerta cuando se registra usuario
+*************************************************
+
+- Crear nueva regla de al final del archivo **LoginPage.css**:
+
+.. code-block:: css 
+
+    
+    .alert{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    }
+
+- Crear alerta en **LoginPage.js**:
+
+.. code-block:: 
+
+    import {Fragment} from 'react';
+    import {useState} from 'react';
+    import './LoginPage.css';
+    import RegisterModalComponent from './RegisterModalComponent';
+
+    function LoginPage(){
+        // crear hook para la alerta:
+        const [alert, setAlert] = useState(false);
+
+        return(
+            <Fragment>
+                {/* crear un alert con condición de ocultar en la clase: */}
+                <div className={alert === true ? "alert alert-success" : "alert alert-success fade"} role="alert">
+                    Registro realizado con éxito. Ya puedes iniciar sesión.
+                </div>
+                <div className="bodystyle text-center" cz-shortcut-listen="true">
+                    <div className="form-signin text-center">
+                        <form>
+                            <h1>Por favor inicia sesión</h1>
+                            <div className="form-floating">
+                                <input type="email" className="form-control" id="floatingInput" placeholder="name@example.com" />
+                                <label htmlFor="floatingInput">Email</label>
+                            </div>
+                            <div className="form-floating">
+                                <input type="password" className="form-control" id="floatingPassword" placeholder="Password" />
+                                <label htmlFor="floatingPassword">Contraseña</label>
+                            </div>
+                            <div className="mb-3">
+                            <button type="button" className="cursor" data-bs-toggle="modal" data-bs-target="#registerUser">Crear usuario</button>
+                            </div>
+                            <div className="mb-3">
+                            <button type="button" className="cursor" data-bs-toggle="modal" data-bs-target="#resetPassword">¿has olvidado la contraseña?</button>
+                            </div>
+                            <button className="w-100 btn btn-lg btn-primary" type="submit">Iniciar sesión</button>
+                        </form>
+                    </div>
+                </div>
+                {/* pasar estado de la alerta: */}
+                <RegisterModalComponent setAlert={setAlert} />
+            </Fragment>
+        )
+    }
+
+    export default LoginPage;
+
+- Modificar ahora el componente **RegisterModalComponent.js**:
+
+.. code-block::  
+
+    // importar fragment:
+    import {Fragment} from 'react';
+    import {useState} from 'react';
+
+    // recuperar campo estado del hook:
+    function RegisterModalComponent({setAlert}){
+        const [email, setEmail] = useState("");
+        const [password, setPassword] = useState("");
+
+        const handleEmail = (e) =>{
+            setEmail(e.target.value);
+        }
+
+        const handlePassword = (e) =>{
+            setPassword(e.target.value);
+        }
+
+        // crear handle para formulario:
+        const handleForm = (e) =>{
+            e.preventDefault();
+            console.log(email);
+            console.log(password);
+            // cargar alert durante 3 segundos:
+            setAlert(true);
+            window.setTimeout(()=>{
+                setAlert(false);
+            }, 3000);
+        } 
+
+        // crear modal:
+        return(
+            <Fragment>
+                <div className="modal fade" id="registerUser" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLabel">Registro</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body">
+                        <form onSubmit={handleForm}>
+                            <div className="row">
+                                <div className="col">
+                                    <input type="email" className="form-control mt-3" placeholder="Email" onChange={handleEmail} />  
+                                    <input type="password" className="form-control mt-3" placeholder="Contraseña" onChange={handlePassword} /> 
+                                    <input type="submit" className="btn btn-success form-control mt-3" value="Darse de alta" data-bs-dismiss="modal" />
+                                </div>
+                            </div>
+                        </form>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </Fragment>
+        )
+    }
+
+    export default RegisterModalComponent;
+
+Paso 15: Crear modal para recuperar contraseña 
+**********************************************
+
+- Crear nuevo archivo en **login** llamado **ResetModalComponent.js**:
+
+.. code-block::  
+
+    // importar fragment:
+    import {Fragment} from 'react';
+    import {useState} from 'react';
+
+    // recuperar campo estado del hook:
+    function ResetModalComponent({setAlert}){
+        const [email, setEmail] = useState("");
+
+        const handleEmail = (e) =>{
+            setEmail(e.target.value);
+        }
+
+        // crear handle para formulario:
+        const handleForm = (e) =>{
+            e.preventDefault();
+            console.log(email);
+            // cargar alert durante 3 segundos:
+            setAlert(true);
+            window.setTimeout(()=>{
+                setAlert(false);
+            }, 3000);
+        } 
+
+        // crear modal:
+        return(
+            <Fragment>
+                <div className="modal fade" id="resetPassword" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLabel">Resetear contraseña</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body">
+                        <form onSubmit={handleForm}>
+                            <div className="row">
+                                <div className="col text-center">
+                                    <input type="email" className="form-control mt-3" placeholder="Email" onChange={handleEmail} />  
+                                    <input type="submit" className="btn btn-success form-control mt-3" value="Enviar email" data-bs-dismiss="modal" />
+                                    <small>Recibirás un email que te llevará donde resetear tu contraseña</small>
+                                </div>
+                            </div>
+                        </form>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </Fragment>
+        )
+    }
+
+    export default ResetModalComponent;
+
+- Cargar el alert y el modal en **LoginPage.js**:
+
+.. code-block::  
+
+    import {Fragment} from 'react';
+    import {useState} from 'react';
+    import './LoginPage.css';
+    import RegisterModalComponent from './RegisterModalComponent';
+    // importar el modal reset:
+    import ResetModalComponent from './ResetModalComponent';
+
+    function LoginPage(){
+        const [alert, setAlert] = useState(false);
+        // crear hook para la alerta:
+        const [resetAlert, setResetAlert] = useState(false);
+
+        return(
+            <Fragment>
+                <div className={alert === true ? "alert alert-success" : "alert alert-success fade"} role="alert">
+                    Registro realizado con éxito. Ya puedes iniciar sesión.
+                </div>
+                {/* crear un alert con condición de ocultar en la clase: */}
+                <div className={resetAlert === true ? "alert alert-primary" : "alert alert-success fade"} role="alert">
+                    Se ha enviado un email para restablecer contraseña, por favor revisa tu bandeja de entrada.
+                </div>
+                <div className="bodystyle text-center" cz-shortcut-listen="true">
+                    <div className="form-signin text-center">
+                        <form>
+                            <h1>Por favor inicia sesión</h1>
+                            <div className="form-floating">
+                                <input type="email" className="form-control" id="floatingInput" placeholder="name@example.com" />
+                                <label htmlFor="floatingInput">Email</label>
+                            </div>
+                            <div className="form-floating">
+                                <input type="password" className="form-control" id="floatingPassword" placeholder="Password" />
+                                <label htmlFor="floatingPassword">Contraseña</label>
+                            </div>
+                            <div className="mb-3">
+                            <button type="button" className="cursor" data-bs-toggle="modal" data-bs-target="#registerUser">Crear usuario</button>
+                            </div>
+                            <div className="mb-3">
+                            <button type="button" className="cursor" data-bs-toggle="modal" data-bs-target="#resetPassword">¿has olvidado la contraseña?</button>
+                            </div>
+                            <button className="w-100 btn btn-lg btn-primary" type="submit">Iniciar sesión</button>
+                        </form>
+                    </div>
+                </div>
+                <RegisterModalComponent setAlert={setAlert} />
+                {/* pasar estado de la alerta: */}
+                <ResetModalComponent setAlert={setResetAlert} />
+            </Fragment>
+        )
+    }
+
+    export default LoginPage;
+
+Paso 16: Crear página para restablecer contraseña 
+*************************************************
+
+- Ahora se va a crear dentro de **pages** una carpeta llamada **reset** y dentro un archivo llamado **ResetPasswordPage.css**:
+
+.. code-block:: css 
+
+    html,
+    .bodystyle {
+    height: 100vh;
+    }
+
+    .bodystyle {
+    display: flex;
+    align-items: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background-color: #f5f5f5;
+    }
+
+    .form-signin {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
+    }
+
+    .form-signin .checkbox {
+    font-weight: 400;
+    }
+
+    .form-signin .form-floating:focus-within {
+    z-index: 2;
+    }
+
+    .form-signin input[type="email"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    }
+
+    .form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    }
+
+    .cursor{
+    border: 0px;
+    background: transparent;
+    }
+
+    .alert{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    }
+
+- Creamos un archivo llamado **ResetPasswordPage.js**:
+
+.. code-block:: 
+
+    import {Fragment} from 'react';
+    import {useState} from 'react';
+    import './ResetPasswordPage.css';
+    // importar useParams de React Router:
+    import { useParams } from 'react-router-dom';
+
+    function ResetPasswordPage(){
+        // crear dos hooks para la contraseña:
+        const [newPassword, setNewPassword] = useState("");
+        const [repiteNewPassword, setRepiteNewPassword] = useState("");
+        const [alert, setAlert] = useState(false);
+        const [match, setMatch] = useState(true);
+
+        // recuperar parametros de ruta:
+        const {id, token} = useParams();
+
+        // crear handles:
+        const handleNewPassword = (e) => {
+            setNewPassword(e.target.value);
+        }
+
+        const handleRepiteNewPassword = (e) => {
+            setRepiteNewPassword(e.target.value);
+        }
+
+        const handleForm = (e) => {
+            e.preventDefault();
+            console.log(newPassword);
+            console.log(repiteNewPassword);
+            console.log(id);
+            console.log(token);
+            // comprobar que las contraseñas coinciden:
+            if(newPassword !== repiteNewPassword){
+                console.log("No coinciden las claves");
+                setMatch(false);
+            }else{
+                // cargar alert y redirigir en 3 segundos:
+                setMatch(true);
+                setAlert(true);
+                window.setTimeout(()=>{
+                    window.location.href = "/login";
+                }, 3000);
+            }
+            
+        }
+
+        return(
+            <Fragment>
+                {/* crear un alert con condición de ocultar en la clase: */}
+                <div className={alert === true ? "alert alert-success" : "alert alert-success fade"} role="alert">
+                    Contraseña restablecida con éxito. Ya puedes iniciar sesión.
+                </div>
+                <div className="bodystyle text-center" cz-shortcut-listen="true">
+                    <div className="form-signin text-center">
+                        <form onSubmit={handleForm}>
+                            <h1>Restablecer contraseña</h1>
+                            <div className="form-floating">
+                                <input type="password" className="form-control" placeholder="Password" onChange={(handleNewPassword)} />
+                                <label htmlFor="floatingPassword">Nueva contraseña</label>
+                            </div>
+                            <div className="form-floating">
+                                <input type="password" className="form-control" placeholder="Password"  onChange={handleRepiteNewPassword}  />
+                                <label htmlFor="floatingPassword">Repetir nueva contraseña</label>
+                                <small className={match === false ? "text-danger" : "text-danger invisible"}>Las contraseñas no coinciden</small>
+                            </div>
+                            <button className="w-100 btn btn-lg btn-secondary" type="submit">Cambiar contraseña</button>
+                        </form>
+                    </div>
+                </div>
+            </Fragment>
+        )
+    }
+
+    export default ResetPasswordPage;
+
+- Crear nueva ruta para resetear clave **Router.js**:
+
+.. code-block::  
+
+    import {BrowserRouter, Route, Routes} from 'react-router-dom';
+    import {Fragment} from 'react';
+
+    import TaskPage from './pages/tasks/TaskPage';
+    import UserPage from './pages/users/UserPage';
+    import LoginPage from './pages/login/LoginPage';
+    // importar el componente para resetear password:
+    import ResetPasswordPage from './pages/reset/ResetPasswordPage';
+
+    function Router(){
+        return(
+            <Fragment>  
+                <BrowserRouter>
+                    <Routes>
+                        <Route exact path="/" element={<TaskPage />} />
+                        <Route path="/users" element={<UserPage />} />
+                        <Route path="/login" element={<LoginPage />} />
+                        {/* Añadir ruta para restablecer contraseña: */}
+                        <Route path="/reset/:id/:token" element={<ResetPasswordPage />} />
+                        <Route path="*" element={<h1>Error 404 - No se encuentra la página</h1>} />
+                    </Routes>
+                </BrowserRouter>
+            </Fragment>
+        )
+    }
+
+    export default Router;
+
+Paso 17: Subir cambios a GitHub  
+*******************************
+
+- Parar depuración de Visual studio code.
+- Añadir cambios: ``git add .``
+- Realizar un commit: ``git commit -am "Phase 1 complete"``
+- Subir cambios a Github con el nombre de la rama actual: ``git push origin feature/phase-1-task-structure``
+- Desde gitHub presionar botón **Compare & pull request**.
+- cambiar rama base **master** por **developer** y pulsar **Create pull request**
+- Pulsar en **Merge pull request** y a continuación en **Confirm merge**.
+- Una vez terminado volvemos a local y cambiamos de rama a developer: ``git checkout developer``
+- Actualizamos rama developer: ``git pull origin developer`` 
+
+Y con esto concluye la primera fase del proyecto.
+
+.. raw:: html 
+
+    <hr><br>
+
+Fase 2: Conectar con API Rest    
+#############################
+
+En esta fase se van a crear todas las pantallas de la aplicación. 
+
+Paso 1: Descargar API Task Learn   
+********************************
+
+- Clonar cualquier repositorio API Task Learn de Fullcoder Learn, por ejemplo: ``git clone https://github.com/Fullcoder-Learning/task-learning-api.git``
+- Acceder al directorio raiz del proyecto y ejectuar ``npm start``.
+
+Paso 2: Preparar proyecto 
+*************************
+
+- Crear rama feature a partir de developer: ``git checkout -b feature/phase-2-connect-to-service``
+- Instalar Axios: ``npm install axios --save``
+- Instalar React JWT: ``npm install react-jwt --save``
+- en la carpeta **src** crear la carpeta **requests** y **helpers**.
+- Arrancar proyecto desde la raiz: ``npm start``
+
+
+Paso 3: Crear servicio para registrarse
+***************************************
+
+- En la carpeta **requests** crear archivo **userRequest.js**:
+
+.. code-block:: 
+
+    // importar axios para hacer peticiones rest:
+    import axios from 'axios';
+
+    // cargar url base:
+    const url_base = "http://localhost:5000/api"
+
+    async function registerRequest(email, password, setAlert){
+        // realizar petición post con usuario y el email:
+        await axios.post(`${url_base}/register`, {
+            email: email,
+            password: password
+        }) // si todo va bien que muestre una alerta:
+        .then(response => {
+            setAlert(true);
+            // cerrar alerta a los 3 segundos:
+            window.setTimeout(()=>{
+                setAlert(false);
+            }, 3000);
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+
+    export{
+        registerRequest // exportar modulo
+    }
+
+
+- Editamos el componente **RegisterModalComponent.js**:
+
+.. code-block:: 
+
+    // importar fragment:
+    import {Fragment} from 'react';
+    import {useState} from 'react';
+    // importar modulo registro:
+    import {registerRequest} from '../../requests/userRequest';
+
+    function RegisterModalComponent({setAlert}){
+        const [email, setEmail] = useState("");
+        const [password, setPassword] = useState("");
+
+        const handleEmail = (e) =>{
+            setEmail(e.target.value);
+        }
+
+        const handlePassword = (e) =>{
+            setPassword(e.target.value);
+        }
+
+        // crear handle para formulario:
+        const handleForm = (e) =>{
+            e.preventDefault();
+            registerRequest(email, password, setAlert);
+        } 
+
+        // crear modal:
+        return(
+            <Fragment>
+                <div className="modal fade" id="registerUser" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLabel">Registro</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body">
+                        <form onSubmit={handleForm}>
+                            <div className="row">
+                                <div className="col">
+                                    <input type="email" className="form-control mt-3" placeholder="Email" onChange={handleEmail} />  
+                                    <input type="password" className="form-control mt-3" placeholder="Contraseña" onChange={handlePassword} /> 
+                                    <input type="submit" className="btn btn-success form-control mt-3" value="Darse de alta" data-bs-dismiss="modal" />
+                                </div>
+                            </div>
+                        </form>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </Fragment>
+        )
+    }
+
+    export default RegisterModalComponent;
+
+Paso 4: Crear servicio para iniciar sesión 
+******************************************
+
+- Añadir una nueva función al servicio **userRequest.js**:
+
+.. code-block:: 
+    
+    import axios from 'axios';
+
+    const url_base = "http://localhost:5000/api"
+
+    async function registerRequest(email, password, setAlert){
+        await axios.post(`${url_base}/register`, {
+            email: email,
+            password: password
+        }) 
+        .then(response => {
+            setAlert(true);
+            window.setTimeout(()=>{
+                setAlert(false);
+            }, 3000);
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+
+    // nueva función para hacer login:
+    async function loginRequest(email, password){
+        await axios.post(`${url_base}/login`, {
+            email: email,
+            password: password
+        }) 
+        .then(response => {
+            // si se inicia sesión correctamente guardar token y redirigir:
+            localStorage.setItem('token', response.data.token);
+            window.location.href = '/';
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+
+    export{
+        registerRequest,
+        loginRequest // exportar modulo
+    }
+
+
+- Editar **LoginPage.js**:
+
+.. code-block:: 
+    
+    import {Fragment} from 'react';
+    import {useState} from 'react';
+    import './LoginPage.css';
+    import RegisterModalComponent from './RegisterModalComponent';
+    import ResetModalComponent from './ResetModalComponent';
+    // importar modulo login:
+    import {loginRequest} from '../../requests/userRequest';
+
+    function LoginPage(){
+        const [alert, setAlert] = useState(false);
+        const [resetAlert, setResetAlert] = useState(false);
+        // añadir todo lo relacionado con email y password y el form:
+        const [email, setEmail] = useState("");
+        const [password, setPassword] = useState("");
+
+        const handleEmail = (e) =>{
+            setEmail(e.target.value);
+        }
+
+        const handlePassword = (e) =>{
+            setPassword(e.target.value);
+        }
+
+        // crear handle para formulario:
+        const handleForm = (e) =>{
+            e.preventDefault();
+            loginRequest(email, password);
+        } 
+
+        return(
+            <Fragment>
+                <div className={alert === true ? "alert alert-success" : "alert alert-success fade"} role="alert">
+                    Registro realizado con éxito. Ya puedes iniciar sesión.
+                </div>
+                <div className={resetAlert === true ? "alert alert-primary" : "alert alert-success fade"} role="alert">
+                    Se ha enviado un email para restablecer contraseña, por favor revisa tu bandeja de entrada.
+                </div>
+                <div className="bodystyle text-center" cz-shortcut-listen="true">
+                    <div className="form-signin text-center">
+                        {/* añadir el handle: */}
+                        <form onSubmit={handleForm}>
+                            <h1>Por favor inicia sesión</h1>
+                            <div className="form-floating">
+                                {/* añadir el handle: */}
+                                <input type="email" className="form-control" placeholder="name@example.com" onChange={handleEmail} />
+                                <label htmlFor="floatingInput">Email</label>
+                            </div>
+                            <div className="form-floating">
+                                {/* añadir el handle: */}
+                                <input type="password" className="form-control" placeholder="Contraseña" onChange={handlePassword} />
+                                <label htmlFor="floatingPassword">Contraseña</label>
+                            </div>
+                            <div className="mb-3">
+                            <button type="button" className="cursor" data-bs-toggle="modal" data-bs-target="#registerUser">Crear usuario</button>
+                            </div>
+                            <div className="mb-3">
+                            <button type="button" className="cursor" data-bs-toggle="modal" data-bs-target="#resetPassword">¿has olvidado la contraseña?</button>
+                            </div>
+                            <button className="w-100 btn btn-lg btn-primary" type="submit">Iniciar sesión</button>
+                        </form>
+                    </div>
+                </div>
+                <RegisterModalComponent setAlert={setAlert} />
+                <ResetModalComponent setAlert={setResetAlert} />
+            </Fragment>
+        )
+    }
+
+    export default LoginPage;
+
+Paso 5: Securizar rutas 
+***********************
+
+- Modificar rutas para que solo se pueda acceder con un token valido. Editamos **Router.js**:
+
+.. code-block:: 
+
+    // importar modulo navigate para redireccionar:
+    import {BrowserRouter, Route, Routes, Navigate} from 'react-router-dom';
+    import {Fragment} from 'react';
+    // importar jwt: 
+    import {useJwt} from 'react-jwt';
+
+    import TaskPage from './pages/tasks/TaskPage';
+    import UserPage from './pages/users/UserPage';
+    import LoginPage from './pages/login/LoginPage';
+    import ResetPasswordPage from './pages/reset/ResetPasswordPage';
+
+    // volver función asincrona:
+    function Router(){
+        // recuperar token:
+        const localToken = localStorage.getItem("token");
+        // comprobar si ha caducado:
+        const {isExpired} = useJwt(localToken);
+        // crear una redirección si no se cumplen las condiciones:
+        const redirect = <Navigate replace to='/login' />
+
+        return(
+            <Fragment>  
+                <BrowserRouter>
+                    <Routes>
+                        {/* Ahora se cambia el estado del componente raiz por RouteGuard: */}
+                        <Route exact path="/" element={
+                                isExpired ? redirect : <TaskPage />} />
+                        <Route exact path="/users" element={
+                                isExpired ? redirect : <UserPage />} />
+                        <Route path="/login" element={<LoginPage />} />
+                        {/* Añadir ruta para restablecer contraseña: */}
+                        <Route path="/reset/:id/:token" element={<ResetPasswordPage />} />
+                        <Route path="*" element={<h1>Error 404 - No se encuentra la página</h1>} />
+                    </Routes>
+                </BrowserRouter>
+            </Fragment>
+        )
+    }
+
+    export default Router;
+
+paso 6: Enviar email para restablecer contraseña  
+************************************************
+
+- Crear servicio en **userRequest.js**:
+
+.. code-block:: 
+    
+    import axios from 'axios';
+
+    const url_base = "http://localhost:5000/api"
+
+    async function registerRequest(email, password, setAlert){
+        await axios.post(`${url_base}/register`, {
+            email: email,
+            password: password
+        }) 
+        .then(response => {
+            setAlert(true);
+            window.setTimeout(()=>{
+                setAlert(false);
+            }, 3000);
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+
+    async function loginRequest(email, password){
+        await axios.post(`${url_base}/login`, {
+            email: email,
+            password: password
+        }) 
+        .then(response => {
+            localStorage.setItem('token', response.data.token);
+            window.location.href = '/';
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+
+    // esta función enviará un email a nuestra bandeja con una url de recuperación:
+    async function forgotRequest(email, alertState){
+        await axios.post(`${url_base}/forgot`, {
+            email: email
+        }) 
+        .then(response => {
+            // cargar alert durante 3 segundos:
+            alertState(true);
+            window.setTimeout(()=>{
+                alertState(false);
+            }, 3000);
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+
+
+    export{
+        registerRequest,
+        loginRequest,
+        forgotRequest // exportar modulo
+    }
+
+
+- Editar el componente **ResetModalComponent**: 
+
+.. code-block:: 
+
+    // importar fragment:
+    import {Fragment} from 'react';
+    import {useState} from 'react';
+    // importar servicio:
+    import {forgotRequest} from '../../requests/userRequest';
+
+    function ResetModalComponent({setAlert}){
+        const [email, setEmail] = useState("");
+
+        const handleEmail = (e) =>{
+            setEmail(e.target.value);
+        }
+
+        const handleForm = (e) =>{
+            e.preventDefault();
+            forgotRequest(email, setAlert);
+        } 
+
+        return(
+            <Fragment>
+                <div className="modal fade" id="resetPassword" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLabel">Resetear contraseña</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body">
+                        <form onSubmit={handleForm}>
+                            <div className="row">
+                                <div className="col text-center">
+                                    <input type="email" className="form-control mt-3" placeholder="Email" onChange={handleEmail} />  
+                                    <input type="submit" className="btn btn-success form-control mt-3" value="Enviar email" data-bs-dismiss="modal" />
+                                    <small>Recibirás un email que te llevará donde resetear tu contraseña</small>
+                                </div>
+                            </div>
+                        </form>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </Fragment>
+        )
+    }
+
+    export default ResetModalComponent;
+
+Paso 7: Reestablecer contraseña
+*******************************
+
+- Editamos **userRequest.js**:
+
+.. code-block:: 
+
+    import axios from 'axios';
+
+    const url_base = "http://localhost:5000/api"
+
+    async function registerRequest(email, password, setAlert){
+        await axios.post(`${url_base}/register`, {
+            email: email,
+            password: password
+        }) 
+        .then(response => {
+            setAlert(true);
+            window.setTimeout(()=>{
+                setAlert(false);
+            }, 3000);
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+
+    async function loginRequest(email, password){
+        await axios.post(`${url_base}/login`, {
+            email: email,
+            password: password
+        }) 
+        .then(response => {
+            localStorage.setItem('token', response.data.token);
+            window.location.href = '/';
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+
+    async function forgotRequest(email, alertState){
+        await axios.post(`${url_base}/forgot`, {
+            email: email
+        }) 
+        .then(response => {
+            alertState(true);
+            window.setTimeout(()=>{
+                alertState(false);
+            }, 3000);
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+    // crear función que resetea password:
+    async function resetRequest(newPassword, repiteNewPassword, id, token, alertState){
+        // enviar por url el id y el token:
+        await axios.put(`${url_base}/reset/${id}/${token}`, {
+            newPassword: newPassword,
+            repitePassword: repiteNewPassword
+        }) 
+        .then(response => {
+            // cargar alert durante 3 segundos:
+            alertState(true);
+            window.setTimeout(()=>{
+                window.location.href = "/login";
+            }, 3000);
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+
+
+    export{
+        registerRequest,
+        loginRequest,
+        forgotRequest,
+        resetRequest // exportar modulo
+    }
+
+- Ahora toca revisar **ResetPasswordPage.js**:
+
+.. code-block:: 
+
+    import {Fragment} from 'react';
+    import {useState} from 'react';
+    import './ResetPasswordPage.css';
+    // importar useParams de React Router:
+    import { useParams } from 'react-router-dom';
+    // importar servicio reset password:
+    import {resetRequest} from '../../requests/userRequest';
+
+    function ResetPasswordPage(){
+        // crear dos hooks para la contraseña:
+        const [newPassword, setNewPassword] = useState("");
+        const [repiteNewPassword, setRepiteNewPassword] = useState("");
+        const [alert, setAlert] = useState(false);
+        const [match, setMatch] = useState(true);
+
+        // recuperar parametros de ruta:
+        const {id, token} = useParams();
+
+        // crear handles:
+        const handleNewPassword = (e) => {
+            setNewPassword(e.target.value);
+        }
+
+        const handleRepiteNewPassword = (e) => {
+            setRepiteNewPassword(e.target.value);
+        }
+
+        const handleForm = (e) => {
+            e.preventDefault();
+            console.log(newPassword);
+            console.log(repiteNewPassword);
+            console.log(id);
+            console.log(token);
+            // comprobar que las contraseñas coinciden:
+            if(newPassword !== repiteNewPassword){
+                console.log("No coinciden las claves");
+                setMatch(false);
+            }else{
+                setMatch(true);
+                // enviar nueva contraseña:
+                resetRequest(newPassword, repiteNewPassword, id, token, setAlert)
+                
+            }
+            
+        }
+
+        return(
+            <Fragment>
+                {/* crear un alert con condición de ocultar en la clase: */}
+                <div className={alert === true ? "alert alert-success" : "alert alert-success fade"} role="alert">
+                    Contraseña restablecida con éxito. Ya puedes iniciar sesión.
+                </div>
+                <div className="bodystyle text-center" cz-shortcut-listen="true">
+                    <div className="form-signin text-center">
+                        <form onSubmit={handleForm}>
+                            <h1>Restablecer contraseña</h1>
+                            <div className="form-floating">
+                                <input type="password" className="form-control" placeholder="Password" onChange={(handleNewPassword)} />
+                                <label htmlFor="floatingPassword">Nueva contraseña</label>
+                            </div>
+                            <div className="form-floating">
+                                <input type="password" className="form-control" placeholder="Password"  onChange={handleRepiteNewPassword}  />
+                                <label htmlFor="floatingPassword">Repetir nueva contraseña</label>
+                                <small className={match === false ? "text-danger" : "text-danger invisible"}>Las contraseñas no coinciden</small>
+                            </div>
+                            <button className="w-100 btn btn-lg btn-secondary" type="submit">Cambiar contraseña</button>
+                        </form>
+                    </div>
+                </div>
+            </Fragment>
+        )
+    }
+
+    export default ResetPasswordPage;
+
+Paso 8: Crear tareas 
+********************
+
+- Creamos un nuevo servicio en la carpeta **requests** llamado **taskRequest.js**:
+
+.. code-block:: 
+
+    import axios from 'axios';
+
+    // preparar cabeceras:
+    const config = {
+        headers: {
+            Authorization: localStorage.getItem("token") // pasar el token guardado a la autorización
+        }  
+    }
+
+    const url_base = "http://localhost:5000/api";
+
+    // crear tarea:
+    async function createTaskRequest(name, description, taskState){
+        // enviar tarea por post:
+        await axios.post(`${url_base}/tasks`, {
+            name: name,
+            description: description
+        }, config) // pasar autorización al final
+        .then(response =>{
+            // actualizar el listado de tareas en vivo:
+            taskState(tasks => [...tasks, response.data.task]);
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+
+    export{
+        createTaskRequest // exportar modulo
+    }
+
+- Implementar en el formulario de **TaskTableComponent.js**:
+
+.. code-block:: 
+
+    // importar hook usestate:
+    import {useState} from 'react';
+    import DeleteTaskModalComponent from './DeleteTaskModalComponent';
+    import FinishTaskModalComponent from './FinishTaskModalComponent';
+    // cargar servicio post:
+    import {createTaskRequest} from '../../requests/taskRequest';
+
+    function TaskTableComponent(){
+        const [dummyData, setDummyData] =  useState([
+            {_id: 1, name: "Cocinar", description: "Cocinar galletas el sábado", date_created: "08/08/2022", is_complete: true, date_finish: "10/08/2022"},
+            {_id: 2, name: "Preparar proyecto", description: "Preparar proyecto para presentar en Septiembre", date_created: "15/08/2022", is_complete: false},
+            {_id: 3, name: "Estudiar Java", description: "Aprender Java para cubrir las especificaciones del proyecto", date_created: "19/08/2022", is_complete: false}
+        ])
+
+        const [id, setId] = useState(null);
+        const [name, setName] = useState(null);
+        const [description, setDescription] = useState(null);
+
+        const dataHandle = (id, name) => {
+            return (e)=>{
+                setId(id);
+                setName(name);
+            }
+        }
+
+        const handleName = (e) => {
+            setName(e.target.value);
+        }
+
+        const handleDescription = (e) => {
+            setDescription(e.target.value);
+        }
+
+        const handleForm = (e) => {
+            e.preventDefault();
+            // añadimos el servicio y le pasamos provisionalmente la lista dummy:
+            createTaskRequest(name, description, setDummyData);
+
+        }
+
+        return(
+            <div className="text-center container">
+                <table className="table mt-4">
+                    <thead>
+                        <tr>
+                            <th scope="col">Título</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Fecha creación</th>
+                            <th scope="col">Finalizada</th>
+                            <th scope="col">Fecha Finalización</th>
+                            <th scope="col">Operaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody className="text-start">
+                        {
+                            dummyData.map(data => {
+                                return(
+                                    <tr key={data._id}>
+                                        <td>{data.name}</td>
+                                        <td>{data.description}</td>
+                                        <td>{data.date_created}</td>
+                                        <td className="text-center">{data.is_complete ? ('Si') : ('No')}</td>
+                                        <td>{data.date_finish ? (data.date_finish) : ('')}</td>
+                                        <td className="text-center">
+                                            <button type="button" onClick={dataHandle(data._id, data.name)} className="btn btn-sm btn-primary me-2 mb-1" data-bs-toggle="modal" data-bs-target="#finishModal">Finalizar</button>
+                                            <button type="button" onClick={dataHandle(data._id, data.name)} className="btn btn-sm btn-danger me-2" data-bs-toggle="modal" data-bs-target="#deleteModal">Eliminar</button>
+                                        </td>
+                                    </tr>
+                                )
+                            })
+                        }
+                        {/* Crear un formulario para añadir nuevas tareas: */}
+                        <tr className="text-center">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td colSpan="3" >
+                                <form className="row input-group-sm" onSubmit={handleForm}>
+                                    <input className="col me-2 form-control form-sm" type="text" placeholder="Título" onChange={handleName} />
+                                    <input className="col me-2 form-control" type="text" placeholder="Descripción"  onChange={handleDescription} />
+                                    <input className="col me-2 form-control btn btn-success" type="submit" value="Crear tarea" />
+                                </form>
+                            </td>
+                            
+                        </tr>
+                    </tbody>
+                </table>
+                {/* Añadimos el componente y le pasamos el hook id: */}
+                <FinishTaskModalComponent id={id} name={name} />
+                <DeleteTaskModalComponent id={id} name={name} />
+            </div>
+        )
+    }
+
+    export default TaskTableComponent;
+
+Paso 9: Recuperar Tareas
+************************
+
+- Crear servicio para recuperar tareas en **taskRequest.js**:
+
+.. code-block:: 
+
+    import axios from 'axios';
+
+    const config = {
+        headers: {
+            Authorization: localStorage.getItem("token") 
+        }  
+    }
+
+    const url_base = "http://localhost:5000/api";
+
+    async function createTaskRequest(name, description, taskState){
+        await axios.post(`${url_base}/tasks`, {
+            name: name,
+            description: description
+        }, config) 
+        .then(response =>{
+            taskState(tasks => [...tasks, response.data.task]);
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+
+    // crear función para recuperar tareas:
+    async function ListTaskRequest(status){ 
+        await axios.get(`${url_base}/tasks`, config) 
+        .then(response => {
+            status(response.data);
+            console.log(response.data);
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+
+    export{
+        createTaskRequest,
+        ListTaskRequest // exportar modulo
+    }
+
+
+- Modificar tabla en **TaskTableComponent.js**:
+
+.. code-block:: 
+
+    // importar hook useeffect para listar:
+    import {useState, useEffect} from 'react';
+    import DeleteTaskModalComponent from './DeleteTaskModalComponent';
+    import FinishTaskModalComponent from './FinishTaskModalComponent';
+    // cargar servicio get:
+    import {createTaskRequest, ListTaskRequest} from '../../requests/taskRequest';
+
+    function TaskTableComponent(){
+        // eliminar el hook DummyData y reemplazar por este:
+        const [tasks, setTasks] = useState(null);
+
+        const [id, setId] = useState(null);
+        const [name, setName] = useState(null);
+        const [description, setDescription] = useState(null);
+
+        // cargar el useEffect y pedir el listado de tareas:
+        useEffect(()=>{
+            ListTaskRequest(setTasks);
+        },[]);
+
+        const dataHandle = (id, name) => {
+            return (e)=>{
+                setId(id);
+                setName(name);
+            }
+        }
+
+        const handleName = (e) => {
+            setName(e.target.value);
+        }
+
+        const handleDescription = (e) => {
+            setDescription(e.target.value);
+        }
+
+        const handleForm = (e) => {
+            e.preventDefault();
+            // Cambiamos el dummydata por el estado de tasks:
+            createTaskRequest(name, description, setTasks);
+
+        }
+
+        return(
+            <div className="text-center container">
+                <table className="table mt-4">
+                    <thead>
+                        <tr>
+                            <th scope="col">Título</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Fecha creación</th>
+                            <th scope="col">Finalizada</th>
+                            <th scope="col">Fecha Finalización</th>
+                            <th scope="col">Operaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody className="text-start">
+                        {/* Ahora vamos a cambiar el dummydata por tasks y comprobamos que existen tareas: */}
+                        { tasks ? (
+                            tasks.map(data => {
+                                return(
+                                    <tr key={data._id}>
+                                        <td>{data.name}</td>
+                                        <td>{data.description}</td>
+                                        <td>{data.date_created}</td>
+                                        <td className="text-center">{data.is_complete ? ('Si') : ('No')}</td>
+                                        <td>{data.date_finish ? (data.date_finish) : ('')}</td>
+                                        <td className="text-center">
+                                            <button type="button" onClick={dataHandle(data._id, data.name)} className="btn btn-sm btn-primary me-2 mb-1" data-bs-toggle="modal" data-bs-target="#finishModal">Finalizar</button>
+                                            <button type="button" onClick={dataHandle(data._id, data.name)} className="btn btn-sm btn-danger me-2" data-bs-toggle="modal" data-bs-target="#deleteModal">Eliminar</button>
+                                        </td>
+                                    </tr>
+                                )
+                            })) : (<tr colSpan="6"><td>No existen tareas</td></tr>)
+                        }
+                        {/* Crear un formulario para añadir nuevas tareas: */}
+                        <tr className="text-center">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td colSpan="3" >
+                                <form className="row input-group-sm" onSubmit={handleForm}>
+                                    <input className="col me-2 form-control form-sm" type="text" placeholder="Título" onChange={handleName} />
+                                    <input className="col me-2 form-control" type="text" placeholder="Descripción"  onChange={handleDescription} />
+                                    <input className="col me-2 form-control btn btn-success" type="submit" value="Crear tarea" />
+                                </form>
+                            </td>
+                            
+                        </tr>
+                    </tbody>
+                </table>
+                {/* Añadimos el componente y le pasamos el hook id: */}
+                <FinishTaskModalComponent id={id} name={name} />
+                <DeleteTaskModalComponent id={id} name={name} />
+            </div>
+        )
+    }
+
+    export default TaskTableComponent;
+
+Paso 10: Finalizar tarea 
+************************
+
+- Crear una nueva función en **taskRequest.js**:
+
+.. code-block:: 
+
+    import axios from 'axios';
+
+    const config = {
+        headers: {
+            Authorization: localStorage.getItem("token") 
+        }  
+    }
+
+    const url_base = "http://localhost:5000/api";
+
+    async function createTaskRequest(name, description, taskState){
+        await axios.post(`${url_base}/tasks`, {
+            name: name,
+            description: description
+        }, config) 
+        .then(response =>{
+            taskState(tasks => [...tasks, response.data.task]);
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+
+    async function ListTaskRequest(status){ 
+        await axios.get(`${url_base}/tasks`, config) 
+        .then(response => {
+            status(response.data);
+            console.log(response.data);
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+
+    // crear función para finalizar tareas:
+    async function setOK(tasks, setTasks, id){ 
+        await axios.patch(`${url_base}/tasks/${id}`, {}, config)
+        .then(response =>{
+            console.log('tareas:');
+            console.log(tasks);
+            // recorrer tareas para actualizar la tarea en el listado:
+            tasks.map(task =>{
+                if(task._id === id){
+                    task.is_complete = true
+                }
+                return(null);
+            });
+            
+            console.log(tasks);
+            // reemplazar listado actual por el nuevo modificado arriba:
+            setTasks(tasks => [...tasks]);
+        }).catch(error =>{
+            console.log(error);
+        })
+    }
+
+    export{
+        createTaskRequest,
+        ListTaskRequest,
+        setOK // exportar modulo
+    }
+
+- Editar ahora el componente **FinishTaskComponent.js**:
+
+.. code-block:: 
+
+    import {Fragment} from 'react';
+    // importar el servicio:
+    import {setOK} from '../../requests/taskRequest';
+
+    // recuperar estado y listado OJO - HAY QUE PASAR TODOS ESTOS PARAMETROS DESDE LA TABLA:
+    function FinishTaskModalComponent({id, name, tasks, setTasks}){
+        const taskId = id;
+        const taskName = name;
+
+        const handleButton = (e) => {
+            setOK(tasks, setTasks, taskId);
+        }
+
+        // crear modal:
+        return(
+            <Fragment>
+                <div className="modal fade" id="finishModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLabel">Se va a finalizar la siguiente tarea</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body">
+                            <p>{taskId} - {taskName}</p>
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            {/* Pasarle el nuevo handle al botón: */}
+                            <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={handleButton}>Aceptar</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </Fragment>
+        )
+    }
+
+    export default FinishTaskModalComponent;
+
+
+Paso 11: Eliminar Tareas 
+************************
+
+Ahora toca añadir la función para eliminar tareas en **taskRequest.js**:
+
+.. code-block:: 
+
+    import axios from 'axios';
+
+    const config = {
+        headers: {
+            Authorization: localStorage.getItem("token") 
+        }  
+    }
+
+    const url_base = "http://localhost:5000/api";
+
+    async function createTaskRequest(name, description, taskState){
+        await axios.post(`${url_base}/tasks`, {
+            name: name,
+            description: description
+        }, config) 
+        .then(response =>{
+            taskState(tasks => [...tasks, response.data.task]);
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+
+    async function ListTaskRequest(status){ 
+        await axios.get(`${url_base}/tasks`, config) 
+        .then(response => {
+            status(response.data);
+            console.log(response.data);
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+
+    async function setOK(tasks, setTasks, id){ 
+        await axios.patch(`${url_base}/tasks/${id}`, {}, config)
+        .then(response =>{
+            console.log('tareas:');
+            console.log(tasks);
+            tasks.map(task =>{
+                if(task._id === id){
+                    task.is_complete = true
+                }
+                return(null);
+            });
+            
+            console.log(tasks);
+            setTasks(tasks => [...tasks]);
+        }).catch(error =>{
+            console.log(error);
+        })
+    }
+
+    // eliminar tarea:
+    async function deleteTask(tasks, setTasks, id){
+        await axios.delete(`${url_base}/tasks/${id}`, config)
+        .then(response => {
+            // eliminar tarea de la colección:
+            setTasks(tasks => [...tasks.filter(task => task._id !== id)]);
+        }).catch(error =>{  
+            console.log(error);
+        })
+    }
+
+    export{
+        createTaskRequest,
+        ListTaskRequest,
+        setOK,
+        deleteTask // exportar modulo
+    }
+
+
+Modificamos el componente **DeleteTaskModal.js**: 
+
+.. code-block:: 
+
+    import {Fragment} from 'react';
+    // importar el servicio:
+    import {deleteTask} from '../../requests/taskRequest';
+
+    // recuperar campo id del hook:
+    function DeleteTaskModalComponent({id, name, tasks, setTasks}){
+        const taskId = id;
+        const taskName = name;
+
+        // crear un handle para el botón:
+        const handleButton = (e)=> {
+            deleteTask(tasks, setTasks, taskId);
+        }
+
+        return(
+            <Fragment>
+                <div className="modal fade" id="deleteModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLabel">Se va a eliminar la siguiente tarea</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body">
+                            <p>{taskName}</p>
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            {/* Cargar el handle en el botón: */}
+                            <button type="button" className="btn btn-danger" data-bs-dismiss="modal" onClick={handleButton}>Aceptar</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </Fragment>
+        )
+    }
+
+    export default DeleteTaskModalComponent;
+
+Paso 12: Cargar datos de usuario 
+********************************
+
+- Crear una nueva request en **userRequest.js**:
+
+.. code-block:: 
+
+    import axios from 'axios';
+
+    const url_base = "http://localhost:5000/api"
+
+    // cargamos el token:
+    const config = {
+        headers: {
+            Authorization: localStorage.getItem("token") 
+        }  
+    }
+
+
+    async function registerRequest(email, password, setAlert){
+        await axios.post(`${url_base}/register`, {
+            email: email,
+            password: password
+        }) 
+        .then(response => {
+            setAlert(true);
+            window.setTimeout(()=>{
+                setAlert(false);
+            }, 3000);
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+
+    async function loginRequest(email, password){
+        await axios.post(`${url_base}/login`, {
+            email: email,
+            password: password
+        }) 
+        .then(response => {
+            localStorage.setItem('token', response.data.token);
+            window.location.href = '/';
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+
+    async function forgotRequest(email, alertState){
+        await axios.post(`${url_base}/forgot`, {
+            email: email
+        }) 
+        .then(response => {
+            alertState(true);
+            window.setTimeout(()=>{
+                alertState(false);
+            }, 3000);
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+    async function resetRequest(newPassword, repiteNewPassword, id, token, alertState){
+        await axios.put(`${url_base}/reset/${id}/${token}`, {
+            newPassword: newPassword,
+            repitePassword: repiteNewPassword
+        }) 
+        .then(response => {
+            alertState(true);
+            window.setTimeout(()=>{
+                window.location.href = "/login";
+            }, 3000);
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+
+    // crear función para recuperar datos de usuario:
+    async function getUser(setName, setLastname, setEmail){
+        await axios.get(`${url_base}/users`, config)
+        .then(response => {
+            // setear los datos para los campos que contengan valores:
+            setName(response.data.user.name ? response.data.user.name : "");
+            setLastname(response.data.user.lastname ? response.data.user.lastname : "");
+            setEmail(response.data.user.email ? response.data.user.email : "");
+            setId(response.data.user._id ? response.data.user._id : "");
+        }).catch(error =>{
+            console.log(error);
+        })
+    }
+
+
+    export{
+        registerRequest,
+        loginRequest,
+        forgotRequest,
+        resetRequest,
+        getUser // exportar modulo
+    }
+
+
+
+- Editar el componente **UserFormComponent.js**:
+
+.. code-block:: 
+
+    // importar useEffect:
+    import {useState, useEffect} from 'react';
+    // importar el servicio:
+    import {getUser} from '../../requests/userRequest';
+
+    import './UserFormComponent.css';
+    const avatar = require('../../assets/avatar.png');
+
+    function UserFormComponent(){
+        const [file, setFile] = useState("");
+        const [name, setName] = useState("");
+        const [lastname, setLastname] = useState("");
+        const [email, setEmail] = useState("");
+        const [password, setPassword] = useState("");
+        const [id, setId] = useState("");
+
+        useEffect(()=>{
+            // enviar estados para actualizar campos:
+            getUser(setName, setLastname, setEmail, setId);
+            
+        },[]);
+
+        // crear handles para cambiar estado de hooks:
+        const handleFile = (e) =>{
+            setFile(e.target.files[0]);
+        }
+
+        const handleName = (e) =>{
+            setName(e.target.value);
+        }
+
+        const handleLastname = (e) =>{
+            setLastname(e.target.value);
+        }
+
+        const handleEmail = (e) =>{
+            setEmail(e.target.value);
+        }
+
+        const handlePassword = (e) =>{
+            setPassword(e.target.value);
+        }
+
+        // crear handle para formulario:
+        const handleForm = (e) =>{
+            e.preventDefault();
+            console.log(file);
+            console.log(name);
+            console.log(lastname);
+            console.log(email);
+            console.log(password);
+        }
+        
+        // cargar formulario:
+        return(
+            <div className="container mt-4 text-center">
+                <form onSubmit={handleForm}>
+                    <div className="row">
+                        <div className="col">
+                            <h3>Datos de usuario</h3>
+                            <hr />
+                            {/* Cargar values: */}
+                            <img src={avatar} className="avatarEdit rounded img-thumbnail img-fluid"  alt="Avatar" />
+                            <input type="file" className="form-control mt-3" placeholder="Subir avatar" onChange={handleFile} />
+                            <input type="text" className="form-control mt-3" placeholder="Nombre" value={name} onChange={handleName} />   
+                            <input type="text" className="form-control mt-3" placeholder="Apellidos" value={lastname} onChange={handleLastname} />  
+                            <input type="email" className="form-control mt-3" placeholder="Email" value={email} onChange={handleEmail} />  
+                            <input type="password" className="form-control mt-3" placeholder="Contraseña" onChange={handlePassword} /> 
+                            <input type="submit" className="btn btn-success form-control mt-3" value="Actualizar datos" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        );
+    }
+
+    export default UserFormComponent;
+
+Paso 13: Editar datos de usuario 
+********************************
+
+- Crear el servicio para actualizar usuario en **userRequest.js**:
+
+.. code-block:: 
+
+    import axios from 'axios';
+
+    const url_base = "http://localhost:5000/api"
+
+    // cargamos el token:
+    const config = {
+        headers: {
+            Authorization: localStorage.getItem("token") 
+        }  
+    }
+
+
+    async function registerRequest(email, password, setAlert){
+        await axios.post(`${url_base}/register`, {
+            email: email,
+            password: password
+        }) 
+        .then(response => {
+            setAlert(true);
+            window.setTimeout(()=>{
+                setAlert(false);
+            }, 3000);
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+
+    async function loginRequest(email, password){
+        await axios.post(`${url_base}/login`, {
+            email: email,
+            password: password
+        }) 
+        .then(response => {
+            localStorage.setItem('token', response.data.token);
+            window.location.href = '/';
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+
+    async function forgotRequest(email, alertState){
+        await axios.post(`${url_base}/forgot`, {
+            email: email
+        }) 
+        .then(response => {
+            alertState(true);
+            window.setTimeout(()=>{
+                alertState(false);
+            }, 3000);
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+    async function resetRequest(newPassword, repiteNewPassword, id, token, alertState){
+        await axios.put(`${url_base}/reset/${id}/${token}`, {
+            newPassword: newPassword,
+            repitePassword: repiteNewPassword
+        }) 
+        .then(response => {
+            alertState(true);
+            window.setTimeout(()=>{
+                window.location.href = "/login";
+            }, 3000);
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+
+    async function getUser(setName, setLastname, setEmail, setId, setFile){
+        await axios.get(`${url_base}/users`, config)
+        .then(response => {
+            setName(response.data.user.name ? response.data.user.name : "");
+            setLastname(response.data.user.lastname ? response.data.user.lastname : "");
+            setEmail(response.data.user.email ? response.data.user.email : "");
+            setId(response.data.user._id ? response.data.user._id : "");
+            setFile(response.data.user.avatar ? response.data.user.avatar : null);
+        }).catch(error =>{
+            console.log(error);
+        })
+    }
+
+    // update user:
+    async function updateUser(id, name, lastname, email, password, file, setAvatar){
+        // creamos un objeto tipo FormData para enviar archivos:
+        const formData = new FormData();
+        // cargamos los detalles del archivo con formdata ya que estamos usando formularios en lugar de json:
+        formData.append("name", name);
+        formData.append("lastname", lastname);
+        if(email){
+            formData.append("email", email);
+        }
+        if(password){
+            formData.append("password", password);
+        }
+        try{
+            // pasar la imagen con su nombre de campo y valores:
+            formData.append(
+                "avatar",
+                file,
+                file.name
+            )
+        }catch(error){
+            console.log("no se ha cargado archivo");
+        }
+
+        await axios.put(`${url_base}/users/${id}`, formData, config)
+        .then(response => {
+            console.log("Se han guardado los cambios");
+            // actualizar hook del avatar que se muestra:
+            setAvatar(response.data.user.avatar ? response.data.user.avatar : null);
+        }).catch(error => {
+            console.log(error);
+        })
+    }
+
+
+    export{
+        registerRequest,
+        loginRequest,
+        forgotRequest,
+        resetRequest,
+        getUser,
+        updateUser // exportar modulo
+    }
+
+- Ahora modificar el formulario **UserFormComponent.js**:
+
+.. code-block:: 
+
+    // importar useEffect:
+    import {useState, useEffect} from 'react';
+    // importar el servicio:
+    import {getUser, updateUser} from '../../requests/userRequest';
+
+    import './UserFormComponent.css';
+    // cargar avatar por defecto si no hemos subido uno:
+    const defaultAvatar = require('../../assets/avatar.png');
+
+    function UserFormComponent(){
+        const [name, setName] = useState("");
+        const [lastname, setLastname] = useState("");
+        const [email, setEmail] = useState("");
+        const [password, setPassword] = useState("");
+        // este hook gestionará el input file del avatar:
+        const [file, setFile] = useState(null);
+        // este hook cargará la imagen que tengamos disponible, sino abajo validamos que muestre el avatar por defecto:
+        const [avatar, setAvatar] = useState(null);
+        const [id, setId] = useState("");
+
+        useEffect(()=>{
+            // enviar estados para actualizar campos:
+            getUser(setName, setLastname, setEmail, setId, setAvatar);
+            // console.log(id);
+            
+        },[]);
+
+        // crear handles para cambiar estado de hooks:
+        const handleFile = (e) =>{
+            setFile(e.target.files[0]);
+        }
+
+        const handleName = (e) =>{
+            setName(e.target.value);
+        }
+
+        const handleLastname = (e) =>{
+            setLastname(e.target.value);
+        }
+
+        const handleEmail = (e) =>{
+            setEmail(e.target.value);
+        }
+
+        const handlePassword = (e) =>{
+            setPassword(e.target.value);
+        }
+
+        // crear handle para formulario:
+        const handleForm = (e) =>{
+            e.preventDefault();
+            updateUser(id, name, lastname, email, password, file, setAvatar);
+        }
+        
+        // cargar formulario:
+        return(
+            <div className="container mt-4 text-center">
+                <form onSubmit={handleForm} encType="multipart/form-data">
+                    <div className="row">
+                        <div className="col">
+                            <h3>Datos de usuario</h3>
+                            <hr />
+                            {/* Cargar values y filename en caso de input form (validar el avatar que se muestra si existe, sino mostrar uno por defecto): */}
+                            <img src={avatar ? `http://localhost:5000/api/users/avatar/${avatar}` : defaultAvatar} className="avatarEdit rounded img-thumbnail img-fluid"  alt="Avatar" />
+                            <input type="file" className="form-control mt-3" placeholder="Subir avatar" filename={file} onChange={handleFile} />
+                            <input type="text" className="form-control mt-3" placeholder="Nombre" value={name} onChange={handleName} />   
+                            <input type="text" className="form-control mt-3" placeholder="Apellidos" value={lastname} onChange={handleLastname} />  
+                            <input type="email" className="form-control mt-3" placeholder="Email" value={email} onChange={handleEmail} />  
+                            <input type="password" className="form-control mt-3" placeholder="Contraseña" onChange={handlePassword} /> 
+                            <input type="submit" className="btn btn-success form-control mt-3" value="Actualizar datos" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        );
+    }
+
+    export default UserFormComponent;
+
+Paso 14: Subir cambios a GitHub  
+*******************************
+
+- Parar depuración de Visual studio code.
+- Añadir cambios: ``git add .``
+- Realizar un commit: ``git commit -am "Phase 2 complete"``
+- Subir cambios a Github con el nombre de la rama actual: ``git push origin feature/phase-2-connect-to-service``
+- Desde gitHub presionar botón **Compare & pull request**.
+- cambiar rama base **master** por **developer** y pulsar **Create pull request**
+- Pulsar en **Merge pull request** y a continuación en **Confirm merge**.
+- Una vez terminado volvemos a local y cambiamos de rama a developer: ``git checkout developer``
+- Actualizamos rama developer: ``git pull origin developer`` 
+
+Y con esto concluye la segunda fase del proyecto.
+
+.. raw:: html 
+
+    <hr><br>
