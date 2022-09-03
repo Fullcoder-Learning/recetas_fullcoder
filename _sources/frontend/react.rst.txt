@@ -2915,7 +2915,194 @@ Paso 13: Editar datos de usuario
 
     export default UserFormComponent;
 
-Paso 14: Subir cambios a GitHub  
+Paso 14: Actualizar usuario navbar 
+**********************************
+
+- Creamos un nuevo servicio solo para el navbar ya que **getUser** necesita mas parametros, editamos **userRequest.js**:
+
+.. code-block:: 
+
+    import axios from 'axios';
+
+    const url_base = "http://localhost:5000/api"
+
+    const config = {
+        headers: {
+            Authorization: localStorage.getItem("token") 
+        }  
+    }
+
+
+    async function registerRequest(email, password, setAlert){
+        await axios.post(`${url_base}/register`, {
+            email: email,
+            password: password
+        }) 
+        .then(response => {
+            setAlert(true);
+            window.setTimeout(()=>{
+                setAlert(false);
+            }, 3000);
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+
+    async function loginRequest(email, password){
+        await axios.post(`${url_base}/login`, {
+            email: email,
+            password: password
+        }) 
+        .then(response => {
+            localStorage.setItem('token', response.data.token);
+            window.location.href = '/';
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+
+    async function forgotRequest(email, alertState){
+        await axios.post(`${url_base}/forgot`, {
+            email: email
+        }) 
+        .then(response => {
+            alertState(true);
+            window.setTimeout(()=>{
+                alertState(false);
+            }, 3000);
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+    async function resetRequest(newPassword, repiteNewPassword, id, token, alertState){
+        await axios.put(`${url_base}/reset/${id}/${token}`, {
+            newPassword: newPassword,
+            repitePassword: repiteNewPassword
+        }) 
+        .then(response => {
+            alertState(true);
+            window.setTimeout(()=>{
+                window.location.href = "/login";
+            }, 3000);
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+
+    async function getUser(setName, setLastname, setEmail, setId, setFile){
+        await axios.get(`${url_base}/users`, config)
+        .then(response => {
+            setName(response.data.user.name ? response.data.user.name : "");
+            setLastname(response.data.user.lastname ? response.data.user.lastname : "");
+            setEmail(response.data.user.email ? response.data.user.email : "");
+            setId(response.data.user._id ? response.data.user._id : "");
+            setFile(response.data.user.avatar ? response.data.user.avatar : null);
+        }).catch(error =>{
+            console.log(error);
+        })
+    }
+
+    async function updateUser(id, name, lastname, email, password, file, setAvatar){
+        const formData = new FormData();
+        formData.append("name", name);
+        formData.append("lastname", lastname);
+        if(email){
+            formData.append("email", email);
+        }
+        if(password){
+            formData.append("password", password);
+        }
+        try{
+            formData.append(
+                "avatar",
+                file,
+                file.name
+            )
+        }catch(error){
+            console.log("no se ha cargado archivo");
+        }
+
+        await axios.put(`${url_base}/users/${id}`, formData, config)
+        .then(response => {
+            console.log("Se han guardado los cambios");
+            setAvatar(response.data.user.avatar ? response.data.user.avatar : null);
+        }).catch(error => {
+            console.log(error);
+        })
+    }
+
+    // versión mas simple del getUser para navBar:
+    async function getNavUser(setUserame, setAvatar){
+        await axios.get(`${url_base}/users`, config)
+        .then(response => {
+            setUserame(response.data.user.name ? response.data.user.name : "");
+            setAvatar(response.data.user.avatar ? response.data.user.avatar : null);
+        }).catch(error =>{
+            console.log(error);
+        })
+    }
+
+    export{
+        registerRequest,
+        loginRequest,
+        forgotRequest,
+        resetRequest,
+        getUser,
+        updateUser,
+        getNavUser // exportar modulo
+    }
+
+
+- Ahora hay que modificar el navbar para que muestre la foto y el nombre de usuario, editamos **NavbarCommon.js**: 
+
+.. code-block::
+
+    import {Fragment} from 'react';
+    import {NavLink} from 'react-router-dom';
+    // importar los hooks usestate y useeffect:
+    import {useState, useEffect} from 'react';
+    import './NavbarCommon.css';
+    // importar servicio user:
+    import {getNavUser} from '../requests/userRequest';
+
+    const defaultAvatar = require("../assets/avatar.png");
+
+    function NavBarCommon(){
+        // crear dos hooks con el nombre de usuario y la foto:
+        const [username, setUsername] = useState("Usuario");
+        const [avatar, setAvatar] = useState(null);
+
+        useEffect(()=>{
+            // le pasamos al los hooks el valor:
+            getNavUser(setUsername, setAvatar);
+        }, []);
+
+
+        return(
+            <Fragment>
+                    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+                        <div className="container-fluid">
+                            <NavLink to="/" className="navbar-brand">Task Learn</NavLink>
+                        </div>
+                        
+                        <ul className="navbar-nav mb-2 mb-lg-0">
+                            <li className="nav-item">
+                                <NavLink to="/users" className="nav-link text-center">
+                                    {/* se modifican los campos para que reciban los hooks, en el caso de la imagen hay que validar: */}
+                                    <img className="avatar rounded img-thumbnail img-fluid" src={avatar ? `http://localhost:5000/api/users/avatar/${avatar}` : defaultAvatar} alt="foto"></img>
+                                    <small>{username}</small>
+                                </NavLink>
+                            </li>
+                        </ul>
+                    </nav>
+            </Fragment>
+        )
+    }
+
+    export default NavBarCommon;
+
+
+Paso 15: Subir cambios a GitHub  
 *******************************
 
 - Parar depuración de Visual studio code.

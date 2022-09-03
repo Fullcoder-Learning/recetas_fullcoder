@@ -217,7 +217,8 @@
 <li><p><a class="reference internal" href="#paso-11-eliminar-tareas" id="id32">Paso 11: Eliminar Tareas</a></p></li>
 <li><p><a class="reference internal" href="#paso-12-cargar-datos-de-usuario" id="id33">Paso 12: Cargar datos de usuario</a></p></li>
 <li><p><a class="reference internal" href="#paso-13-editar-datos-de-usuario" id="id34">Paso 13: Editar datos de usuario</a></p></li>
-<li><p><a class="reference internal" href="#paso-14-subir-cambios-a-github" id="id35">Paso 14: Subir cambios a GitHub</a></p></li>
+<li><p><a class="reference internal" href="#paso-14-actualizar-usuario-navbar" id="id35">Paso 14: Actualizar usuario navbar</a></p></li>
+<li><p><a class="reference internal" href="#paso-15-subir-cambios-a-github" id="id36">Paso 15: Subir cambios a GitHub</a></p></li>
 </ul>
 </li>
 </ul>
@@ -3105,8 +3106,193 @@ export default UserFormComponent;
 </pre></div>
 </div>
 </section>
-<section id="paso-14-subir-cambios-a-github">
-<h3><a class="toc-backref" href="#id35">Paso 14: Subir cambios a GitHub</a><a class="headerlink" href="#paso-14-subir-cambios-a-github" title="Enlazar permanentemente con este título">¶</a></h3>
+<section id="paso-14-actualizar-usuario-navbar">
+<h3><a class="toc-backref" href="#id35">Paso 14: Actualizar usuario navbar</a><a class="headerlink" href="#paso-14-actualizar-usuario-navbar" title="Enlazar permanentemente con este título">¶</a></h3>
+<ul class="simple">
+<li><p>Creamos un nuevo servicio solo para el navbar ya que <strong>getUser</strong> necesita mas parametros, editamos <strong>userRequest.js</strong>:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>import axios from &#39;axios&#39;;
+
+const url_base = &quot;http://localhost:5000/api&quot;
+
+const config = {
+    headers: {
+        Authorization: localStorage.getItem(&quot;token&quot;)
+    }
+}
+
+
+async function registerRequest(email, password, setAlert){
+    await axios.post(`${url_base}/register`, {
+        email: email,
+        password: password
+    })
+    .then(response =&gt; {
+        setAlert(true);
+        window.setTimeout(()=&gt;{
+            setAlert(false);
+        }, 3000);
+    }).catch(error =&gt;{
+        console.log(error);
+    });
+}
+
+async function loginRequest(email, password){
+    await axios.post(`${url_base}/login`, {
+        email: email,
+        password: password
+    })
+    .then(response =&gt; {
+        localStorage.setItem(&#39;token&#39;, response.data.token);
+        window.location.href = &#39;/&#39;;
+    }).catch(error =&gt;{
+        console.log(error);
+    });
+}
+
+async function forgotRequest(email, alertState){
+    await axios.post(`${url_base}/forgot`, {
+        email: email
+    })
+    .then(response =&gt; {
+        alertState(true);
+        window.setTimeout(()=&gt;{
+            alertState(false);
+        }, 3000);
+    }).catch(error =&gt;{
+        console.log(error);
+    });
+}
+async function resetRequest(newPassword, repiteNewPassword, id, token, alertState){
+    await axios.put(`${url_base}/reset/${id}/${token}`, {
+        newPassword: newPassword,
+        repitePassword: repiteNewPassword
+    })
+    .then(response =&gt; {
+        alertState(true);
+        window.setTimeout(()=&gt;{
+            window.location.href = &quot;/login&quot;;
+        }, 3000);
+    }).catch(error =&gt;{
+        console.log(error);
+    });
+}
+
+async function getUser(setName, setLastname, setEmail, setId, setFile){
+    await axios.get(`${url_base}/users`, config)
+    .then(response =&gt; {
+        setName(response.data.user.name ? response.data.user.name : &quot;&quot;);
+        setLastname(response.data.user.lastname ? response.data.user.lastname : &quot;&quot;);
+        setEmail(response.data.user.email ? response.data.user.email : &quot;&quot;);
+        setId(response.data.user._id ? response.data.user._id : &quot;&quot;);
+        setFile(response.data.user.avatar ? response.data.user.avatar : null);
+    }).catch(error =&gt;{
+        console.log(error);
+    })
+}
+
+async function updateUser(id, name, lastname, email, password, file, setAvatar){
+    const formData = new FormData();
+    formData.append(&quot;name&quot;, name);
+    formData.append(&quot;lastname&quot;, lastname);
+    if(email){
+        formData.append(&quot;email&quot;, email);
+    }
+    if(password){
+        formData.append(&quot;password&quot;, password);
+    }
+    try{
+        formData.append(
+            &quot;avatar&quot;,
+            file,
+            file.name
+        )
+    }catch(error){
+        console.log(&quot;no se ha cargado archivo&quot;);
+    }
+
+    await axios.put(`${url_base}/users/${id}`, formData, config)
+    .then(response =&gt; {
+        console.log(&quot;Se han guardado los cambios&quot;);
+        setAvatar(response.data.user.avatar ? response.data.user.avatar : null);
+    }).catch(error =&gt; {
+        console.log(error);
+    })
+}
+
+// versión mas simple del getUser para navBar:
+async function getNavUser(setUserame, setAvatar){
+    await axios.get(`${url_base}/users`, config)
+    .then(response =&gt; {
+        setUserame(response.data.user.name ? response.data.user.name : &quot;&quot;);
+        setAvatar(response.data.user.avatar ? response.data.user.avatar : null);
+    }).catch(error =&gt;{
+        console.log(error);
+    })
+}
+
+export{
+    registerRequest,
+    loginRequest,
+    forgotRequest,
+    resetRequest,
+    getUser,
+    updateUser,
+    getNavUser // exportar modulo
+}
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Ahora hay que modificar el navbar para que muestre la foto y el nombre de usuario, editamos <strong>NavbarCommon.js</strong>:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>import {Fragment} from &#39;react&#39;;
+import {NavLink} from &#39;react-router-dom&#39;;
+// importar los hooks usestate y useeffect:
+import {useState, useEffect} from &#39;react&#39;;
+import &#39;./NavbarCommon.css&#39;;
+// importar servicio user:
+import {getNavUser} from &#39;../requests/userRequest&#39;;
+
+const defaultAvatar = require(&quot;../assets/avatar.png&quot;);
+
+function NavBarCommon(){
+    // crear dos hooks con el nombre de usuario y la foto:
+    const [username, setUsername] = useState(&quot;Usuario&quot;);
+    const [avatar, setAvatar] = useState(null);
+
+    useEffect(()=&gt;{
+        // le pasamos al los hooks el valor:
+        getNavUser(setUsername, setAvatar);
+    }, []);
+
+
+    return(
+        &lt;Fragment&gt;
+                &lt;nav className=&quot;navbar navbar-expand-lg navbar-dark bg-dark&quot;&gt;
+                    &lt;div className=&quot;container-fluid&quot;&gt;
+                        &lt;NavLink to=&quot;/&quot; className=&quot;navbar-brand&quot;&gt;Task Learn&lt;/NavLink&gt;
+                    &lt;/div&gt;
+
+                    &lt;ul className=&quot;navbar-nav mb-2 mb-lg-0&quot;&gt;
+                        &lt;li className=&quot;nav-item&quot;&gt;
+                            &lt;NavLink to=&quot;/users&quot; className=&quot;nav-link text-center&quot;&gt;
+                                {/* se modifican los campos para que reciban los hooks, en el caso de la imagen hay que validar: */}
+                                &lt;img className=&quot;avatar rounded img-thumbnail img-fluid&quot; src={avatar ? `http://localhost:5000/api/users/avatar/${avatar}` : defaultAvatar} alt=&quot;foto&quot;&gt;&lt;/img&gt;
+                                &lt;small&gt;{username}&lt;/small&gt;
+                            &lt;/NavLink&gt;
+                        &lt;/li&gt;
+                    &lt;/ul&gt;
+                &lt;/nav&gt;
+        &lt;/Fragment&gt;
+    )
+}
+
+export default NavBarCommon;
+</pre></div>
+</div>
+</section>
+<section id="paso-15-subir-cambios-a-github">
+<h3><a class="toc-backref" href="#id36">Paso 15: Subir cambios a GitHub</a><a class="headerlink" href="#paso-15-subir-cambios-a-github" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Parar depuración de Visual studio code.</p></li>
 <li><p>Añadir cambios: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span> <span class="pre">.</span></code></p></li>
