@@ -752,7 +752,7 @@ Paso 11: Crear componente para editar usuario
                             <input type="text" className="form-control mt-3" placeholder="Nombre" onChange={handleName} />   
                             <input type="text" className="form-control mt-3" placeholder="Apellidos" onChange={handleLastname} />  
                             <input type="text" className="form-control mt-3" placeholder="Email" onChange={handleEmail} />  
-                            <input type="text" className="form-control mt-3" placeholder="Contraseña" onChange={handlePassword} /> 
+                            <input type="text" className="form-control mt-3" placeholder="nueva contraseña (dejar en blanco para no cambiar)" onChange={handlePassword} /> 
                             <input type="submit" className="btn btn-success form-control mt-3" value="Actualizar datos" />
                         </div>
                     </div>
@@ -1015,133 +1015,7 @@ Paso 13: Crear modal para registrar usuarios
 
     export default LoginPage;
 
-Paso 14: Crear alerta cuando se registra usuario
-*************************************************
-
-- Crear nueva regla de al final del archivo **LoginPage.css**:
-
-.. code-block:: css 
-
-    
-    .alert{
-    position: fixed;
-    top: 0;
-    width: 100%;
-    }
-
-- Crear alerta en **LoginPage.js**:
-
-.. code-block:: 
-
-    import {Fragment} from 'react';
-    import {useState} from 'react';
-    import './LoginPage.css';
-    import RegisterModalComponent from './RegisterModalComponent';
-
-    function LoginPage(){
-        // crear hook para la alerta:
-        const [alert, setAlert] = useState(false);
-
-        return(
-            <Fragment>
-                {/* crear un alert con condición de ocultar en la clase: */}
-                <div className={alert === true ? "alert alert-success" : "alert alert-success fade"} role="alert">
-                    Registro realizado con éxito. Ya puedes iniciar sesión.
-                </div>
-                <div className="bodystyle text-center" cz-shortcut-listen="true">
-                    <div className="form-signin text-center">
-                        <form>
-                            <h1>Por favor inicia sesión</h1>
-                            <div className="form-floating">
-                                <input type="email" className="form-control" id="floatingInput" placeholder="name@example.com" />
-                                <label htmlFor="floatingInput">Email</label>
-                            </div>
-                            <div className="form-floating">
-                                <input type="password" className="form-control" id="floatingPassword" placeholder="Password" />
-                                <label htmlFor="floatingPassword">Contraseña</label>
-                            </div>
-                            <div className="mb-3">
-                            <button type="button" className="cursor" data-bs-toggle="modal" data-bs-target="#registerUser">Crear usuario</button>
-                            </div>
-                            <div className="mb-3">
-                            <button type="button" className="cursor" data-bs-toggle="modal" data-bs-target="#resetPassword">¿has olvidado la contraseña?</button>
-                            </div>
-                            <button className="w-100 btn btn-lg btn-primary" type="submit">Iniciar sesión</button>
-                        </form>
-                    </div>
-                </div>
-                {/* pasar estado de la alerta: */}
-                <RegisterModalComponent setAlert={setAlert} />
-            </Fragment>
-        )
-    }
-
-    export default LoginPage;
-
-- Modificar ahora el componente **RegisterModalComponent.js**:
-
-.. code-block::  
-
-    // importar fragment:
-    import {Fragment} from 'react';
-    import {useState} from 'react';
-
-    // recuperar campo estado del hook:
-    function RegisterModalComponent({setAlert}){
-        const [email, setEmail] = useState("");
-        const [password, setPassword] = useState("");
-
-        const handleEmail = (e) =>{
-            setEmail(e.target.value);
-        }
-
-        const handlePassword = (e) =>{
-            setPassword(e.target.value);
-        }
-
-        // crear handle para formulario:
-        const handleForm = (e) =>{
-            e.preventDefault();
-            console.log(email);
-            console.log(password);
-            // cargar alert durante 3 segundos:
-            setAlert(true);
-            window.setTimeout(()=>{
-                setAlert(false);
-            }, 3000);
-        } 
-
-        // crear modal:
-        return(
-            <Fragment>
-                <div className="modal fade" id="registerUser" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div className="modal-dialog">
-                        <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title" id="exampleModalLabel">Registro</h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div className="modal-body">
-                        <form onSubmit={handleForm}>
-                            <div className="row">
-                                <div className="col">
-                                    <input type="email" className="form-control mt-3" placeholder="Email" onChange={handleEmail} />  
-                                    <input type="password" className="form-control mt-3" placeholder="Contraseña" onChange={handlePassword} /> 
-                                    <input type="submit" className="btn btn-success form-control mt-3" value="Darse de alta" data-bs-dismiss="modal" />
-                                </div>
-                            </div>
-                        </form>
-                        </div>
-                        </div>
-                    </div>
-                </div>
-            </Fragment>
-        )
-    }
-
-    export default RegisterModalComponent;
-
-Paso 15: Crear modal para recuperar contraseña 
+Paso 14: Crear modal para recuperar contraseña 
 **********************************************
 
 - Crear nuevo archivo en **login** llamado **ResetModalComponent.js**:
@@ -1153,7 +1027,7 @@ Paso 15: Crear modal para recuperar contraseña
     import {useState} from 'react';
 
     // recuperar campo estado del hook:
-    function ResetModalComponent({setAlert}){
+    function ResetModalComponent(){
         const [email, setEmail] = useState("");
 
         const handleEmail = (e) =>{
@@ -1164,11 +1038,6 @@ Paso 15: Crear modal para recuperar contraseña
         const handleForm = (e) =>{
             e.preventDefault();
             console.log(email);
-            // cargar alert durante 3 segundos:
-            setAlert(true);
-            window.setTimeout(()=>{
-                setAlert(false);
-            }, 3000);
         } 
 
         // crear modal:
@@ -1213,14 +1082,22 @@ Paso 15: Crear modal para recuperar contraseña
     import ResetModalComponent from './ResetModalComponent';
 
     function LoginPage(){
-        const [alert, setAlert] = useState(false);
         // crear hook para la alerta:
         const [resetAlert, setResetAlert] = useState(false);
+
 
         return(
             <Fragment>
                 <div className={alert === true ? "alert alert-success" : "alert alert-success fade"} role="alert">
                     Registro realizado con éxito. Ya puedes iniciar sesión.
+                </div>
+                {/* Añadir la alerta de error al crear usuario: */}
+                <div className={alertErrorRegister === true ? "alert alert-warning" : "alert alert-warning fade"} role="alert">
+                    Error al crear usuario, el email ya existe.
+                </div>
+                {/* Añadir también una alerta con mensaje de error si nos equivocamos */}
+                <div className={alertError === true ? "alert alert-danger" : "alert alert-danger fade"} role="alert">
+                    Error al iniciar sesión, usuario o contraseña incorrectos.
                 </div>
                 {/* crear un alert con condición de ocultar en la clase: */}
                 <div className={resetAlert === true ? "alert alert-primary" : "alert alert-success fade"} role="alert">
@@ -1248,7 +1125,7 @@ Paso 15: Crear modal para recuperar contraseña
                         </form>
                     </div>
                 </div>
-                <RegisterModalComponent setAlert={setAlert} />
+                <RegisterModalComponent />
                 {/* pasar estado de la alerta: */}
                 <ResetModalComponent setAlert={setResetAlert} />
             </Fragment>
@@ -1257,7 +1134,7 @@ Paso 15: Crear modal para recuperar contraseña
 
     export default LoginPage;
 
-Paso 16: Crear página para restablecer contraseña 
+Paso 15: Crear página para restablecer contraseña 
 *************************************************
 
 - Ahora se va a crear dentro de **pages** una carpeta llamada **reset** y dentro un archivo llamado **ResetPasswordPage.css**:
@@ -1426,10 +1303,10 @@ Paso 16: Crear página para restablecer contraseña
 
     export default Router;
 
-Paso 17: Subir cambios a GitHub  
+Paso 16: Subir cambios a GitHub  
 *******************************
 
-- Parar depuración de Visual studio code.
+- Parar ejecución de app.
 - Añadir cambios: ``git add .``
 - Realizar un commit: ``git commit -am "Phase 1 complete"``
 - Subir cambios a Github con el nombre de la rama actual: ``git push origin feature/phase-1-task-structure``
@@ -1462,6 +1339,7 @@ Paso 2: Preparar proyecto
 - Crear rama feature a partir de developer: ``git checkout -b feature/phase-2-connect-to-service``
 - Instalar Axios: ``npm install axios --save``
 - Instalar React JWT: ``npm install react-jwt --save``
+- Instalar moment: ``npm install moment --save``
 - en la carpeta **src** crear la carpeta **requests** y **helpers**.
 - Arrancar proyecto desde la raiz: ``npm start``
 
@@ -1479,20 +1357,22 @@ Paso 3: Crear servicio para registrarse
     // cargar url base:
     const url_base = "http://localhost:5000/api"
 
-    async function registerRequest(email, password, setAlert){
-        // realizar petición post con usuario y el email:
-        await axios.post(`${url_base}/register`, {
-            email: email,
+    async function registerRequest(email, password, setAlert, setAlertErrorRegister){
+    await axios.post(`${url_base}/register`, {
+        email: email,
             password: password
-        }) // si todo va bien que muestre una alerta:
+        }) 
         .then(response => {
             setAlert(true);
-            // cerrar alerta a los 3 segundos:
             window.setTimeout(()=>{
                 setAlert(false);
             }, 3000);
         }).catch(error =>{
             console.log(error);
+            setAlertErrorRegister(true);
+            window.setTimeout(()=>{
+                setAlertErrorRegister(false);
+            }, 3000);
         });
     }
 
@@ -1511,7 +1391,7 @@ Paso 3: Crear servicio para registrarse
     // importar modulo registro:
     import {registerRequest} from '../../requests/userRequest';
 
-    function RegisterModalComponent({setAlert}){
+    function RegisterModalComponent({setAlert, setAlertErrorRegister}){
         const [email, setEmail] = useState("");
         const [password, setPassword] = useState("");
 
@@ -1526,7 +1406,7 @@ Paso 3: Crear servicio para registrarse
         // crear handle para formulario:
         const handleForm = (e) =>{
             e.preventDefault();
-            registerRequest(email, password, setAlert);
+            registerRequest(email, password, setAlert, setAlertErrorRegister);
         } 
 
         // crear modal:
@@ -1543,8 +1423,8 @@ Paso 3: Crear servicio para registrarse
                         <form onSubmit={handleForm}>
                             <div className="row">
                                 <div className="col">
-                                    <input type="email" className="form-control mt-3" placeholder="Email" onChange={handleEmail} />  
-                                    <input type="password" className="form-control mt-3" placeholder="Contraseña" onChange={handlePassword} /> 
+                                    <input type="email" className="form-control mt-3" placeholder="Email" minLength="5" onChange={handleEmail} />  
+                                    <input type="password" className="form-control mt-3" placeholder="Contraseña" minLength="1" onChange={handlePassword} /> 
                                     <input type="submit" className="btn btn-success form-control mt-3" value="Darse de alta" data-bs-dismiss="modal" />
                                 </div>
                             </div>
@@ -1559,18 +1439,72 @@ Paso 3: Crear servicio para registrarse
 
     export default RegisterModalComponent;
 
+- Cargar el modal - Editar **LoginPage.js**:
+
+.. code-block:: 
+    
+    import {Fragment} from 'react';
+    import {useState} from 'react';
+    import './LoginPage.css';
+    // cargar el modal de registro:
+    import RegisterModalComponent from './RegisterModalComponent';
+    import {loginRequest} from '../../requests/userRequest';
+
+    function LoginPage(){
+        // notificar si se ha registrado correctamente con una alerta:
+        const [alert, setAlert] = useState(false);
+        // crear un alert para notificar que hubo un error al registrar usuario:
+        const [alertErrorRegister, setAlertErrorRegister] = useState(false);
+
+       
+
+        return(
+            <Fragment>
+                <div className={alert === true ? "alert alert-success" : "alert alert-success fade"} role="alert">
+                    Registro realizado con éxito. Ya puedes iniciar sesión.
+                </div>
+                {/* Añadir la alerta de error al crear usuario: */}
+                <div className={alertErrorRegister === true ? "alert alert-warning" : "alert alert-warning fade"} role="alert">
+                    Error al crear usuario, el email ya existe.
+                </div>
+                <div className="bodystyle text-center" cz-shortcut-listen="true">
+                    <div className="form-signin text-center">
+                        <form>
+                            <h1>Por favor inicia sesión</h1>
+                            <div className="form-floating">
+                                <input type="email" className="form-control" placeholder="name@example.com" />
+                                <label htmlFor="floatingInput">Email</label>
+                            </div>
+                            <div className="form-floating">
+                                <input type="password" className="form-control" placeholder="Contraseña" />
+                                <label htmlFor="floatingPassword">Contraseña</label>
+                            </div>
+                            <div className="mb-3">
+                            <button type="button" className="cursor" data-bs-toggle="modal" data-bs-target="#registerUser">Crear usuario</button>
+                            </div>
+                            <button className="w-100 btn btn-lg btn-primary" type="submit">Iniciar sesión</button>
+                        </form>
+                    </div>
+                </div>
+                <RegisterModalComponent setAlert={setAlert} setAlertErrorRegister={setAlertErrorRegister} />
+            </Fragment>
+        )
+    }
+
+    export default LoginPage;
+
 Paso 4: Crear servicio para iniciar sesión 
 ******************************************
 
 - Añadir una nueva función al servicio **userRequest.js**:
 
-.. code-block:: 
+.. code-block:: javascript
     
     import axios from 'axios';
 
     const url_base = "http://localhost:5000/api"
 
-    async function registerRequest(email, password, setAlert){
+    async function registerRequest(email, password, setAlert, setAlertErrorRegister){
         await axios.post(`${url_base}/register`, {
             email: email,
             password: password
@@ -1582,27 +1516,29 @@ Paso 4: Crear servicio para iniciar sesión
             }, 3000);
         }).catch(error =>{
             console.log(error);
+            setAlertErrorRegister(true);
+            window.setTimeout(()=>{
+                setAlertErrorRegister(false);
+            }, 3000);
         });
     }
 
-    // nueva función para hacer login:
-    async function loginRequest(email, password){
+    async function loginRequest(email, password, setAlertError){
         await axios.post(`${url_base}/login`, {
             email: email,
             password: password
         }) 
         .then(response => {
-            // si se inicia sesión correctamente guardar token y redirigir:
             localStorage.setItem('token', response.data.token);
             window.location.href = '/';
         }).catch(error =>{
             console.log(error);
+            // si falla el inicio de sesión enviamos un mensaje de error:
+            setAlertError(true);
+            window.setTimeout(()=>{
+                setAlertError(false);
+            }, 3000);
         });
-    }
-
-    export{
-        registerRequest,
-        loginRequest // exportar modulo
     }
 
 
@@ -1614,14 +1550,14 @@ Paso 4: Crear servicio para iniciar sesión
     import {useState} from 'react';
     import './LoginPage.css';
     import RegisterModalComponent from './RegisterModalComponent';
-    import ResetModalComponent from './ResetModalComponent';
-    // importar modulo login:
+    // cargar el servicio:
     import {loginRequest} from '../../requests/userRequest';
 
     function LoginPage(){
         const [alert, setAlert] = useState(false);
-        const [resetAlert, setResetAlert] = useState(false);
-        // añadir todo lo relacionado con email y password y el form:
+        const [alertErrorRegister, setAlertErrorRegister] = useState(false);
+        // cargar hook de alerta cuando hay error al iniciar sesión:
+        const [alertError, setAlertError] = useState(false);
         const [email, setEmail] = useState("");
         const [password, setPassword] = useState("");
 
@@ -1633,10 +1569,10 @@ Paso 4: Crear servicio para iniciar sesión
             setPassword(e.target.value);
         }
 
-        // crear handle para formulario:
         const handleForm = (e) =>{
             e.preventDefault();
-            loginRequest(email, password);
+            // cargar servicio para iniciar sesión:
+            loginRequest(email, password, setAlertError);
         } 
 
         return(
@@ -1644,21 +1580,22 @@ Paso 4: Crear servicio para iniciar sesión
                 <div className={alert === true ? "alert alert-success" : "alert alert-success fade"} role="alert">
                     Registro realizado con éxito. Ya puedes iniciar sesión.
                 </div>
-                <div className={resetAlert === true ? "alert alert-primary" : "alert alert-success fade"} role="alert">
-                    Se ha enviado un email para restablecer contraseña, por favor revisa tu bandeja de entrada.
+                {/* Añadir la alerta de error al crear usuario: */}
+                <div className={alertErrorRegister === true ? "alert alert-warning" : "alert alert-warning fade"} role="alert">
+                    Error al crear usuario, el email ya existe.
+                </div>
+                <div className={alertError === true ? "alert alert-danger" : "alert alert-danger fade"} role="alert">
+                    Error al iniciar sesión, usuario o contraseña incorrectos.
                 </div>
                 <div className="bodystyle text-center" cz-shortcut-listen="true">
                     <div className="form-signin text-center">
-                        {/* añadir el handle: */}
                         <form onSubmit={handleForm}>
                             <h1>Por favor inicia sesión</h1>
                             <div className="form-floating">
-                                {/* añadir el handle: */}
                                 <input type="email" className="form-control" placeholder="name@example.com" onChange={handleEmail} />
                                 <label htmlFor="floatingInput">Email</label>
                             </div>
                             <div className="form-floating">
-                                {/* añadir el handle: */}
                                 <input type="password" className="form-control" placeholder="Contraseña" onChange={handlePassword} />
                                 <label htmlFor="floatingPassword">Contraseña</label>
                             </div>
@@ -1672,8 +1609,7 @@ Paso 4: Crear servicio para iniciar sesión
                         </form>
                     </div>
                 </div>
-                <RegisterModalComponent setAlert={setAlert} />
-                <ResetModalComponent setAlert={setResetAlert} />
+                <RegisterModalComponent setAlert={setAlert} setAlertErrorRegister={setAlertErrorRegister} />
             </Fragment>
         )
     }
@@ -1733,13 +1669,13 @@ paso 6: Enviar email para restablecer contraseña
 
 - Crear servicio en **userRequest.js**:
 
-.. code-block:: 
+.. code-block:: javascript
     
     import axios from 'axios';
 
     const url_base = "http://localhost:5000/api"
 
-    async function registerRequest(email, password, setAlert){
+    async function registerRequest(email, password, setAlert, setAlertErrorRegister){
         await axios.post(`${url_base}/register`, {
             email: email,
             password: password
@@ -1751,10 +1687,14 @@ paso 6: Enviar email para restablecer contraseña
             }, 3000);
         }).catch(error =>{
             console.log(error);
+            setAlertErrorRegister(true);
+            window.setTimeout(()=>{
+                setAlertErrorRegister(false);
+            }, 3000);
         });
     }
 
-    async function loginRequest(email, password){
+    async function loginRequest(email, password, setAlertError){
         await axios.post(`${url_base}/login`, {
             email: email,
             password: password
@@ -1764,25 +1704,32 @@ paso 6: Enviar email para restablecer contraseña
             window.location.href = '/';
         }).catch(error =>{
             console.log(error);
+            setAlertError(true);
+            window.setTimeout(()=>{
+                setAlertError(false);
+            }, 3000);
         });
     }
 
     // esta función enviará un email a nuestra bandeja con una url de recuperación:
-    async function forgotRequest(email, alertState){
+    async function forgotRequest(email, alertState, setResetAlertError){
         await axios.post(`${url_base}/forgot`, {
             email: email
         }) 
         .then(response => {
-            // cargar alert durante 3 segundos:
             alertState(true);
             window.setTimeout(()=>{
                 alertState(false);
             }, 3000);
         }).catch(error =>{
             console.log(error);
+            // si falla el inicio de sesión enviamos un mensaje de error:
+            setResetAlertError(true);
+            window.setTimeout(()=>{
+                setResetAlertError(false);
+            }, 3000);
         });
     }
-
 
     export{
         registerRequest,
@@ -1791,7 +1738,7 @@ paso 6: Enviar email para restablecer contraseña
     }
 
 
-- Editar el componente **ResetModalComponent**: 
+- Editar el componente **ResetModalComponent.js**: 
 
 .. code-block:: 
 
@@ -1801,7 +1748,8 @@ paso 6: Enviar email para restablecer contraseña
     // importar servicio:
     import {forgotRequest} from '../../requests/userRequest';
 
-    function ResetModalComponent({setAlert}){
+    // se le pasa el estado de error:
+    function ResetModalComponent({setAlert, setResetAlertError}){
         const [email, setEmail] = useState("");
 
         const handleEmail = (e) =>{
@@ -1810,7 +1758,8 @@ paso 6: Enviar email para restablecer contraseña
 
         const handleForm = (e) =>{
             e.preventDefault();
-            forgotRequest(email, setAlert);
+            // cargar la función para recuperar contraseña:
+            forgotRequest(email, setAlert, setResetAlertError);
         } 
 
         return(
@@ -1842,6 +1791,89 @@ paso 6: Enviar email para restablecer contraseña
 
     export default ResetModalComponent;
 
+- Actualizar el componente **LoginPage.js**:
+
+.. code-block:: 
+
+    import {Fragment} from 'react';
+    import {useState} from 'react';
+    import './LoginPage.css';
+    import RegisterModalComponent from './RegisterModalComponent';
+    import ResetModalComponent from './ResetModalComponent';
+    import {loginRequest} from '../../requests/userRequest';
+
+    function LoginPage(){
+        const [alert, setAlert] = useState(false);
+        const [alertErrorRegister, setAlertErrorRegister] = useState(false);
+        const [alertError, setAlertError] = useState(false);
+        // cargar los hooks para las alertas:
+        const [resetAlert, setResetAlert] = useState(false);
+        const [resetAlertError, setResetAlertError] = useState(false);
+        const [email, setEmail] = useState("");
+        const [password, setPassword] = useState("");
+
+        const handleEmail = (e) =>{
+            setEmail(e.target.value);
+        }
+
+        const handlePassword = (e) =>{
+            setPassword(e.target.value);
+        }
+
+        const handleForm = (e) =>{
+            e.preventDefault();
+            loginRequest(email, password, setAlertError);
+        } 
+
+        return(
+            <Fragment>
+                <div className={alert === true ? "alert alert-success" : "alert alert-success fade"} role="alert">
+                    Registro realizado con éxito. Ya puedes iniciar sesión.
+                </div>
+                <div className={alertErrorRegister === true ? "alert alert-warning" : "alert alert-success fade"} role="alert">
+                    Error al crear usuario, el email ya existe.
+                </div>
+                <div className={alertError === true ? "alert alert-danger" : "alert alert-danger fade"} role="alert">
+                    Error al iniciar sesión, usuario o contraseña incorrectos.
+                </div>
+                <div className={resetAlert === true ? "alert alert-danger" : "alert alert-danger fade"} role="alert">
+                    Se ha enviado un email para restablecer contraseña, por favor revisa tu bandeja de entrada.
+                </div>
+                {/* Añadir la alerta si no se reestablece la contraseña: */}
+                <div className={resetAlertError === true ? "alert alert-danger" : "alert alert-danger fade"} role="alert">
+                    Error, el email introducido no existe.
+                </div>
+                <div className="bodystyle text-center" cz-shortcut-listen="true">
+                    <div className="form-signin text-center">
+                        <form onSubmit={handleForm}>
+                            <h1>Por favor inicia sesión</h1>
+                            <div className="form-floating">
+                                <input type="email" className="form-control" placeholder="name@example.com" onChange={handleEmail} />
+                                <label htmlFor="floatingInput">Email</label>
+                            </div>
+                            <div className="form-floating">
+                                <input type="password" className="form-control" placeholder="Contraseña" onChange={handlePassword} />
+                                <label htmlFor="floatingPassword">Contraseña</label>
+                            </div>
+                            <div className="mb-3">
+                            <button type="button" className="cursor" data-bs-toggle="modal" data-bs-target="#registerUser">Crear usuario</button>
+                            </div>
+                            <div className="mb-3">
+                            <button type="button" className="cursor" data-bs-toggle="modal" data-bs-target="#resetPassword">¿has olvidado la contraseña?</button>
+                            </div>
+                            <button className="w-100 btn btn-lg btn-primary" type="submit">Iniciar sesión</button>
+                        </form>
+                    </div>
+                </div>
+                <RegisterModalComponent setAlert={setAlert} setAlertErrorRegister={setAlertErrorRegister} />
+                {/* Enviar el estado de la alerta: */}
+                <ResetModalComponent setAlert={setResetAlert} setResetAlertError={setResetAlertError} />
+            </Fragment>
+        )
+    }
+
+    export default LoginPage;
+
 Paso 7: Reestablecer contraseña
 *******************************
 
@@ -1853,7 +1885,7 @@ Paso 7: Reestablecer contraseña
 
     const url_base = "http://localhost:5000/api"
 
-    async function registerRequest(email, password, setAlert){
+    async function registerRequest(email, password, setAlert, setAlertErrorRegister){
         await axios.post(`${url_base}/register`, {
             email: email,
             password: password
@@ -1865,10 +1897,14 @@ Paso 7: Reestablecer contraseña
             }, 3000);
         }).catch(error =>{
             console.log(error);
+            setAlertErrorRegister(true);
+            window.setTimeout(()=>{
+                setAlertErrorRegister(false);
+            }, 3000);
         });
     }
 
-    async function loginRequest(email, password){
+    async function loginRequest(email, password, setAlertError){
         await axios.post(`${url_base}/login`, {
             email: email,
             password: password
@@ -1878,10 +1914,14 @@ Paso 7: Reestablecer contraseña
             window.location.href = '/';
         }).catch(error =>{
             console.log(error);
+            setAlertError(true);
+            window.setTimeout(()=>{
+                setAlertError(false);
+            }, 3000);
         });
     }
 
-    async function forgotRequest(email, alertState){
+    async function forgotRequest(email, alertState, setResetAlertError){
         await axios.post(`${url_base}/forgot`, {
             email: email
         }) 
@@ -1892,8 +1932,13 @@ Paso 7: Reestablecer contraseña
             }, 3000);
         }).catch(error =>{
             console.log(error);
+            setResetAlertError(true);
+            window.setTimeout(()=>{
+                setResetAlertError(false);
+            }, 3000);
         });
     }
+
     // crear función que resetea password:
     async function resetRequest(newPassword, repiteNewPassword, id, token, alertState){
         // enviar por url el id y el token:
@@ -1998,6 +2043,7 @@ Paso 7: Reestablecer contraseña
     }
 
     export default ResetPasswordPage;
+
 
 Paso 8: Crear tareas 
 ********************
@@ -2188,6 +2234,8 @@ Paso 9: Recuperar Tareas
 
     // importar hook useeffect para listar:
     import {useState, useEffect} from 'react';
+    // importar moment para formatear fechas: 
+    import moment from 'moment';
     import DeleteTaskModalComponent from './DeleteTaskModalComponent';
     import FinishTaskModalComponent from './FinishTaskModalComponent';
     // cargar servicio get:
@@ -2249,9 +2297,10 @@ Paso 9: Recuperar Tareas
                                     <tr key={data._id}>
                                         <td>{data.name}</td>
                                         <td>{data.description}</td>
-                                        <td>{data.date_created}</td>
+                                        {/* Hay que formatear las fechas con moment: */}
+                                        <td>{moment(data.date_created).format('D/M/YYYY, h:mm:ss a')}</td>
                                         <td className="text-center">{data.is_complete ? ('Si') : ('No')}</td>
-                                        <td>{data.date_finish ? (data.date_finish) : ('')}</td>
+                                        <td>{data.date_finish ? (moment(data.date_finish).format('D/M/YYYY, h:mm:ss a')) : ('')}</td>
                                         <td className="text-center">
                                             <button type="button" onClick={dataHandle(data._id, data.name)} className="btn btn-sm btn-primary me-2 mb-1" data-bs-toggle="modal" data-bs-target="#finishModal">Finalizar</button>
                                             <button type="button" onClick={dataHandle(data._id, data.name)} className="btn btn-sm btn-danger me-2" data-bs-toggle="modal" data-bs-target="#deleteModal">Eliminar</button>
@@ -2333,7 +2382,9 @@ Paso 10: Finalizar tarea
             // recorrer tareas para actualizar la tarea en el listado:
             tasks.map(task =>{
                 if(task._id === id){
-                    task.is_complete = true
+                    task.is_complete = true;
+                    // asignar fecha de finalización para esta actualización de la tabla:
+                    task.date_finish = Date.now();
                 }
                 return(null);
             });
@@ -2443,7 +2494,9 @@ Ahora toca añadir la función para eliminar tareas en **taskRequest.js**:
             console.log(tasks);
             tasks.map(task =>{
                 if(task._id === id){
-                    task.is_complete = true
+                    task.is_complete = true;
+                    // asignar fecha de finalización para esta actualización de la tabla:
+                    task.date_finish = Date.now();
                 }
                 return(null);
             });
@@ -2518,7 +2571,260 @@ Modificamos el componente **DeleteTaskModal.js**:
 
     export default DeleteTaskModalComponent;
 
-Paso 12: Cargar datos de usuario 
+Paso 12: Editar tareas
+**********************
+
+- creamos una nueva función para editar tareas en **taskRequest.js**:
+
+.. code-block:: 
+
+    import axios from 'axios';
+
+    const config = {
+        headers: {
+            Authorization: localStorage.getItem("token") 
+        }  
+    }
+
+    const url_base = "http://localhost:5000/api";
+
+    async function createTaskRequest(name, description, taskState){
+        await axios.post(`${url_base}/tasks`, {
+            name: name,
+            description: description
+        }, config) 
+        .then(response =>{
+            taskState(tasks => [...tasks, response.data.task]);
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+
+    async function ListTaskRequest(status){ 
+        await axios.get(`${url_base}/tasks`, config) 
+        .then(response => {
+            status(response.data);
+            console.log(response.data);
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+
+    async function setOK(tasks, setTasks, id){ 
+        await axios.patch(`${url_base}/tasks/${id}`, {}, config)
+        .then(response =>{
+            console.log('tareas:');
+            console.log(tasks);
+            tasks.map(task =>{
+                if(task._id === id){
+                    task.is_complete = true;
+                    task.date_finish = Date.now();
+                }
+                return(null);
+            });
+            
+            console.log(tasks);
+            setTasks(tasks => [...tasks]);
+        }).catch(error =>{
+            console.log(error);
+        })
+    }
+
+    async function deleteTask(tasks, setTasks, id){
+        await axios.delete(`${url_base}/tasks/${id}`, config)
+        .then(response => {
+            setTasks(tasks => [...tasks.filter(task => task._id !== id)]);
+        }).catch(error =>{  
+            console.log(error);
+        })
+    }
+
+    // actualizar tarea:
+    async function updateTaskRequest(id, name, description, tasks, setTasks){
+        await axios.put(`${url_base}/tasks/${id}`, {
+            name: name,
+            description: description
+        }, config)
+        .then(response => {
+            tasks.map(task =>{
+                if(task._id === id){
+                    task.name = response.data.task.name;
+                    task.description = response.data.task.description;
+                }
+                return(null);
+            });
+            
+            console.log(tasks);
+            setTasks(tasks => [...tasks]);
+        })
+    }
+
+    export{
+        createTaskRequest,
+        ListTaskRequest,
+        setOK,
+        deleteTask,
+        updateTaskRequest // exportar modulo
+    }
+
+- Implementamos los cambios en la tabla **taskTableComponent.js**:
+
+.. code-block:: 
+
+    // importar hook useeffect para listar:
+    import {useState, useEffect} from 'react';
+    import moment from 'moment';
+    import DeleteTaskModalComponent from './DeleteTaskModalComponent';
+    import FinishTaskModalComponent from './FinishTaskModalComponent';
+    // cargar la request para actualizar tareas:
+    import {createTaskRequest, ListTaskRequest, updateTaskRequest} from '../../requests/taskRequest';
+
+    function TaskTableComponent(){
+        const [tasks, setTasks] = useState(null);
+
+        const [id, setId] = useState(null);
+        // cambiar null por "" para solventar errores de formulario:
+        const [name, setName] = useState("");
+        const [description, setDescription] = useState("");
+        // añadimos el resto de campos de la tabla:
+        const [dateCreated, setDateCreated] = useState("");
+        const [isComplete, setIsComplete] = useState("");
+        const [dateFinish, setDateFinish] = useState("");
+
+        // creamos unos nuevos hooks para mostrar u ocultar input o texto:
+        const [showTask, setShowTask] = useState(true);
+        const [hideInput, setHideInput] = useState(true);
+
+        useEffect(()=>{
+            ListTaskRequest(setTasks);
+        },[]);
+
+        // añadimos los estilos personalizados:
+        const inputUpdate = {display: "none"};
+
+        // añadimos el resto de campos con valor por defecto nulo por si no la recibe:
+        const dataHandle = (id, name, description = "", dateCreated = null, isComplete = "", dateFinish = "") => {
+            return (e)=>{
+                setId(id);
+                setName(name);
+                // si llega la descripción la seteamos en el estado:
+                if(dateCreated){
+                    setDescription(description);
+                    setDateCreated(dateCreated);
+                    setIsComplete(isComplete);
+                    setDateFinish(dateFinish);
+                    // si recibe descripción en el dataHandle entonces mostramos los campos input:
+                    setShowTask(false);
+                    setHideInput(false);
+                }
+            }
+        }
+
+        const handleName = (e) => {
+            setName(e.target.value);
+        }
+
+        const handleDescription = (e) => {
+            setDescription(e.target.value);
+        }
+
+        const handleForm = (e) => {
+            e.preventDefault();
+            createTaskRequest(name, description, setTasks);
+        }
+
+        // cancelar edición:
+        const cancelHandle = (e) => {
+            setShowTask(true);
+            setHideInput(true);
+        }
+
+        // actualizar tarea:
+        const updateTaskHandle  = (e) => {
+            // actualizar tarea:
+            updateTaskRequest(id, name, description, tasks, setTasks);
+            // cerrar actualización:
+            setShowTask(true);
+            setHideInput(true);
+        }
+
+        return(
+            <div className="text-center container">
+                <table className="table mt-4">
+                    <thead>
+                        <tr>
+                            <th scope="col">Título</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Fecha creación</th>
+                            <th scope="col">Finalizada</th>
+                            <th scope="col">Fecha Finalización</th>
+                            <th scope="col">Operaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody className="text-start">
+                        { tasks ? (
+                            tasks.map(data => {
+                                return(
+                                    <tr key={data._id} style={showTask ? null : inputUpdate}>
+                                        <td>
+                                            {data.name}
+                                        </td>
+                                        <td>
+                                            {data.description}
+                                        </td>
+                                        <td>{moment(data.date_created).format('D/M/YYYY, h:mm:ss a')}</td>
+                                        <td className="text-center">{data.is_complete ? ('Si') : ('No')}</td>
+                                        <td>{data.date_finish ? (moment(data.date_finish).format('D/M/YYYY, h:mm:ss a')) : ('')}</td>
+                                        <td className="text-center">
+                                            <button type="button" onClick={dataHandle(data._id, data.name, data.description, data.date_created, data.is_complete, data.date_finish)} className="btn btn-sm btn-warning me-2 mb-1">Editar</button>
+                                            <button type="button" onClick={dataHandle(data._id, data.name)} className="btn btn-sm btn-primary me-2 mb-1" data-bs-toggle="modal" data-bs-target="#finishModal">Finalizar</button>
+                                            <button type="button" onClick={dataHandle(data._id, data.name)} className="btn btn-sm btn-danger me-2" data-bs-toggle="modal" data-bs-target="#deleteModal">Eliminar</button>
+                                        </td>
+                                    </tr>
+                                )
+                            })
+                            ) : (<tr colSpan="6"><td>No existen tareas</td></tr>)
+                        }
+                        {/* Añadir unos inputs nuevos para actualizar name y description: */}
+                        <tr style={hideInput ? inputUpdate : null}>
+                            <td>
+                                <input className="col me-2 form-control form-sm" type="text" placeholder="Título" value={name} onChange={handleName} />
+                            </td>
+                            <td>
+                                <input className="col me-2 form-control" type="text" placeholder="Descripción" value={description} onChange={handleDescription} />
+                            </td>
+                            <td>{moment(dateCreated).format('D/M/YYYY, h:mm:ss a')}</td>
+                            <td className="text-center">{isComplete ? ('Si') : ('No')}</td>
+                            <td>{dateFinish ? (moment(dateFinish).format('D/M/YYYY, h:mm:ss a')) : ('')}</td>
+                            <td className="text-center">
+                                <button type="button" onClick={updateTaskHandle} className="btn btn-sm btn-success me-2 mb-1">Guardar</button>
+                                <button type="button" onClick={cancelHandle} className="btn btn-sm btn-primary me-2 mb-1" >Cancelar</button>
+                            </td>
+                        </tr>
+                        <tr className="text-center">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td colSpan="3" >
+                                <form className="row input-group-sm" onSubmit={handleForm}>
+                                    <input className="col me-2 form-control form-sm" type="text" placeholder="Título" onChange={handleName} />
+                                    <input className="col me-2 form-control" type="text" placeholder="Descripción"  onChange={handleDescription} />
+                                    <input className="col me-2 form-control btn btn-success" type="submit" value="Crear tarea" />
+                                </form>
+                            </td>
+                            
+                        </tr>
+                    </tbody>
+                </table>
+                <FinishTaskModalComponent id={id} name={name} tasks={tasks} setTasks={setTasks} />
+                <DeleteTaskModalComponent id={id} name={name} tasks={tasks} setTasks={setTasks} />
+            </div>
+        )
+    }
+
+    export default TaskTableComponent;
+
+Paso 13: Cargar datos de usuario 
 ********************************
 
 - Crear una nueva request en **userRequest.js**:
@@ -2537,7 +2843,7 @@ Paso 12: Cargar datos de usuario
     }
 
 
-    async function registerRequest(email, password, setAlert){
+    async function registerRequest(email, password, setAlert, setAlertErrorRegister){
         await axios.post(`${url_base}/register`, {
             email: email,
             password: password
@@ -2549,10 +2855,14 @@ Paso 12: Cargar datos de usuario
             }, 3000);
         }).catch(error =>{
             console.log(error);
+            setAlertErrorRegister(true);
+            window.setTimeout(()=>{
+                setAlertErrorRegister(false);
+            }, 3000);
         });
     }
 
-    async function loginRequest(email, password){
+    async function loginRequest(email, password, setAlertError){
         await axios.post(`${url_base}/login`, {
             email: email,
             password: password
@@ -2562,10 +2872,14 @@ Paso 12: Cargar datos de usuario
             window.location.href = '/';
         }).catch(error =>{
             console.log(error);
+            setAlertError(true);
+            window.setTimeout(()=>{
+                setAlertError(false);
+            }, 3000);
         });
     }
 
-    async function forgotRequest(email, alertState){
+    async function forgotRequest(email, alertState, setResetAlertError){
         await axios.post(`${url_base}/forgot`, {
             email: email
         }) 
@@ -2576,8 +2890,13 @@ Paso 12: Cargar datos de usuario
             }, 3000);
         }).catch(error =>{
             console.log(error);
+            setResetAlertError(true);
+            window.setTimeout(()=>{
+                setResetAlertError(false);
+            }, 3000);
         });
     }
+
     async function resetRequest(newPassword, repiteNewPassword, id, token, alertState){
         await axios.put(`${url_base}/reset/${id}/${token}`, {
             newPassword: newPassword,
@@ -2689,7 +3008,7 @@ Paso 12: Cargar datos de usuario
                             <input type="text" className="form-control mt-3" placeholder="Nombre" value={name} onChange={handleName} />   
                             <input type="text" className="form-control mt-3" placeholder="Apellidos" value={lastname} onChange={handleLastname} />  
                             <input type="email" className="form-control mt-3" placeholder="Email" value={email} onChange={handleEmail} />  
-                            <input type="password" className="form-control mt-3" placeholder="Contraseña" onChange={handlePassword} /> 
+                            <input type="password" className="form-control mt-3" placeholder="nueva contraseña (dejar en blanco para no cambiar)" onChange={handlePassword} /> 
                             <input type="submit" className="btn btn-success form-control mt-3" value="Actualizar datos" />
                         </div>
                     </div>
@@ -2700,7 +3019,7 @@ Paso 12: Cargar datos de usuario
 
     export default UserFormComponent;
 
-Paso 13: Editar datos de usuario 
+Paso 14: Editar datos de usuario 
 ********************************
 
 - Crear el servicio para actualizar usuario en **userRequest.js**:
@@ -2718,8 +3037,7 @@ Paso 13: Editar datos de usuario
         }  
     }
 
-
-    async function registerRequest(email, password, setAlert){
+    async function registerRequest(email, password, setAlert, setAlertErrorRegister){
         await axios.post(`${url_base}/register`, {
             email: email,
             password: password
@@ -2731,10 +3049,14 @@ Paso 13: Editar datos de usuario
             }, 3000);
         }).catch(error =>{
             console.log(error);
+            setAlertErrorRegister(true);
+            window.setTimeout(()=>{
+                setAlertErrorRegister(false);
+            }, 3000);
         });
     }
 
-    async function loginRequest(email, password){
+    async function loginRequest(email, password, setAlertError){
         await axios.post(`${url_base}/login`, {
             email: email,
             password: password
@@ -2744,10 +3066,14 @@ Paso 13: Editar datos de usuario
             window.location.href = '/';
         }).catch(error =>{
             console.log(error);
+            setAlertError(true);
+            window.setTimeout(()=>{
+                setAlertError(false);
+            }, 3000);
         });
     }
 
-    async function forgotRequest(email, alertState){
+    async function forgotRequest(email, alertState, setResetAlertError){
         await axios.post(`${url_base}/forgot`, {
             email: email
         }) 
@@ -2758,8 +3084,13 @@ Paso 13: Editar datos de usuario
             }, 3000);
         }).catch(error =>{
             console.log(error);
+            setResetAlertError(true);
+            window.setTimeout(()=>{
+                setResetAlertError(false);
+            }, 3000);
         });
     }
+
     async function resetRequest(newPassword, repiteNewPassword, id, token, alertState){
         await axios.put(`${url_base}/reset/${id}/${token}`, {
             newPassword: newPassword,
@@ -2789,10 +3120,8 @@ Paso 13: Editar datos de usuario
     }
 
     // update user:
-    async function updateUser(id, name, lastname, email, password, file, setAvatar){
-        // creamos un objeto tipo FormData para enviar archivos:
+    async function updateUser(id, name, lastname, email, password, file, setAvatar, setAlert){
         const formData = new FormData();
-        // cargamos los detalles del archivo con formdata ya que estamos usando formularios en lugar de json:
         formData.append("name", name);
         formData.append("lastname", lastname);
         if(email){
@@ -2802,7 +3131,6 @@ Paso 13: Editar datos de usuario
             formData.append("password", password);
         }
         try{
-            // pasar la imagen con su nombre de campo y valores:
             formData.append(
                 "avatar",
                 file,
@@ -2815,8 +3143,11 @@ Paso 13: Editar datos de usuario
         await axios.put(`${url_base}/users/${id}`, formData, config)
         .then(response => {
             console.log("Se han guardado los cambios");
-            // actualizar hook del avatar que se muestra:
             setAvatar(response.data.user.avatar ? response.data.user.avatar : null);
+            setAlert(true);
+            window.setTimeout(()=>{
+                setAlert(false);
+            }, 3000);
         }).catch(error => {
             console.log(error);
         })
@@ -2855,6 +3186,7 @@ Paso 13: Editar datos de usuario
         // este hook cargará la imagen que tengamos disponible, sino abajo validamos que muestre el avatar por defecto:
         const [avatar, setAvatar] = useState(null);
         const [id, setId] = useState("");
+        const [alert, setAlert] = useState(false);
 
         useEffect(()=>{
             // enviar estados para actualizar campos:
@@ -2887,12 +3219,15 @@ Paso 13: Editar datos de usuario
         // crear handle para formulario:
         const handleForm = (e) =>{
             e.preventDefault();
-            updateUser(id, name, lastname, email, password, file, setAvatar);
+            updateUser(id, name, lastname, email, password, file, setAvatar, setAlert);
         }
         
         // cargar formulario:
         return(
             <div className="container mt-4 text-center">
+                <div className={alert === true ? "alert alert-success" : "alert alert-success fade"} role="alert">
+                    Se han actualizado los datos.
+                </div>
                 <form onSubmit={handleForm} encType="multipart/form-data">
                     <div className="row">
                         <div className="col">
@@ -2904,7 +3239,7 @@ Paso 13: Editar datos de usuario
                             <input type="text" className="form-control mt-3" placeholder="Nombre" value={name} onChange={handleName} />   
                             <input type="text" className="form-control mt-3" placeholder="Apellidos" value={lastname} onChange={handleLastname} />  
                             <input type="email" className="form-control mt-3" placeholder="Email" value={email} onChange={handleEmail} />  
-                            <input type="password" className="form-control mt-3" placeholder="Contraseña" onChange={handlePassword} /> 
+                            <input type="password" className="form-control mt-3" placeholder="nueva contraseña (dejar en blanco para no cambiar)" onChange={handlePassword} /> 
                             <input type="submit" className="btn btn-success form-control mt-3" value="Actualizar datos" />
                         </div>
                     </div>
@@ -2915,7 +3250,7 @@ Paso 13: Editar datos de usuario
 
     export default UserFormComponent;
 
-Paso 14: Actualizar usuario navbar 
+Paso 15: Actualizar usuario navbar 
 **********************************
 
 - Creamos un nuevo servicio solo para el navbar ya que **getUser** necesita mas parametros, editamos **userRequest.js**:
@@ -2933,7 +3268,7 @@ Paso 14: Actualizar usuario navbar
     }
 
 
-    async function registerRequest(email, password, setAlert){
+    async function registerRequest(email, password, setAlert, setAlertErrorRegister){
         await axios.post(`${url_base}/register`, {
             email: email,
             password: password
@@ -2945,10 +3280,14 @@ Paso 14: Actualizar usuario navbar
             }, 3000);
         }).catch(error =>{
             console.log(error);
+            setAlertErrorRegister(true);
+            window.setTimeout(()=>{
+                setAlertErrorRegister(false);
+            }, 3000);
         });
     }
 
-    async function loginRequest(email, password){
+    async function loginRequest(email, password, setAlertError){
         await axios.post(`${url_base}/login`, {
             email: email,
             password: password
@@ -2958,10 +3297,14 @@ Paso 14: Actualizar usuario navbar
             window.location.href = '/';
         }).catch(error =>{
             console.log(error);
+            setAlertError(true);
+            window.setTimeout(()=>{
+                setAlertError(false);
+            }, 3000);
         });
     }
 
-    async function forgotRequest(email, alertState){
+    async function forgotRequest(email, alertState, setResetAlertError){
         await axios.post(`${url_base}/forgot`, {
             email: email
         }) 
@@ -2972,8 +3315,13 @@ Paso 14: Actualizar usuario navbar
             }, 3000);
         }).catch(error =>{
             console.log(error);
+            setResetAlertError(true);
+            window.setTimeout(()=>{
+                setResetAlertError(false);
+            }, 3000);
         });
     }
+
     async function resetRequest(newPassword, repiteNewPassword, id, token, alertState){
         await axios.put(`${url_base}/reset/${id}/${token}`, {
             newPassword: newPassword,
@@ -3002,7 +3350,7 @@ Paso 14: Actualizar usuario navbar
         })
     }
 
-    async function updateUser(id, name, lastname, email, password, file, setAvatar){
+    async function updateUser(id, name, lastname, email, password, file, setAvatar, setAlert){
         const formData = new FormData();
         formData.append("name", name);
         formData.append("lastname", lastname);
@@ -3026,6 +3374,10 @@ Paso 14: Actualizar usuario navbar
         .then(response => {
             console.log("Se han guardado los cambios");
             setAvatar(response.data.user.avatar ? response.data.user.avatar : null);
+            setAlert(true);
+            window.setTimeout(()=>{
+                setAlert(false);
+            }, 3000);
         }).catch(error => {
             console.log(error);
         })
@@ -3102,12 +3454,688 @@ Paso 14: Actualizar usuario navbar
     export default NavBarCommon;
 
 
-Paso 15: Subir cambios a GitHub  
+Paso 16: Crear botón para eliminar usuario
+******************************************
+
+- Creamos el servicio **delete** en **userRequest.js**:
+
+.. code-block:: javascript 
+
+    import axios from 'axios';
+
+    const url_base = "http://localhost:5000/api"
+
+    const config = {
+        headers: {
+            Authorization: localStorage.getItem("token") 
+        }  
+    }
+
+    async function registerRequest(email, password, setAlert, setAlertErrorRegister){
+        await axios.post(`${url_base}/register`, {
+            email: email,
+            password: password
+        }) 
+        .then(response => {
+            setAlert(true);
+            window.setTimeout(()=>{
+                setAlert(false);
+            }, 3000);
+        }).catch(error =>{
+            console.log(error);
+            setAlertErrorRegister(true);
+            window.setTimeout(()=>{
+                setAlertErrorRegister(false);
+            }, 3000);
+        });
+    }
+
+    async function loginRequest(email, password, setAlertError){
+        await axios.post(`${url_base}/login`, {
+            email: email,
+            password: password
+        }) 
+        .then(response => {
+            localStorage.setItem('token', response.data.token);
+            window.location.href = '/';
+        }).catch(error =>{
+            console.log(error);
+            setAlertError(true);
+            window.setTimeout(()=>{
+                setAlertError(false);
+            }, 3000);
+        });
+    }
+
+    async function forgotRequest(email, alertState, setResetAlertError){
+        await axios.post(`${url_base}/forgot`, {
+            email: email
+        }) 
+        .then(response => {
+            alertState(true);
+            window.setTimeout(()=>{
+                alertState(false);
+            }, 3000);
+        }).catch(error =>{
+            console.log(error);
+            setResetAlertError(true);
+            window.setTimeout(()=>{
+                setResetAlertError(false);
+            }, 3000);
+        });
+    }
+
+    async function resetRequest(newPassword, repiteNewPassword, id, token, alertState){
+        await axios.put(`${url_base}/reset/${id}/${token}`, {
+            newPassword: newPassword,
+            repitePassword: repiteNewPassword
+        }) 
+        .then(response => {
+            alertState(true);
+            window.setTimeout(()=>{
+                window.location.href = "/login";
+            }, 3000);
+        }).catch(error =>{
+            console.log(error);
+        });
+    }
+
+    async function getUser(setName, setLastname, setEmail, setId, setFile){
+        await axios.get(`${url_base}/users`, config)
+        .then(response => {
+            setName(response.data.user.name ? response.data.user.name : "");
+            setLastname(response.data.user.lastname ? response.data.user.lastname : "");
+            setEmail(response.data.user.email ? response.data.user.email : "");
+            setId(response.data.user._id ? response.data.user._id : "");
+            setFile(response.data.user.avatar ? response.data.user.avatar : null);
+        }).catch(error =>{
+            console.log(error);
+        })
+    }
+
+    async function updateUser(id, name, lastname, email, password, file, setAvatar, setAlert){
+        const formData = new FormData();
+        formData.append("name", name);
+        formData.append("lastname", lastname);
+        if(email){
+            formData.append("email", email);
+        }
+        if(password){
+            formData.append("password", password);
+        }
+        try{
+            formData.append(
+                "avatar",
+                file,
+                file.name
+            )
+        }catch(error){
+            console.log("no se ha cargado archivo");
+        }
+
+        await axios.put(`${url_base}/users/${id}`, formData, config)
+        .then(response => {
+            console.log("Se han guardado los cambios");
+            setAvatar(response.data.user.avatar ? response.data.user.avatar : null);
+            setAlert(true);
+            window.setTimeout(()=>{
+                setAlert(false);
+            }, 3000);
+        }).catch(error => {
+            console.log(error);
+        })
+    }
+
+    async function getNavUser(setUserame, setAvatar){
+        await axios.get(`${url_base}/users`, config)
+        .then(response => {
+            setUserame(response.data.user.name ? response.data.user.name : "");
+            setAvatar(response.data.user.avatar ? response.data.user.avatar : null);
+        }).catch(error =>{
+            console.log(error);
+        })
+    }
+
+    async function deleteUserRequest(id){
+        await axios.delete(`${url_base}/users/${id}`, config)
+        .then(response => {
+            // con esta función se limpia todo lo almacenado en el navegador del usuario:
+            localStorage.clear();
+            window.location.href = '/login';
+        }).catch(error =>{
+            console.log(error);
+        })
+    }
+
+    export{
+        registerRequest,
+        loginRequest,
+        forgotRequest,
+        resetRequest,
+        getUser,
+        updateUser,
+        getNavUser,
+        deleteUserRequest // exportar modulo
+    }
+
+
+- Añadimos la siguiente clase a la hoja **UserFormComponent.css**:
+
+.. code-block:: css 
+
+    .cursor{
+        border: 0px;
+        background: transparent;
+    }
+
+- Editamos el componente **UserFormComponent.js**:
+
+.. code-block::  
+
+    import {useState, useEffect} from 'react';
+    import {getUser, updateUser} from '../../requests/userRequest';
+
+    // importar componente modal:
+    import DeleteUserModalComponent from './DeleteUserModalComponent';
+
+    import './UserFormComponent.css';
+    const defaultAvatar = require('../../assets/avatar.png');
+
+
+    function UserFormComponent(){
+        const [name, setName] = useState("");
+        const [lastname, setLastname] = useState("");
+        const [email, setEmail] = useState("");
+        const [password, setPassword] = useState("");
+        const [file, setFile] = useState(null);
+        const [avatar, setAvatar] = useState(null);
+        const [id, setId] = useState("");
+        const [alert, setAlert] = useState(false);
+
+        useEffect(()=>{
+            getUser(setName, setLastname, setEmail, setId, setAvatar);
+            
+        },[]);
+
+        const handleFile = (e) =>{
+            setFile(e.target.files[0]);
+        }
+
+        const handleName = (e) =>{
+            setName(e.target.value);
+        }
+
+        const handleLastname = (e) =>{
+            setLastname(e.target.value);
+        }
+
+        const handleEmail = (e) =>{
+            setEmail(e.target.value);
+        }
+
+        const handlePassword = (e) =>{
+            setPassword(e.target.value);
+        }
+
+        const handleForm = (e) =>{
+            e.preventDefault();
+            updateUser(id, name, lastname, email, password, file, setAvatar, setAlert);
+        }
+        
+        return(
+            <div className="container mt-4 text-center">
+                <div className={alert === true ? "alert alert-success" : "alert alert-success fade"} role="alert">
+                    Se han actualizado los datos.
+                </div>
+                <form onSubmit={handleForm} encType="multipart/form-data">
+                    <div className="row">
+                        <div className="col">
+                            <h3>Datos de usuario</h3>
+                            <hr />
+                            <img src={avatar ? `http://localhost:5000/api/users/avatar/${avatar}` : defaultAvatar} className="avatarEdit rounded img-thumbnail img-fluid"  alt="Avatar" />
+                            <input type="file" className="form-control mt-3" placeholder="Subir avatar" filename={file} onChange={handleFile} />
+                            <input type="text" className="form-control mt-3" placeholder="Nombre" value={name} onChange={handleName} />   
+                            <input type="text" className="form-control mt-3" placeholder="Apellidos" value={lastname} onChange={handleLastname} />  
+                            <input type="email" className="form-control mt-3" placeholder="Email" value={email} onChange={handleEmail} />  
+                            <input type="password" className="form-control mt-3" placeholder="nueva contraseña (dejar en blanco para no cambiar)" onChange={handlePassword} /> 
+                            <input type="submit" className="btn btn-success form-control mt-3" value="Actualizar datos" />
+                        </div>
+                    </div>
+                </form>
+                {/* botón para dar de baja usuario: */}
+                <div className="row">
+                    <div className="col">
+                        <hr />
+                        <button type="button" className="cursor me-2 mb-1" data-bs-toggle="modal" data-bs-target="#deleteUserModal">Dar de baja usuario</button>
+                    </div>
+                </div>
+                <DeleteUserModalComponent id={id} />
+            </div>
+        );
+    }
+
+    export default UserFormComponent;
+
+- Creamos el modal **DeleteUserModalComponent.js**:
+
+.. code-block:: 
+
+    import {Fragment} from 'react';
+    // importar el servicio:
+    import {deleteUserRequest} from '../../requests/userRequest';
+
+    // recuperar campo id del hook:
+    function DeleteUserModalComponent({id}){
+        const userId = id;
+
+        // crear un handle para el botón:
+        const handleButton = (e)=> {
+            deleteUserRequest(userId);
+        }
+
+        return(
+            <Fragment>
+                <div className="modal fade" id="deleteUserModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLabel">Cerrar cuenta</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body">
+                            <p>Se va a eliminar su cuenta de usuario junto a todas sus tareas</p>
+                            <p>Esta operación no tiene retorno, ¿proceder?</p>
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            {/* Cargar el handle en el botón: */}
+                            <button type="button" className="btn btn-danger" data-bs-dismiss="modal" onClick={handleButton}>Aceptar</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </Fragment>
+        )
+    }
+
+    export default DeleteUserModalComponent;
+
+
+Paso 17: Subir cambios a GitHub  
 *******************************
 
-- Parar depuración de Visual studio code.
+- Parar ejecución de app.
 - Añadir cambios: ``git add .``
 - Realizar un commit: ``git commit -am "Phase 2 complete"``
+- Subir cambios a Github con el nombre de la rama actual: ``git push origin feature/phase-2-connect-to-service``
+- Desde gitHub presionar botón **Compare & pull request**.
+- cambiar rama base **master** por **developer** y pulsar **Create pull request**
+- Pulsar en **Merge pull request** y a continuación en **Confirm merge**.
+- Una vez terminado volvemos a local y cambiamos de rama a developer: ``git checkout developer``
+- Actualizamos rama developer: ``git pull origin developer`` 
+
+Y con esto concluye la segunda fase del proyecto.
+
+.. raw:: html 
+
+    <hr><br>
+
+Fase 3: Diseño responsivo 
+#########################
+
+En esta fase vamos a mejorar el diseño responsive de la aplicación para poder utilizarla en dispositivos móviles.
+
+Paso 1: Preparar proyecto 
+*************************
+
+- Crear rama feature a partir de developer: ``git checkout -b feature/phase-3-modify-forms``
+- Instalar Axios: ``npm install react-hook-form --save``
+- Arrancar proyecto desde la raiz: ``npm start``
+
+Paso 2: Ajustar Tabla de tareas  
+*******************************
+
+- Editamos **TaskPage.js** para centrar la funcionalidad como padre:
+
+.. code-block:: 
+
+    // importar hook useeffect para listar:
+    import {useState, useEffect} from 'react';
+    import {Fragment} from 'react';
+    import NavBarCommon from '../../common/NavbarCommon';
+    import TaskTableComponent from './TaskTableComponent';
+    // importar componentes de modal:
+    import DeleteTaskModalComponent from './DeleteTaskModalComponent';
+    import FinishTaskModalComponent from './FinishTaskModalComponent';
+    // cargar componente para movil:
+    import TaskTableComponentMobile from './TaskTableComponentMobile';
+    // cargar servicio:
+    import {createTaskRequest, ListTaskRequest, updateTaskRequest} from '../../requests/taskRequest';
+
+
+    function TaskPage(){
+        // mover el hook con las tareas:
+        const [tasks, setTasks] = useState(null);
+        // Crear un nuevo hook que unifica los datos:
+        const [taskData, setTaskData] = useState({
+            id: null,
+            name: "",
+            description: "",
+            date_created: null,
+            is_complete: null,
+            date_finish: null,
+        });
+        // mover hooks para mostrar u ocultar input o texto:
+        const [showTask, setShowTask] = useState(true);
+        const [hideInput, setHideInput] = useState(true);
+
+        // mover datahandle y revisarlo:
+        const dataHandle = (e) => {
+            // recuperar campos del target:
+            const {name, value} = e.target;
+
+            // se les hace un spread a cada campo y se añaden:
+            setTaskData({...taskData, [name]: value});
+            console.log(taskData);
+        }
+
+        // mover handle para cancelar edición:
+        const cancelHandle = (e) => {
+            setShowTask(true);
+            setHideInput(true);
+        }
+
+        // Traer también el updateHandle:
+        const updateTaskHandle  = (e) => {
+            // actualizar tarea:
+            updateTaskRequest(taskData.id, taskData.name, taskData.description, tasks, setTasks);
+            // cerrar actualización:
+            setShowTask(true);
+            setHideInput(true);
+        }
+
+        // crear un handle para el botón de editar:
+        const editHandleButton = (e) =>{
+            // cambiar a modo actualizar:
+            setShowTask(false);
+            setHideInput(false);
+        }
+
+        // crear un nuevo handle para preparar datos a eliminar o finalizar tarea:
+        const getTaskData = (id, name, description, createDate, isComplete, dateFinish, updateButtonClick=false) => {
+            return (e) => {
+                // con el uso de spread le pasamos los datos al hook:
+                setTaskData(
+                    {...taskData, 
+                        id: id, name: name, description: description,
+                        date_created: createDate, is_complete: isComplete,
+                        date_finish: dateFinish
+                    }
+                    );
+                
+                // cambiar a modo actualizar en vista general:
+                if(updateButtonClick){
+                    setShowTask(false);
+                    setHideInput(false);
+                    updateButtonClick = false;
+                }
+            }
+        }
+
+        // y traer el handleForm:
+        const handleForm = (e) => {
+            e.preventDefault();
+            createTaskRequest(taskData.name, taskData.description, setTasks);
+        }
+
+
+        // cambiar el useeffect al page:
+        useEffect(()=>{
+            ListTaskRequest(setTasks);
+        },[]);
+
+
+        // movemos los estilos personalizados:
+        const inputUpdate = {display: "none"};
+
+        return(
+            <Fragment>
+                <NavBarCommon />
+                <div className="d-none d-sm-block">
+                    <TaskTableComponent tasks={tasks} showTask={showTask} 
+                    inputUpdate={inputUpdate} dataHandle={dataHandle} hideInput={hideInput} 
+                    taskData={taskData} updateTaskHandle={updateTaskHandle} cancelHandle={cancelHandle}
+                    handleForm={handleForm} getTaskData={getTaskData} />
+                </div>
+                <div className="d-sm-none">
+                    <TaskTableComponentMobile tasks={tasks} showTask={showTask} 
+                    inputUpdate={inputUpdate} dataHandle={dataHandle} hideInput={hideInput} 
+                    taskData={taskData} updateTaskHandle={updateTaskHandle} cancelHandle={cancelHandle}
+                    handleForm={handleForm} getTaskData={getTaskData} editHandleButton={editHandleButton} />
+                </div>
+                {/* Mover los componentes de modal: */}
+                
+                <FinishTaskModalComponent id={taskData.id} name={taskData.name} tasks={tasks} setTasks={setTasks} />
+                <DeleteTaskModalComponent id={taskData.id} name={taskData.name} tasks={tasks} setTasks={setTasks} />
+            </Fragment>
+        )
+    }
+
+    export default TaskPage;
+
+
+- Editamos el componente **TaskTableComponent.js**:
+
+.. code-block::
+
+    import moment from 'moment';
+
+    // pasarle nuevos elementos que antes estaban aquí:
+    function TaskTableComponent({tasks, showTask, inputUpdate, dataHandle, 
+        hideInput, taskData, updateTaskHandle, cancelHandle, handleForm, getTaskData}){
+
+
+        return(
+            <div className="text-center container">
+                <table className="table mt-4">
+                    <thead>
+                        <tr>
+                            <th scope="col">Título</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Fecha creación</th>
+                            <th scope="col">Finalizada</th>
+                            <th scope="col">Fecha Finalización</th>
+                            <th scope="col">Operaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody className="text-start">
+                        { tasks ? (
+                            tasks.map(data => {
+                                return(
+                                    <tr key={data._id} style={showTask ? null : inputUpdate}>
+                                        <td>
+                                            {data.name}
+                                        </td>
+                                        <td>
+                                            {data.description}
+                                        </td>
+                                        <td>{moment(data.date_created).format('D/M/YYYY, h:mm:ss a')}</td>
+                                        <td className="text-center">{data.is_complete ? ('Si') : ('No')}</td>
+                                        <td>{data.date_finish ? (moment(data.date_finish).format('D/M/YYYY, h:mm:ss a')) : ('')}</td>
+                                        <td className="text-center">
+                                            <button type="button" onClick={getTaskData(data._id, data.name, data.description, data.date_created, data.is_complete, data.date_finish, true)} className="btn btn-sm btn-warning me-2 mb-1">Editar</button>
+                                            <button type="button" onClick={getTaskData(data._id, data.name)} className="btn btn-sm btn-primary me-2 mb-1" data-bs-toggle="modal" data-bs-target="#finishModal">Finalizar</button>
+                                            <button type="button" onClick={getTaskData(data._id, data.name)} className="btn btn-sm btn-danger me-2" data-bs-toggle="modal" data-bs-target="#deleteModal">Eliminar</button>
+                                        </td>
+                                    </tr>
+                                )
+                            })
+                            ) : (<tr colSpan="6"><td>No existen tareas</td></tr>)
+                        }
+                        {/* Añadir unos inputs nuevos para actualizar name y description: */}
+                        <tr style={hideInput ? inputUpdate : null}>
+                            <td>
+                                <input name="name" className="col me-2 form-control form-sm" type="text" placeholder="Título" value={taskData.name} onChange={dataHandle} />
+                            </td>
+                            <td>
+                                <input name="description" className="col me-2 form-control" type="text" placeholder="Descripción" value={taskData.description} onChange={dataHandle} />
+                            </td>
+                            <td>{moment(taskData.dateCreated).format('D/M/YYYY, h:mm:ss a')}</td>
+                            <td className="text-center">{taskData.isComplete ? ('Si') : ('No')}</td>
+                            <td>{taskData.dateFinish ? (moment(taskData.dateFinish).format('D/M/YYYY, h:mm:ss a')) : ('')}</td>
+                            <td className="text-center">
+                                <button type="button" onClick={updateTaskHandle} className="btn btn-sm btn-success me-2 mb-1">Guardar</button>
+                                <button type="button" onClick={cancelHandle} className="btn btn-sm btn-primary me-2 mb-1" >Cancelar</button>
+                            </td>
+                        </tr>
+                        <tr className="text-center">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td colSpan="3" >
+                                <form className="row input-group-sm" onSubmit={handleForm}>
+                                    <input name="name" className="col me-2 form-control form-sm" type="text" placeholder="Título" onChange={dataHandle} />
+                                    <input name="description" className="col me-2 form-control" type="text" placeholder="Descripción"  onChange={dataHandle} />
+                                    <input className="col me-2 form-control btn btn-success" type="submit" value="Crear tarea" />
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        )
+    }
+
+    export default TaskTableComponent;
+
+
+- Y por último creamos el componente **TaskTableComponentMobile.js**:
+
+.. code-block::
+
+    import moment from 'moment';
+
+    function TaskTableComponent({tasks, showTask, inputUpdate, dataHandle, 
+        hideInput, taskData, updateTaskHandle, cancelHandle, handleForm, getTaskData, editHandleButton}){
+
+        return(
+            <div>
+            <div className="list-group ms-1 me-1 mt-3">
+                { tasks ? (
+                    tasks.map(data => {
+                        return(
+                            <div key={data._id} style={showTask ? null : inputUpdate} className="list-group-item list-group-item-action" aria-current="true" onClick={
+                                getTaskData(data._id, data.name, data.description, data.date_created, data.is_complete, data.date_finish)}>
+                                <div className="d-flex w-100 justify-content-between">
+                                <h5 className="mb-1">{data.name}</h5>
+                                <small>{moment(data.date_created).format('D/M/YYYY, h:mm:ss a')}</small>
+                                </div>
+                                <p className="mb-1">{data.description}</p>
+                                <small>{data.is_complete ? (`Finalizada el: ${moment(data.date_finish).format('D/M/YYYY, h:mm:ss a')}`) : ('En curso')}</small>
+                            </div>
+                        )
+                    })
+                    ) : (<span className="text-center mt-4">No existen tareas</span>)
+                }
+                    <div style={hideInput ? inputUpdate : null} className="list-group-item list-group-item-action" aria-current="true" onClick={
+                        getTaskData(taskData.id, taskData.name, taskData.description, taskData.date_created, taskData.is_complete, taskData.date_finish)}>
+                        <div className="d-flex w-100 justify-content-between">
+                        <h5 className="mb-1"><input name="name" className="col me-2 form-control form-sm" type="text" placeholder="Título" value={taskData.name} onChange={dataHandle} /></h5>
+                        <small>{moment(taskData.date_created).format('D/M/YYYY, h:mm:ss a')}</small>
+                        </div>
+                        <p className="mb-1"><input name="description" className="col me-2 form-control" type="text" placeholder="Descripción" value={taskData.description} onChange={dataHandle} /></p>
+                        <small>{taskData.is_complete ? (`Finalizada el: ${moment(taskData.date_finish).format('D/M/YYYY, h:mm:ss a')}`) : ('En curso')}</small>
+                    </div>
+                    <div style={showTask ? null : inputUpdate} className="list-group-item list-group-item-action" aria-current="true" >
+                        <div className="d-flex w-100 justify-content-between">
+                        <h5 className="mb-1"><input name="name" className="col me-2 form-control form-sm" type="text" placeholder="Título" value={taskData.name} onChange={dataHandle} /></h5>
+                        <small>NUEVA TAREA</small>
+                        </div>
+                        <p className="mb-1"><input name="description" className="col me-2 form-control" type="text" placeholder="Descripción" value={taskData.description} onChange={dataHandle} /></p>
+                        <small><button type="button" className="btn btn-success" onClick={handleForm}>crear tarea</button></small>
+                    </div>
+                </div>
+                {/* truco para separar: */}
+                <br /><br /><br /><br />
+                <nav className="navbar fixed-bottom navbar-dark bg-dark" >
+                    <div className="container-fluid text-center">
+                        <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+                            <button type="button" style={showTask ? null : inputUpdate} className="btn btn-warning" onClick={editHandleButton}>Editar</button>
+                            <button type="button" style={showTask ? null : inputUpdate} className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#finishModal">Finalizar</button>
+                            <button type="button" style={showTask ? null : inputUpdate} className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Eliminar</button>
+                            {/* Mostrar otra hilera de botones para editar: */}
+                            <button type="button" style={hideInput ? inputUpdate : null} className="btn btn-success" onClick={updateTaskHandle} >Guardar cambios</button>
+                            <button type="button" style={hideInput ? inputUpdate : null} className="btn btn-secondary" onClick={cancelHandle} >Cerrar</button>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        )
+    }
+
+    export default TaskTableComponent;
+
+
+Paso 3: Editar navbar
+*********************
+
+Ahora toca hacer responsivo el navbar, editamos **NavbarCommon.js**:
+
+.. code-block:: 
+
+    import {Fragment} from 'react';
+    import {NavLink} from 'react-router-dom';
+    import {useState, useEffect} from 'react';
+    import './NavbarCommon.css';
+    import {getNavUser} from '../requests/userRequest';
+
+    const defaultAvatar = require("../assets/avatar.png");
+
+    function NavBarCommon(){
+        const [username, setUsername] = useState("Usuario");
+        const [avatar, setAvatar] = useState(null);
+
+        // crear estilo:
+        const index = {
+            zIndex: "100"
+        }
+
+        useEffect(()=>{
+            getNavUser(setUsername, setAvatar);
+        }, []);
+
+
+        return(
+            <Fragment>
+                    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+                        <div className="col-md-11 align-items-start ms-2" style={index} >
+                            <NavLink to="/"className="navbar-brand">Task Learn</NavLink>
+                        </div>
+                        
+                        <ul className="navbar-nav mb-2 mb-lg-0 col-md-1 align-items-end me-3">
+                            <li className="nav-item align-items-end">
+                                <NavLink to="/users" className="nav-link text-center">
+                                    {/* se modifican los campos para que reciban los hooks, en el caso de la imagen hay que validar: */}
+                                    <img className="avatar rounded img-thumbnail img-fluid" src={avatar ? `http://localhost:5000/api/users/avatar/${avatar}` : defaultAvatar} alt="foto"></img>
+                                    <div className="col">
+                                        <small>{username}</small>
+                                    </div>
+                                </NavLink>
+                            </li>
+                        </ul>
+                    </nav>
+            </Fragment>
+        )
+    }
+
+    export default NavBarCommon;
+
+Paso 4: Subir cambios a GitHub  
+******************************
+
+- Parar ejecución de app.
+- Añadir cambios: ``git add .``
+- Realizar un commit: ``git commit -am "Phase 3 complete"``
 - Subir cambios a Github con el nombre de la rama actual: ``git push origin feature/phase-2-connect-to-service``
 - Desde gitHub presionar botón **Compare & pull request**.
 - cambiar rama base **master** por **developer** y pulsar **Create pull request**
