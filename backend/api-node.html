@@ -147,6 +147,15 @@
           </li>
 
         
+          <li class="toctree-l1 ">
+            
+              <a href="../frontend/angular.html" class="reference internal ">Frontend Angular Task Learn</a>
+            
+
+            
+          </li>
+
+        
       </ul>
     </div>
   
@@ -2137,7 +2146,7 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 
 <span class="p">}</span><span class="w"></span>
 
-<span class="c1">// crear función para recuperar password:</span><span class="w"></span>
+<span class="w"> </span><span class="c1">// crear función para recuperar password:</span><span class="w"></span>
 <span class="kd">function</span><span class="w"> </span><span class="nx">forgot</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">){</span><span class="w"></span>
 <span class="w">    </span><span class="c1">// recibir parámetros:</span><span class="w"></span>
 <span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">email</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">email</span><span class="p">;</span><span class="w"></span>
@@ -2148,47 +2157,48 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 <span class="w">        </span><span class="c1">// recuperar usuario:</span><span class="w"></span>
 <span class="w">        </span><span class="nx">User</span><span class="p">.</span><span class="nx">findOne</span><span class="p">({</span><span class="nx">email</span><span class="o">:</span><span class="w"> </span><span class="nx">email</span><span class="p">},</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="p">(</span><span class="nx">err</span><span class="p">,</span><span class="w"> </span><span class="nx">userData</span><span class="p">)=&gt;{</span><span class="w"></span>
 <span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span><span class="w"></span>
-<span class="w">                </span><span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mf">400</span><span class="p">).</span><span class="nx">send</span><span class="p">({</span><span class="nx">msg</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Error: email doesn&#39;t exists&quot;</span><span class="p">});</span><span class="w"></span>
+<span class="w">                </span><span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mf">500</span><span class="p">).</span><span class="nx">send</span><span class="p">({</span><span class="nx">msg</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Server status error&quot;</span><span class="p">});</span><span class="w"></span>
 <span class="w">            </span><span class="p">}</span><span class="k">else</span><span class="p">{</span><span class="w"></span>
-<span class="w">                </span><span class="c1">// crear un token para 1 hora:</span><span class="w"></span>
-<span class="w">                </span><span class="nx">token</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">jwt</span><span class="p">.</span><span class="nx">createToken</span><span class="p">(</span><span class="nx">userData</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;1h&quot;</span><span class="p">);</span><span class="w"></span>
-<span class="w">                </span><span class="c1">// preparar el email:</span><span class="w"></span>
-<span class="w">                </span><span class="kd">const</span><span class="w"> </span><span class="nx">transporter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">nodemailer</span><span class="p">.</span><span class="nx">createTransport</span><span class="p">({</span><span class="w"></span>
-<span class="w">                    </span><span class="nx">host</span><span class="o">:</span><span class="w"> </span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">EMAIL_HOST</span><span class="p">,</span><span class="w"></span>
-<span class="w">                    </span><span class="nx">port</span><span class="o">:</span><span class="w"> </span><span class="mf">2525</span><span class="p">,</span><span class="w"></span>
-<span class="w">                    </span><span class="nx">auth</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">                        </span><span class="nx">user</span><span class="o">:</span><span class="w"> </span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">EMAIL_USER</span><span class="p">,</span><span class="w"></span>
-<span class="w">                        </span><span class="nx">pass</span><span class="o">:</span><span class="w"> </span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">EMAIL_PASS</span><span class="w"></span>
-<span class="w">                    </span><span class="p">}</span><span class="w"></span>
-<span class="w">                </span><span class="p">});</span><span class="w"></span>
+<span class="w">                </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">userData</span><span class="p">){</span><span class="w"></span>
+<span class="w">                    </span><span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mf">400</span><span class="p">).</span><span class="nx">send</span><span class="p">({</span><span class="nx">msg</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Error: email doesn&#39;t exists&quot;</span><span class="p">});</span><span class="w"></span>
+<span class="w">                </span><span class="p">}</span><span class="k">else</span><span class="p">{</span><span class="w"></span>
+<span class="w">                    </span><span class="c1">// crear un token para 1 hora:</span><span class="w"></span>
+<span class="w">                    </span><span class="nx">token</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">jwt</span><span class="p">.</span><span class="nx">createToken</span><span class="p">(</span><span class="nx">userData</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;1h&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">                    </span><span class="c1">// preparar el email:</span><span class="w"></span>
+<span class="w">                    </span><span class="kd">const</span><span class="w"> </span><span class="nx">transporter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">nodemailer</span><span class="p">.</span><span class="nx">createTransport</span><span class="p">({</span><span class="w"></span>
+<span class="w">                        </span><span class="nx">host</span><span class="o">:</span><span class="w"> </span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">EMAIL_HOST</span><span class="p">,</span><span class="w"></span>
+<span class="w">                        </span><span class="nx">port</span><span class="o">:</span><span class="w"> </span><span class="mf">2525</span><span class="p">,</span><span class="w"></span>
+<span class="w">                        </span><span class="nx">auth</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                            </span><span class="nx">user</span><span class="o">:</span><span class="w"> </span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">EMAIL_USER</span><span class="p">,</span><span class="w"></span>
+<span class="w">                            </span><span class="nx">pass</span><span class="o">:</span><span class="w"> </span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">EMAIL_PASS</span><span class="w"></span>
+<span class="w">                        </span><span class="p">}</span><span class="w"></span>
+<span class="w">                    </span><span class="p">});</span><span class="w"></span>
 
 
-<span class="w">                </span><span class="c1">// preparar las opciones del correo:</span><span class="w"></span>
-<span class="w">                </span><span class="kd">const</span><span class="w"> </span><span class="nx">mailOptions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// mailtrap no nos da una dirección así que usaremos aquella con la que nos registramos:</span><span class="w"></span>
-<span class="w">                    </span><span class="kr">from</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;pytonicus@gmail.com&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="w">                    </span><span class="nx">to</span><span class="o">:</span><span class="w"> </span><span class="nx">userData</span><span class="p">.</span><span class="nx">email</span><span class="p">,</span><span class="w"></span>
-<span class="w">                    </span><span class="nx">subject</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Reestablecer contraseña | Task Learn&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="w">                    </span><span class="c1">// ruta del frontend para resetear password:</span><span class="w"></span>
-<span class="w">                    </span><span class="nx">text</span><span class="o">:</span><span class="w"> </span><span class="sb">`http://localhost:3000/reset/</span><span class="si">${</span><span class="nx">userData</span><span class="p">.</span><span class="nx">id</span><span class="si">}</span><span class="sb">/</span><span class="si">${</span><span class="nx">token</span><span class="si">}</span><span class="sb">`</span><span class="w"> </span><span class="c1">// ruta del frontend</span><span class="w"></span>
-<span class="w">                </span><span class="p">};</span><span class="w"></span>
+<span class="w">                    </span><span class="c1">// preparar las opciones del correo:</span><span class="w"></span>
+<span class="w">                    </span><span class="kd">const</span><span class="w"> </span><span class="nx">mailOptions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// mailtrap no nos da una dirección así que usaremos aquella con la que nos registramos:</span><span class="w"></span>
+<span class="w">                        </span><span class="kr">from</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;pytonicus@gmail.com&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">                        </span><span class="nx">to</span><span class="o">:</span><span class="w"> </span><span class="nx">userData</span><span class="p">.</span><span class="nx">email</span><span class="p">,</span><span class="w"></span>
+<span class="w">                        </span><span class="nx">subject</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Reestablecer contraseña | Task Learn&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">                        </span><span class="c1">// ruta del frontend para resetear password:</span><span class="w"></span>
+<span class="w">                        </span><span class="nx">text</span><span class="o">:</span><span class="w"> </span><span class="sb">`http://localhost:3000/reset/</span><span class="si">${</span><span class="nx">userData</span><span class="p">.</span><span class="nx">id</span><span class="si">}</span><span class="sb">/</span><span class="si">${</span><span class="nx">token</span><span class="si">}</span><span class="sb">`</span><span class="w"> </span><span class="c1">// ruta del frontend</span><span class="w"></span>
+<span class="w">                    </span><span class="p">};</span><span class="w"></span>
 
-<span class="w">                </span><span class="c1">// enviar email:</span><span class="w"></span>
-<span class="w">                </span><span class="nx">transporter</span><span class="p">.</span><span class="nx">sendMail</span><span class="p">(</span><span class="nx">mailOptions</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">err</span><span class="p">,</span><span class="w"> </span><span class="nx">response</span><span class="p">)=&gt;{</span><span class="w"></span>
-<span class="w">                    </span><span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span><span class="w"></span>
-<span class="w">                        </span><span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mf">500</span><span class="p">).</span><span class="nx">send</span><span class="p">({</span><span class="nx">msg</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Server status error&quot;</span><span class="p">});</span><span class="w"></span>
-<span class="w">                    </span><span class="p">}</span><span class="k">else</span><span class="p">{</span><span class="w"></span>
-<span class="w">                        </span><span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mf">200</span><span class="p">).</span><span class="nx">send</span><span class="p">({</span><span class="nx">msg</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Email has send&quot;</span><span class="p">});</span><span class="w"></span>
-<span class="w">                    </span><span class="p">}</span><span class="w"></span>
-<span class="w">                </span><span class="p">});</span><span class="w"></span>
+<span class="w">                    </span><span class="c1">// enviar email:</span><span class="w"></span>
+<span class="w">                    </span><span class="nx">transporter</span><span class="p">.</span><span class="nx">sendMail</span><span class="p">(</span><span class="nx">mailOptions</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">err</span><span class="p">,</span><span class="w"> </span><span class="nx">response</span><span class="p">)=&gt;{</span><span class="w"></span>
+<span class="w">                        </span><span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span><span class="w"></span>
+<span class="w">                            </span><span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mf">500</span><span class="p">).</span><span class="nx">send</span><span class="p">({</span><span class="nx">msg</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Server status error&quot;</span><span class="p">});</span><span class="w"></span>
+<span class="w">                        </span><span class="p">}</span><span class="k">else</span><span class="p">{</span><span class="w"></span>
+<span class="w">                            </span><span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mf">200</span><span class="p">).</span><span class="nx">send</span><span class="p">({</span><span class="nx">msg</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Email has send&quot;</span><span class="p">});</span><span class="w"></span>
+<span class="w">                        </span><span class="p">}</span><span class="w"></span>
+<span class="w">                    </span><span class="p">});</span><span class="w"></span>
+<span class="w">                </span><span class="p">}</span><span class="w"></span>
 <span class="w">            </span><span class="p">}</span><span class="w"></span>
 <span class="w">        </span><span class="p">});</span><span class="w"></span>
 <span class="w">    </span><span class="p">}</span><span class="k">catch</span><span class="p">(</span><span class="nx">error</span><span class="p">){</span><span class="w"></span>
 <span class="w">        </span><span class="nx">req</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mf">500</span><span class="p">).</span><span class="nx">send</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span><span class="w"></span>
 <span class="w">    </span><span class="p">}</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
-
-<span class="c1">// TODO: Crear función para cambiar password haciendo update solo del password.</span><span class="w"></span>
-
 
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="nx">postUser</span><span class="p">,</span><span class="w"></span>
@@ -2663,7 +2673,7 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 <span class="linenos">185</span><span class="w">                    </span><span class="p">}</span><span class="w"></span>
 <span class="linenos">186</span>
 <span class="linenos">187</span><span class="w">                    </span><span class="c1">// si tenemos el campo avatar de tipo file seguimos adelante:</span><span class="w"></span>
-<span class="linenos">188</span><span class="w">                    </span><span class="k">if</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">files</span><span class="p">.</span><span class="nx">avatar</span><span class="p">){</span><span class="w"></span>
+<span class="linenos">188</span><span class="w">                    </span><span class="k">if</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">files</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">req</span><span class="p">.</span><span class="nx">files</span><span class="p">.</span><span class="nx">avatar</span><span class="p">){</span><span class="w"></span>
 <span class="linenos">189</span><span class="w">                        </span><span class="c1">// obtener el path del fichero:</span><span class="w"></span>
 <span class="linenos">190</span><span class="w">                        </span><span class="kd">const</span><span class="w"> </span><span class="nx">filePath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">req</span><span class="p">.</span><span class="nx">files</span><span class="p">.</span><span class="nx">avatar</span><span class="p">.</span><span class="nx">path</span><span class="p">;</span><span class="w"></span>
 <span class="linenos">191</span><span class="w">                        </span><span class="c1">// separar el id del archivo de la ruta upload:</span><span class="w"></span>
@@ -2947,7 +2957,7 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 <span class="w">                        </span><span class="nx">userData</span><span class="p">.</span><span class="nx">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">bcryptjs</span><span class="p">.</span><span class="nx">hash</span><span class="p">(</span><span class="nx">params</span><span class="p">.</span><span class="nx">password</span><span class="p">,</span><span class="w"> </span><span class="nx">salt</span><span class="p">);</span><span class="w"></span>
 <span class="w">                    </span><span class="p">}</span><span class="w"></span>
 
-<span class="w">                    </span><span class="k">if</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">files</span><span class="p">.</span><span class="nx">avatar</span><span class="p">){</span><span class="w"></span>
+<span class="w">                    </span><span class="k">if</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">files</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">req</span><span class="p">.</span><span class="nx">files</span><span class="p">.</span><span class="nx">avatar</span><span class="p">){</span><span class="w"></span>
 <span class="w">                        </span><span class="kd">const</span><span class="w"> </span><span class="nx">filePath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">req</span><span class="p">.</span><span class="nx">files</span><span class="p">.</span><span class="nx">avatar</span><span class="p">.</span><span class="nx">path</span><span class="p">;</span><span class="w"></span>
 <span class="w">                        </span><span class="kd">let</span><span class="w"> </span><span class="nx">fileSplit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">path</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">filePath</span><span class="p">).</span><span class="nx">split</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">sep</span><span class="p">);</span><span class="w"></span>
 <span class="w">                        </span><span class="kd">let</span><span class="w"> </span><span class="nx">filename</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">fileSplit</span><span class="p">[</span><span class="nx">fileSplit</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mf">1</span><span class="p">];</span><span class="w"></span>
@@ -3227,7 +3237,7 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 <span class="w">                        </span><span class="nx">userData</span><span class="p">.</span><span class="nx">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">bcryptjs</span><span class="p">.</span><span class="nx">hash</span><span class="p">(</span><span class="nx">params</span><span class="p">.</span><span class="nx">password</span><span class="p">,</span><span class="w"> </span><span class="nx">salt</span><span class="p">);</span><span class="w"></span>
 <span class="w">                    </span><span class="p">}</span><span class="w"></span>
 
-<span class="w">                    </span><span class="k">if</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">files</span><span class="p">.</span><span class="nx">avatar</span><span class="p">){</span><span class="w"></span>
+<span class="w">                    </span><span class="k">if</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">files</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">req</span><span class="p">.</span><span class="nx">files</span><span class="p">.</span><span class="nx">avatar</span><span class="p">){</span><span class="w"></span>
 <span class="w">                        </span><span class="kd">const</span><span class="w"> </span><span class="nx">filePath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">req</span><span class="p">.</span><span class="nx">files</span><span class="p">.</span><span class="nx">avatar</span><span class="p">.</span><span class="nx">path</span><span class="p">;</span><span class="w"></span>
 <span class="w">                        </span><span class="kd">let</span><span class="w"> </span><span class="nx">fileSplit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">path</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">filePath</span><span class="p">).</span><span class="nx">split</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">sep</span><span class="p">);</span><span class="w"></span>
 <span class="w">                        </span><span class="kd">let</span><span class="w"> </span><span class="nx">filename</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">fileSplit</span><span class="p">[</span><span class="nx">fileSplit</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mf">1</span><span class="p">];</span><span class="w"></span>

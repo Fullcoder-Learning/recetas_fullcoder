@@ -1,0 +1,4113 @@
+Frontend Angular Task Learn 
+===========================
+
+.. image:: /logos/logo-angular.png
+    :scale: 20%
+    :alt: Logo Angular
+    :align: center
+
+.. |date| date::
+.. |time| date:: %H:%M
+
+Frontend aplicación listado de tareas desarrollada con Angular.
+
+Versión : 14.2.2
+
+- Repositorio proyecto completo: https://github.com/Fullcoder-Learning/angular-task-learn-frontend
+
+.. contents:: Índice
+  
+Fase 1: Diseño de la aplicación   
+###############################
+
+Paso 1 (opcional): Instalar Dependencias  
+****************************************
+
+- Instalar NodeJS desde su sitio oficial: https://nodejs.org/es/
+- Instalar MongoDB desde su sitio oficial:  https://www.mongodb.com/try/download/community
+- Instalar desde node Angular-cli: ``npm install -g @angular/cli``
+
+Paso 2: Preparar proyecto 
+*************************
+
+- Crear proyecto Angular: ``ng new angular-task-learn-frontend``
+- Durante el proceso de creación nos pregunta si queremos rutas. Decimos que si.
+- Regresar a la raiz del proyecto **react-task-learn-frontend**.
+- Instalar bootstrap 5: ``npm install bootstrap --save``
+- Instalar popperjs: ``npm install @popperjs/core --save``
+- Cargar bootstrap en la app en los primeros indices del archivo (los últimos no) de **angular.json**:
+
+.. code-block:: 
+
+    "styles": [
+        "node_modules/bootstrap/dist/css/bootstrap.min.css",
+        "src/styles.css"
+    ],
+        "scripts": [
+            "node_modules/@popperjs/core/dist/umd/popper.min.js",
+            "node_modules/bootstrap/dist/js/bootstrap.min.js"
+
+    ]
+
+- Crear las siguientes carpetas dentro de **app**: **components**, **pages** y **services**. 
+- Inicializar repositorio: ``git init`` 
+- Añadir repositorio remoto: ``git remote add origin https://github.com/Fullcoder-Learning/angular-task-learn-frontend.git``
+- Añadir cambios: ``git add .``
+- Hacer primer commit: ``git commit -am "first commit"``
+- Subir cambios a repositorio remoto: ``git push origin master``
+- Crear rama desarrollo: ``git checkout -b developer``
+- Subir rama desarrollo: ``git push origin developer``
+- Crear rama feature a partir de developer: ``git checkout -b feature/phase-1-task-structure``
+- Arrancar proyecto desde la raiz: ``ng serve --port 3000``
+
+Paso 3: Crear página de tareas 
+******************************
+
+- Para crear una nueva página ejecutamos en terminal: ``ng generate component pages/tasks`` y editamos **tasks.component.html**.
+- Añadir la ruta a **app-routing.module.ts** como ruta raiz:
+
+.. code-block:: 
+
+    import { NgModule } from '@angular/core';
+    import { RouterModule, Routes } from '@angular/router';
+    // importar el componente taskpage:
+    import { TasksComponent } from './pages/tasks/tasks.component';
+
+    // añadir la ruta como raiz:
+    const routes: Routes = [
+    {path: '', component: TasksComponent}
+    ];
+
+    @NgModule({
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule]
+    })
+    export class AppRoutingModule { }
+
+- Borrar todo de **app.component.html** excepto la línea del componente ruta:
+
+.. code-block::  
+
+    <router-outlet></router-outlet>
+
+- Debería de mostrarse a continuación un mensaje **Tasks works!**.
+
+Paso 4: Crear componente navbar 
+*******************************
+
+- Descargar el avatar genérico y guardar dentro de la carpeta **assets**: https://raw.githubusercontent.com/Fullcoder-Learning/-task-learning-frontend/master/src/assets/avatar.png
+
+- Crear un nuevo componente para el navbar: ``ng generate component components/navbar``
+- Editar **navbar.component.html**:
+
+.. code-block::  
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="col-md-11 align-items-start ms-2" >
+            <a href="/" class="navbar-brand">Task Learn</a>
+        </div>
+        
+        <ul class="navbar-nav mb-2 mb-lg-0 col-md-1 align-items-end me-3">
+            <li class="nav-item align-items-end">
+                <a href="/users" class="nav-link text-center">
+                    <img class="avatar rounded img-thumbnail img-fluid" src="./assets/avatar.png" alt="foto" />
+                    <div class="col">
+                        <small>Usuario</small>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+- Cargar el navbar en **tasks.component.html**:
+
+.. code-block::  
+
+    <app-navbar></app-navbar>
+
+    <p>tasks works!</p>
+
+
+- La imagen es muy grande, para ello hemos aignado una clase que crearemos en **navbar.component.css**:
+
+.. code-block:: css 
+
+    .avatar{
+        height: 40px;
+        width: 40px;
+    }
+
+Paso 5: Crear tabla para listar tareas 
+**************************************
+
+- crear un nuevo componente: ``ng generate component components/taskTable``.
+- Editar el controlador del componente **task-table.component.ts**:
+
+.. code-block:: 
+
+    import { Component, OnInit } from '@angular/core';
+
+    @Component({
+    selector: 'app-task-table',
+    templateUrl: './task-table.component.html',
+    styleUrls: ['./task-table.component.css']
+    })
+    export class TaskTableComponent implements OnInit {
+    // crear un objeto dummy para llenar la tabla:
+    dummyData: any = [
+        {_id: "1", name: "Cocinar", description: "Cocinar galletas el sábado", date_created: "08/08/2022", is_complete: true, date_finish: "10/08/2022"},
+        {_id: "2", name: "Preparar proyecto", description: "Preparar proyecto para presentar en Septiembre", date_created: "15/08/2022", is_complete: false},
+        {_id: "3", name: "Estudiar Java", description: "Aprender Java para cubrir las especificaciones del proyecto", date_created: "19/08/2022", is_complete: false}
+    ]
+
+    constructor() { }
+
+    ngOnInit(): void {
+    }
+
+    }
+
+- Crear tabla y recorrer elementos dummy en **task-table.component.html**:
+
+.. code-block::  
+
+    <div class="text-center container">
+        <table class="table mt-4">
+            <thead>
+                <tr>
+                    <th scope="col">Título</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Fecha creación</th>
+                    <th scope="col">Finalizada</th>
+                    <th scope="col">Fecha Finalización</th>
+                    <th scope="col">Operaciones</th>
+                </tr>
+            </thead>
+            <tbody class="text-start">
+                <tr *ngFor="let data of dummyData">
+                    <td>{{data.name}}</td>
+                    <td>{{data.description}}</td>
+                    <td>{{data.date_created}}</td>
+                    <td>
+                        <span *ngIf="data.is_complete == true">Si</span>
+                        <span *ngIf="data.is_complete == false">No</span>
+                    </td>
+                    <td><span *ngIf="data.date_finish != null">{{data.date_finish}}</span></td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-primary me-2">finalizar tarea</button>
+                        <button class="btn btn-sm btn-danger me-2">Eliminar tarea</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+- Añadir componente a pagina **tasks.component.html**:
+
+.. code-block::  
+
+    <app-navbar></app-navbar>
+
+    <app-task-table></app-task-table>
+
+Paso 6: Crear modals 
+********************
+
+- Crear un nuevo modal para finalizar tarea: ``ng generate component components/finishTaskModal``.
+- Editar ahora su controlador **finish-task-modal.component.ts**:
+
+.. code-block:: 
+
+    // importamos Input:
+    import { Component, Input, OnInit } from '@angular/core';
+
+    @Component({
+    selector: 'app-finish-task-modal',
+    templateUrl: './finish-task-modal.component.html',
+    styleUrls: ['./finish-task-modal.component.css']
+    })
+    export class FinishTaskModalComponent implements OnInit {
+    // cargar datos del padre:
+    @Input() taskId: string = "";
+    @Input() taskName: string = "";
+
+    constructor() { }
+
+    ngOnInit(): void {
+    }
+
+    }
+
+- Preparamos el modal **finish-task-modal.component.html**:
+
+.. code-block::  
+
+    <div class="modal fade" id="finishModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Se va a finalizar la siguiente tarea</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>{{taskId}} - {{taskName}}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+- Creamos otro componente para el modal de eliminar tarea: ``ng generate component/components deleteTaskModal``
+- Editamos el controlador **delete-task-modal.component.ts**:
+
+.. code-block:: 
+
+    // importamos Input:
+    import { Component, Input, OnInit } from '@angular/core';
+
+    @Component({
+    selector: 'app-delete-task-modal',
+    templateUrl: './delete-task-modal.component.html',
+    styleUrls: ['./delete-task-modal.component.css']
+    })
+    export class DeleteTaskModalComponent implements OnInit {
+    // cargar datos del padre:
+    @Input() taskId: string = "";
+    @Input() taskName: string = "";
+
+    constructor() { }
+
+    ngOnInit(): void {
+    }
+
+    }
+
+- Creamos el modal html en **delete-task-modal.component.html**:
+
+.. code-block::  
+
+    <div class="modal fade" id="deleteModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Se va a eliminar la siguiente tarea</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>{{taskId}} - {{taskName}}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Aceptar</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+- Creamos una función y dos nuevos atributos para mover estos datos en **task-table.component.ts**:
+
+.. code-block:: 
+
+    import { Component, OnInit } from '@angular/core';
+
+    @Component({
+    selector: 'app-task-table',
+    templateUrl: './task-table.component.html',
+    styleUrls: ['./task-table.component.css']
+    })
+    export class TaskTableComponent implements OnInit {
+    dummyData: any = [
+        {_id: "1", name: "Cocinar", description: "Cocinar galletas el sábado", date_created: "08/08/2022", is_complete: true, date_finish: "10/08/2022"},
+        {_id: "2", name: "Preparar proyecto", description: "Preparar proyecto para presentar en Septiembre", date_created: "15/08/2022", is_complete: false},
+        {_id: "3", name: "Estudiar Java", description: "Aprender Java para cubrir las especificaciones del proyecto", date_created: "19/08/2022", is_complete: false}
+    ]
+
+    // creamos dos nuevos atributos:
+    taskId: string = "";
+    taskName: string = "";
+
+    constructor() { }
+
+    ngOnInit(): void {
+    }
+
+    // creamos una función para asignar los valores recibidos:
+    getTask(id:string, name:string): void {
+        this.taskId = id;
+        this.taskName = name;
+    }
+
+    }
+
+- Cargamos los modals en la tabla y preparamos la acción del botón en **task-table.component.html**:
+
+.. code-block::  
+
+    <div class="text-center container">
+        <table class="table mt-4">
+            <thead>
+                <tr>
+                    <th scope="col">Título</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Fecha creación</th>
+                    <th scope="col">Finalizada</th>
+                    <th scope="col">Fecha Finalización</th>
+                    <th scope="col">Operaciones</th>
+                </tr>
+            </thead>
+            <tbody class="text-start">
+                <tr *ngFor="let data of dummyData">
+                    <td>{{data.name}}</td>
+                    <td>{{data.description}}</td>
+                    <td>{{data.date_created}}</td>
+                    <td>
+                        <span *ngIf="data.is_complete == true">Si</span>
+                        <span *ngIf="data.is_complete == false">No</span>
+                    </td>
+                    <td><span *ngIf="data.date_finish != null">{{data.date_finish}}</span></td>
+                    <td class="text-center">
+                        <!-- Actualizar botón para finalizar y para eliminar tareas: -->
+                        <button (click)="getTask(data._id, data.name)" class="btn btn-sm btn-primary me-2" data-bs-toggle="modal" data-bs-target="#finishModal">finalizar tarea</button>
+                        <button (click)="getTask(data._id, data.name)" class="btn btn-sm btn-danger me-2" data-bs-toggle="modal" data-bs-target="#deleteModal">Eliminar tarea</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <app-finish-task-modal [taskId]="taskId" [taskName]="taskName" ></app-finish-task-modal>
+        <app-delete-task-modal [taskId]="taskId" [taskName]="taskName" ></app-delete-task-modal>
+    </div>
+
+Paso 7: Formulario para crear tareas 
+************************************
+
+- Lo primero que vamos a hacer es cargar el modulo de formularios en **app.module.ts**:
+
+.. code-block:: 
+
+    import { NgModule } from '@angular/core';
+    import { BrowserModule } from '@angular/platform-browser';
+
+    import { AppRoutingModule } from './app-routing.module';
+    import { AppComponent } from './app.component';
+    import { TasksComponent } from './pages/tasks/tasks.component';
+    import { NavbarComponent } from './components/navbar/navbar.component';
+    import { TaskTableComponent } from './components/task-table/task-table.component';
+    import { FinishTaskModalComponent } from './components/finish-task-modal/finish-task-modal.component';
+    import { DeleteTaskModalComponent } from './components/delete-task-modal/delete-task-modal.component';
+    import { FormsModule } from '@angular/forms'; // se importan los forms.
+
+    @NgModule({
+    declarations: [
+        AppComponent,
+        TasksComponent,
+        NavbarComponent,
+        TaskTableComponent,
+        FinishTaskModalComponent,
+        DeleteTaskModalComponent
+    ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        FormsModule // importar modulo de formularios
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
+    })
+    export class AppModule { }
+
+- Preparar campos del formulario en **task-table.component.ts**:
+
+.. code-block:: 
+
+    import { Component, OnInit } from '@angular/core';
+
+    @Component({
+    selector: 'app-task-table',
+    templateUrl: './task-table.component.html',
+    styleUrls: ['./task-table.component.css']
+    })
+    export class TaskTableComponent implements OnInit {
+    dummyData: any = [
+        {_id: "1", name: "Cocinar", description: "Cocinar galletas el sábado", date_created: "08/08/2022", is_complete: true, date_finish: "10/08/2022"},
+        {_id: "2", name: "Preparar proyecto", description: "Preparar proyecto para presentar en Septiembre", date_created: "15/08/2022", is_complete: false},
+        {_id: "3", name: "Estudiar Java", description: "Aprender Java para cubrir las especificaciones del proyecto", date_created: "19/08/2022", is_complete: false}
+    ]
+
+    taskId: string = "";
+    taskName: string = "";
+
+    // crear estructura del formulario:
+    task: any = {
+        name: null,
+        description: null
+    }
+
+    constructor() { }
+
+    ngOnInit(): void {
+    }
+
+    getTask(id:string, name:string): void {
+        this.taskId = id;
+        this.taskName = name;
+    }
+
+    // metodo para crear tarea:
+    createTask(): void {
+        // agergar elemento al listado dummy:
+        this.dummyData.push(
+        {
+            _id: "4", name: this.task.name, description: this.task.description,
+            date_created: Date.now(), is_complete: false
+        }
+        )
+    }
+
+    }
+
+
+- Crear formulario en **task-table.component.html**:
+
+.. code-block::  
+
+    <div class="text-center container">
+        <table class="table mt-4">
+            <thead>
+                <tr>
+                    <th scope="col">Título</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Fecha creación</th>
+                    <th scope="col">Finalizada</th>
+                    <th scope="col">Fecha Finalización</th>
+                    <th scope="col">Operaciones</th>
+                </tr>
+            </thead>
+            <tbody class="text-start">
+                <tr *ngFor="let data of dummyData">
+                    <td>{{data.name}}</td>
+                    <td>{{data.description}}</td>
+                    <td>{{data.date_created}}</td>
+                    <td>
+                        <span *ngIf="data.is_complete == true">Si</span>
+                        <span *ngIf="data.is_complete == false">No</span>
+                    </td>
+                    <td><span *ngIf="data.date_finish != null">{{data.date_finish}}</span></td>
+                    <td class="text-center">
+                        <button (click)="getTask(data._id, data.name)" class="btn btn-sm btn-primary me-2" data-bs-toggle="modal" data-bs-target="#finishModal">finalizar tarea</button>
+                        <button (click)="getTask(data._id, data.name)" class="btn btn-sm btn-danger me-2" data-bs-toggle="modal" data-bs-target="#deleteModal">Eliminar tarea</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- Crear nueva fila con el formulario de crear tareas: -->
+        <div class="row text-center align-items-end">
+                <div class="col-md-5"></div>
+                <!-- Con ngModel no se usa form sino da fallo -->
+                <!-- Cargar los datos del input con ngModel y crear función para procesarlos al hacer click en la lista de arriba -->
+                <input [(ngModel)]="task.name"  class="col me-2 form-control form-sm" type="text" placeholder="Título"/>
+                <input [(ngModel)]="task.description" class="col me-2 form-control" type="text" placeholder="Descripción" />
+                <input (click)="createTask()" class="col me-2 form-control btn btn-success" type="button" value="Crear tarea" />
+        </div>
+        <app-finish-task-modal [taskId]="taskId" [taskName]="taskName" ></app-finish-task-modal>
+        <app-delete-task-modal [taskId]="taskId" [taskName]="taskName" ></app-delete-task-modal>
+    </div>
+
+Paso 8: Crear página de usuarios 
+********************************
+
+- Crear nuevo componente para página de usuarios: ``ng generate component pages/users``
+- Crear ruta al componente de página en **app-routing.module.ts**:
+
+.. code-block:: 
+
+    import { NgModule } from '@angular/core';
+    import { RouterModule, Routes } from '@angular/router';
+    import { TasksComponent } from './pages/tasks/tasks.component';
+    // importar el componente taskpage:
+    import {UsersComponent} from './pages/users/users.component';
+
+    // añadir la ruta como raiz:
+    const routes: Routes = [
+    {path: '', component: TasksComponent},
+    {path: 'users', component: UsersComponent}
+    ];
+
+    @NgModule({
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule]
+    })
+    export class AppRoutingModule { }
+
+
+- Añadir navbar a **users.component.html**:
+
+.. code-block::  
+
+    <app-navbar></app-navbar>
+
+    <p>users works!</p>
+
+Paso 9: Actualizar enlaces de navbar 
+************************************
+
+Cambiar enlaces del navbar por los routerLink de Angular, editamos **navbar.component.html**:
+
+.. code-block::  
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="col-md-11 align-items-start ms-2" >
+            <!-- cambiar href por routerLink -->
+            <a routerLink="/" class="navbar-brand">Task Learn</a>
+        </div>
+        
+        <ul class="navbar-nav mb-2 mb-lg-0 col-md-1 align-items-end me-3">
+            <li class="nav-item align-items-end">
+                <!-- cambiar href por routerLink -->
+                <a routerLink="/users" class="nav-link text-center">
+                    <img class="avatar rounded img-thumbnail img-fluid" src="./assets/avatar.png" alt="foto" />
+                    <div class="col">
+                        <small>Usuario</small>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+De este modo evitamos que se refresque la página.
+
+Paso 10: Crear componente para editar usuario 
+*********************************************
+
+- Crear un nuevo componente para editar usuarios: ``ng generate component components/userForm``
+- Editar la hoja de estilos para ajustar avatar en **user-form.component.css**:
+
+.. code-block:: css
+
+    .avatarEdit{
+        width: 200px;
+        height: 200px;
+    }
+
+- Editar controlador **user-form.component.ts**:
+
+.. code-block:: 
+
+    import { Component, OnInit } from '@angular/core';
+
+    @Component({
+    selector: 'app-user-form',
+    templateUrl: './user-form.component.html',
+    styleUrls: ['./user-form.component.css']
+    })
+    export class UserFormComponent implements OnInit {
+    // cargar avatar:
+    avatar: string = "./assets/avatar.png";
+
+    // crear modelo para editar usuario:
+    user: any = {
+        name: "",
+        lastname: "",
+        email: "",
+        password: "",
+        file: ""
+    }
+
+    constructor() { 
+        // crear usuario dummy:
+        this.user = {name: "Guillermo", lastname: "Granados Gómez", email: "pytonicus@gmail.com"}
+    }
+
+    ngOnInit(): void {
+    }
+
+    // editar usuario:
+    updateUser(): any {
+        console.log(this.user); 
+    }
+
+    }
+
+
+- Editar pantalla **user-form.component.html**:
+
+.. code-block:: 
+
+    <div class="container mt-4 text-center">
+        <div class="row">
+            <div class="col">
+                <h3>Datos de usuario</h3>
+                <hr />
+                <img src={{avatar}} class="avatarEdit rounded img-thumbnail img-fluid"  alt="Avatar" />
+                <input type="file" class="form-control mt-3" placeholder="Subir avatar" [(ngModel)]="user.avatar" />
+                <input type="text" class="form-control mt-3" placeholder="Nombre" [(ngModel)]="user.name" />   
+                <input type="text" class="form-control mt-3" placeholder="Apellidos" [(ngModel)]="user.lastname" />  
+                <input type="text" class="form-control mt-3" placeholder="Email" [(ngModel)]="user.email" />  
+                <input type="text" class="form-control mt-3" placeholder="nueva contraseña (dejar en blanco para no cambiar)" [(ngModel)]="user.password" /> 
+                <input type="button" class="btn btn-success form-control mt-3" value="Actualizar datos" (click)="updateUser()" />
+            </div>
+        </div>
+    </div>
+
+- Cargar formulario en **users.component.html**:
+
+.. code-block::  
+
+    <app-navbar></app-navbar>
+
+    <app-user-form></app-user-form>
+
+Paso 11: Crear pantalla de Login 
+********************************
+
+- Crear un nuevo componente de pagina: ``ng generate component pages/login`` 
+- Cargar ruta del controlador en **app-routing.module.ts**:
+
+.. code-block:: 
+
+    import { NgModule } from '@angular/core';
+    import { RouterModule, Routes } from '@angular/router';
+    import { TasksComponent } from './pages/tasks/tasks.component';
+    import {UsersComponent} from './pages/users/users.component';
+    // importar el componente login:
+    import {LoginComponent} from './pages/login/login.component';
+
+    // añadir la ruta como raiz:
+    const routes: Routes = [
+    {path: '', component: TasksComponent},
+    {path: 'users', component: UsersComponent},
+    {path: 'login', component: LoginComponent}
+    ];
+
+    @NgModule({
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule]
+    })
+    export class AppRoutingModule { }
+
+
+- Editar hoja de estilo **login.component.css**:
+
+.. code-block:: css 
+
+    html,
+    .bodystyle {
+        height: 100vh;
+    }
+
+    .bodystyle {
+        display: flex;
+        align-items: center;
+        padding-top: 40px;
+        padding-bottom: 40px;
+        background-color: #f5f5f5;
+    }
+
+    .form-signin {
+        width: 100%;
+        max-width: 330px;
+        padding: 15px;
+        margin: auto;
+    }
+
+    .form-signin .checkbox {
+        font-weight: 400;
+    }
+
+    .form-signin .form-floating:focus-within {
+        z-index: 2;
+    }
+
+    .form-signin input[type="email"] {
+        margin-bottom: -1px;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+
+    .form-signin input[type="password"] {
+        margin-bottom: 10px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+    }
+
+    .cursor{
+        border: 0px;
+        background: transparent;
+    }
+
+- Editar controlador **login.component.ts**:
+
+.. code-block:: 
+
+    import { Component, OnInit } from '@angular/core';
+
+    @Component({
+        selector: 'app-login',
+        templateUrl: './login.component.html',
+        styleUrls: ['./login.component.css']
+    })
+    export class LoginComponent implements OnInit {
+        // crear modelo de login:
+        loginData: any = {
+            email: "",
+            password: ""
+        }
+
+        constructor() { }
+
+        ngOnInit(): void {
+        }
+
+        // metodo para hacer login:
+        login(): void {
+            console.log(this.loginData);
+        }
+
+    }
+
+
+- Editar pantalla **login.component.html**:
+
+.. code-block::  
+
+    <div class="bodystyle text-center" cz-shortcut-listen="true">
+        <div class="form-signin text-center">
+            <h1>Por favor inicia sesión</h1>
+            <div class="form-floating">
+                <input type="email" [(ngModel)]="loginData.email" class="form-control" id="floatingInput" placeholder="name@example.com" />
+                <label htmlFor="floatingInput">Email</label>
+            </div>
+            <div class="form-floating">
+                <input type="password" [(ngModel)]="loginData.password" class="form-control" id="floatingPassword" placeholder="Password" />
+                <label htmlFor="floatingPassword">Contraseña</label>
+            </div>
+            <div class="mb-3">
+            <button type="button" class="cursor">Crear usuario</button>
+            </div>
+            <div class="mb-3">
+            <button type="button" class="cursor">¿has olvidado la contraseña?</button>
+            </div>
+            <button (click)="login()" class="w-100 btn btn-lg btn-primary" type="button">Iniciar sesión</button>
+        </div>
+    </div>
+
+
+Paso 12: Crear modal para registrar usuarios 
+********************************************
+
+- Crear un nuevo componente para un modal: ``ng generate component components/registerModal``
+- Preparar datos para el registro en **register-modal.component.ts**:
+
+.. code-block:: 
+
+    import { Component, OnInit } from '@angular/core';
+
+    @Component({
+    selector: 'app-register-modal',
+    templateUrl: './register-modal.component.html',
+    styleUrls: ['./register-modal.component.css']
+    })
+    export class RegisterModalComponent implements OnInit {
+    // crear modelo de datos:
+    registerData: any = {
+        email: "",
+        password: ""
+    }
+
+    constructor() { }
+
+    ngOnInit(): void {
+    }
+
+    // metodo para registrar usuario:
+    register(): void {
+        console.log(this.registerData);
+    }
+
+    }
+
+- Ahora editamos la pantalla **register-modal.component.html**:
+
+.. code-block::  
+
+    <div class="modal fade" id="registerUser" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Registro</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <input [(ngModel)]="registerData.email" type="email" class="form-control mt-3" placeholder="Email" />  
+                        <input [(ngModel)]="registerData.password" type="password" class="form-control mt-3" placeholder="Contraseña" /> 
+                        <input type="button" (click)="register()" class="btn btn-success form-control mt-3" value="Darse de alta" data-bs-dismiss="modal" />
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+- Cargar el modal en la pagina login y preparar botón **login.component.html**:
+
+.. code-block::  
+
+    <div class="bodystyle text-center" cz-shortcut-listen="true">
+        <div class="form-signin text-center">
+            <h1>Por favor inicia sesión</h1>
+            <div class="form-floating">
+                <input type="email" [(ngModel)]="loginData.email" class="form-control" id="floatingInput" placeholder="name@example.com" />
+                <label htmlFor="floatingInput">Email</label>
+            </div>
+            <div class="form-floating">
+                <input type="password" [(ngModel)]="loginData.password" class="form-control" id="floatingPassword" placeholder="Password" />
+                <label htmlFor="floatingPassword">Contraseña</label>
+            </div>
+            <div class="mb-3">
+            <button type="button" class="cursor" data-bs-toggle="modal" data-bs-target="#registerUser"  data-bs-toggle="modal" data-bs-target="#registerUser">Crear usuario</button>
+            </div>
+            <div class="mb-3">
+            <button type="button" class="cursor">¿has olvidado la contraseña?</button>
+            </div>
+            <button (click)="login()" class="w-100 btn btn-lg btn-primary" type="button">Iniciar sesión</button>
+        </div>
+    </div>
+    <!-- Cargar componente modal: -->
+    <app-register-modal></app-register-modal>
+
+Paso 13: Crear modal para recuperar contraseña 
+**********************************************
+
+- Crear un componente para el modal: ``ng generate component components/resetModal``
+- Editar el controlador **reset-modal.component.ts**:
+
+.. code-block:: 
+
+    import { Component, OnInit } from '@angular/core';
+
+    @Component({
+    selector: 'app-reset-modal',
+    templateUrl: './reset-modal.component.html',
+    styleUrls: ['./reset-modal.component.css']
+    })
+    export class ResetModalComponent implements OnInit {
+    // crear modelo de datos:
+    restoreData: any = {
+        email: ""
+    }
+
+    constructor() { }
+
+    ngOnInit(): void {
+    }
+
+    // metodo para registrar usuario:
+    restore(): void {
+        console.log(this.restoreData);
+    }
+
+    }
+
+- Ahora editamos la pantalla **reset-modal.component.html**:
+
+.. code-block::  
+
+    <div class="modal fade" id="resetPassword" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Resetear contraseña</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col text-center">
+                        <input type="email" [(ngModel)]="restoreData.email" class="form-control mt-3" placeholder="Email" />  
+                        <input type="button" (click)="restore()" class="btn btn-success form-control mt-3" value="Enviar email" data-bs-dismiss="modal" />
+                        <small>Recibirás un email que te llevará donde resetear tu contraseña</small>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+- Cargamos el componente en **login.component.html**:
+
+.. code-block::  
+
+    <div class="bodystyle text-center" cz-shortcut-listen="true">
+        <div class="form-signin text-center">
+            <h1>Por favor inicia sesión</h1>
+            <div class="form-floating">
+                <input type="email" [(ngModel)]="loginData.email" class="form-control" id="floatingInput" placeholder="name@example.com" />
+                <label htmlFor="floatingInput">Email</label>
+            </div>
+            <div class="form-floating">
+                <input type="password" [(ngModel)]="loginData.password" class="form-control" id="floatingPassword" placeholder="Password" />
+                <label htmlFor="floatingPassword">Contraseña</label>
+            </div>
+            <div class="mb-3">
+            <button type="button" class="cursor" data-bs-toggle="modal" data-bs-target="#registerUser">Crear usuario</button>
+            </div>
+            <div class="mb-3">
+            <!-- actualizar el botón para resetear password: -->
+            <button type="button" class="cursor" data-bs-toggle="modal" data-bs-target="#resetPassword">¿has olvidado la contraseña?</button>
+            </div>
+            <button (click)="login()" class="w-100 btn btn-lg btn-primary" type="button">Iniciar sesión</button>
+        </div>
+    </div>
+    
+    <app-register-modal></app-register-modal>
+    <!-- Cargar componente modal: -->
+    <app-reset-modal></app-reset-modal>
+
+Paso 14: Crear página para restablecer contraseña 
+*************************************************
+
+- Crear una nueva página para reestablecer contraseña: ``ng generate component pages/resetPassword``
+- Crear nueva ruta para esta página en **app-routing.module.ts**:
+
+.. code-block:: 
+
+    import { NgModule } from '@angular/core';
+    import { RouterModule, Routes } from '@angular/router';
+    import { TasksComponent } from './pages/tasks/tasks.component';
+    import {UsersComponent} from './pages/users/users.component';
+    import {LoginComponent} from './pages/login/login.component';
+    // importar el componente reset:
+    import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
+
+    // añadir la ruta que recibirá un id y un token por ruta:
+    const routes: Routes = [
+    {path: '', component: TasksComponent},
+    {path: 'users', component: UsersComponent},
+    {path: 'login', component: LoginComponent},
+    {path: 'reset/:id/:token', component: ResetPasswordComponent}
+    ];
+
+    @NgModule({
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule]
+    })
+    export class AppRoutingModule { }
+
+- Editar la hoja de estilo de reset password **reset-password.component.css**:
+
+.. code-block:: css 
+
+    html,
+    .bodystyle {
+    height: 100vh;
+    }
+
+    .bodystyle {
+    display: flex;
+    align-items: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background-color: #f5f5f5;
+    }
+
+    .form-signin {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
+    }
+
+    .form-signin .checkbox {
+    font-weight: 400;
+    }
+
+    .form-signin .form-floating:focus-within {
+    z-index: 2;
+    }
+
+    .form-signin input[type="email"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    }
+
+    .form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    }
+
+    .cursor{
+    border: 0px;
+    background: transparent;
+    }
+
+    .alert{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    }
+
+- Editar el controlador **reset-password.component.ts**:
+
+.. code-block:: 
+
+    import { Component, OnInit } from '@angular/core';
+    // importar elementos del router para recuperar parametros:
+    import {ActivatedRoute,Params} from "@angular/router"
+    // importar el router para redirigir:
+    import {Router} from '@angular/router';
+
+    @Component({
+    selector: 'app-reset-password',
+    templateUrl: './reset-password.component.html',
+    styleUrls: ['./reset-password.component.css']
+    })
+    export class ResetPasswordComponent implements OnInit {
+    // crear modelo de datos:
+    resetData: any = {
+        newPassword: "",
+        repitePassword: ""
+    }
+
+    // crear atributos para recibir parametros:
+    id: string = "";
+    token: string = "";
+
+    // crear un boolean para comprobar la alerta y otro para la contraseña:
+    alert: boolean = false;
+    match: boolean = true;
+
+    // crear objeto para recibir parametros y el router:
+    constructor(private _activeRouter: ActivatedRoute, private router: Router) { }
+
+    ngOnInit(): void {
+        // recuperar parametros recibidos por la url:
+        this._activeRouter.params.subscribe((params: Params) =>{
+        this.id = params['id'];
+        this.token = params['token'];
+        });
+    }
+
+    reset(): void{
+        if(this.resetData.newPassword !== this.resetData.repitePassword){
+        this.match = false;
+        }else{
+        console.log(this.resetData);
+        this.match = true;
+        this.alert = true;
+        window.setTimeout(()=>{
+            // si todo va bien redirigir a login:
+            this.router.navigate(['login']);
+        }, 3000);
+        }
+    }
+
+    }
+
+- Diseñar pantalla **reset-password.component.html**:
+
+.. code-block::  
+
+    <div *ngIf="alert == true; else desaparece" class="alert alert-success" role="alert">
+    Contraseña restablecida con éxito. Ya puedes iniciar sesión.
+    </div>
+    <ng-template #desaparece>
+        <div class="alert alert-success fade" role="alert">
+            Contraseña restablecida con éxito. Ya puedes iniciar sesión.
+        </div>
+    </ng-template>
+    <div class="bodystyle text-center" cz-shortcut-listen="true">
+        <div class="form-signin text-center">
+            <h1>Restablecer contraseña</h1>
+            <div class="form-floating">
+                <input type="password" [(ngModel)]="resetData.newPassword" class="form-control" placeholder="Password" />
+                <label htmlFor="floatingPassword">Nueva contraseña</label>
+            </div>
+            <div class="form-floating">
+                <input type="password" [(ngModel)]="resetData.repitePassword" class="form-control" placeholder="Password" />
+                <label htmlFor="floatingPassword">Repetir nueva contraseña</label>
+                <small *ngIf="match == false" class="text-danger">Las contraseñas no coinciden</small>
+            </div>
+            <button class="w-100 btn btn-lg btn-secondary" type="button" (click)="reset()">Cambiar contraseña</button>
+        </div>
+    </div>
+
+Paso 15: Crear pagina error 404
+*******************************
+
+- Crear una nueva pagina para error 404: ``ng generate component pages/error404``
+- Añadir ruta para error 404 en **app-routing.module.ts**:
+
+.. code-block:: 
+
+    import { NgModule } from '@angular/core';
+    import { RouterModule, Routes } from '@angular/router';
+    import { TasksComponent } from './pages/tasks/tasks.component';
+    import {UsersComponent} from './pages/users/users.component';
+    import {LoginComponent} from './pages/login/login.component';
+    import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
+    // importar el componente error404:
+    import {Error404Component} from './pages/error404/error404.component';
+
+    // añadir la ruta error 404:
+    const routes: Routes = [
+    {path: '', component: TasksComponent},
+    {path: 'users', component: UsersComponent},
+    {path: 'login', component: LoginComponent},
+    {path: 'reset/:id/:token', component: ResetPasswordComponent},
+    {path: '**', component: Error404Component}
+    ];
+
+    @NgModule({
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule]
+    })
+    export class AppRoutingModule { }
+
+- Editar la hoja de estilos **error404.component.css**:
+
+.. code-block:: css 
+    
+    .center{
+        top: 25vh;
+    }
+
+- Editar pantalla **error404.component.html**:
+
+.. code-block::  
+
+    <div class="position-relative text-center center">
+        <h1 class="h1">Error 404</h1>
+        <h2 class="h2">La página solicitada no existe</h2>
+    </div>
+
+Paso 16: Subir cambios a GitHub  
+*******************************
+
+- Parar ejecución de app.
+- Añadir cambios: ``git add .``
+- Realizar un commit: ``git commit -am "Phase 1 complete"``
+- Subir cambios a Github con el nombre de la rama actual: ``git push origin feature/phase-1-task-structure``
+- Desde gitHub presionar botón **Compare & pull request**.
+- cambiar rama base **master** por **developer** y pulsar **Create pull request**
+- Pulsar en **Merge pull request** y a continuación en **Confirm merge**.
+- Una vez terminado volvemos a local y cambiamos de rama a developer: ``git checkout developer``
+- Actualizamos rama developer: ``git pull origin developer`` 
+
+Y con esto concluye la primera fase del proyecto.
+
+.. raw:: html 
+
+    <hr><br>
+
+Fase 2: Conectar con API Rest    
+#############################
+
+En esta fase se van a crear todas las pantallas de la aplicación. 
+
+Paso 1: Descargar API Task Learn   
+********************************
+
+- Clonar cualquier repositorio API Task Learn de Fullcoder Learn, por ejemplo: ``git clone https://github.com/Fullcoder-Learning/task-learning-api.git``
+- Acceder al directorio raiz del proyecto y ejectuar ``npm start``.
+
+Paso 2: Preparar proyecto 
+*************************
+
+- Crear rama feature a partir de developer: ``git checkout -b feature/phase-2-connect-to-service``
+- Instalar angular-jwt: ``npm install @auth0/angular-jwt``
+- Arrancar proyecto desde la raiz: ``ng serve --port 3000``
+
+Paso 3: Crear servicio para registrarse
+***************************************
+
+- Lo primero que vamos a hacer es importar el modulo **HttpClientModule** en **app.module.ts**:
+
+.. code-block:: 
+
+    import { NgModule } from '@angular/core';
+    import { BrowserModule } from '@angular/platform-browser';
+
+    import { AppRoutingModule } from './app-routing.module';
+    import { AppComponent } from './app.component';
+    import { TasksComponent } from './pages/tasks/tasks.component';
+    import { NavbarComponent } from './components/navbar/navbar.component';
+    import { TaskTableComponent } from './components/task-table/task-table.component';
+    import { FinishTaskModalComponent } from './components/finish-task-modal/finish-task-modal.component';
+    import { DeleteTaskModalComponent } from './components/delete-task-modal/delete-task-modal.component';
+    import { FormsModule } from '@angular/forms';
+    import { UsersComponent } from './pages/users/users.component';
+    import { UserFormComponent } from './components/user-form/user-form.component';
+    import { LoginComponent } from './pages/login/login.component';
+    import { RegisterModalComponent } from './components/register-modal/register-modal.component';
+    import { ResetModalComponent } from './components/reset-modal/reset-modal.component';
+    import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
+    import { Error404Component } from './pages/error404/error404.component';
+    // cargamos el httpclientmodule:
+    import {HttpClientModule} from '@angular/common/http';
+
+    @NgModule({
+    declarations: [
+        AppComponent,
+        TasksComponent,
+        NavbarComponent,
+        TaskTableComponent,
+        FinishTaskModalComponent,
+        DeleteTaskModalComponent,
+        UsersComponent,
+        UserFormComponent,
+        LoginComponent,
+        RegisterModalComponent,
+        ResetModalComponent,
+        ResetPasswordComponent,
+        Error404Component
+    ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        HttpClientModule // importar modulo para peticiones rest
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
+    })
+    export class AppModule { }
+
+- Crear nueva carpeta en **app** llamada **interfaces**.
+- Crear un nuevo interface: ``ng generate interface interfaces/User``.
+- Editar el interface **user.interface.ts**:
+
+.. code-block:: 
+
+    export interface User {
+        email: string,
+        password: string
+    }
+
+- Crear nuevo servicio de usuarios: ``ng generate service services/user``
+- Editamos el servicio **user.service.ts**:
+
+.. code-block:: 
+
+    import { Injectable } from '@angular/core';
+    // importar httpclient:
+    import {HttpClient} from '@angular/common/http';
+    // importar map de rxjs:
+    import {map} from 'rxjs/operators';
+    // importar el interface: 
+    import { User } from '../interfaces/user';
+
+    @Injectable({
+    providedIn: 'root'
+    })
+    export class UserService {
+    // definir la ruta base:
+    url_base: string = 'http://localhost:5000/api';
+
+    // crear objeto httpclient:
+    constructor(private http: HttpClient) { }
+
+    // crear el metodo de registro:
+    registerUser(user: User): any {
+        // devolver el resultado de la operación:
+        return this.http.post(`${this.url_base}/register`, user)
+                .pipe(map((data: object) => {
+                return data;
+                }));
+    }
+    }
+
+- Editar el controlador **register-modal.component.ts**:
+
+.. code-block:: 
+
+    import { Component, OnInit } from '@angular/core';
+    // importar el servicio:
+    import { UserService } from 'src/app/services/user.service';
+    // importamos el interface:
+    import { User } from 'src/app/interfaces/user';
+
+    @Component({
+    selector: 'app-register-modal',
+    templateUrl: './register-modal.component.html',
+    styleUrls: ['./register-modal.component.css']
+    })
+    export class RegisterModalComponent implements OnInit {
+
+    // crear atributos para controlar alertas:
+    registerAlertSuccess: boolean = false;
+    registerAlertError: boolean = false;
+    alertMessage: string = "";
+
+    // se le pasa el tipo de dato interface:
+    registerData: User = {
+        email: "",
+        password: ""
+    }
+
+    // crear objeto del servicio:
+    constructor(private userService: UserService) { }
+
+    ngOnInit(): void {
+    }
+
+    // modificar el metodo register para enviar datos via post:
+    register(): void {
+        // subscribirse al servicio y enviar datos:
+        this.userService.registerUser(this.registerData)
+        // recibe una respuesta de tipo user al subscribirse:
+        .subscribe((res: User) => {
+            // devolver una respuesta por consola para hacer pruebas:
+            console.log(res);
+            // cambiar estado del alert:
+            this.registerAlertSuccess = true;
+            // cambiar mensaje de alerta:
+            this.alertMessage = "Usuario registrado con éxito, ya puedes iniciar sesión.";
+            // establecer un temporizador para quitar mensaje alerta:
+            window.setTimeout(()=>{
+            this.registerAlertSuccess = false;
+            }, 3000);
+        }, (err: object) => {
+            console.log(err);
+            this.registerAlertError =  true;
+            this.alertMessage = "Error al crear usuario, el usuario ya existe.";
+            window.setTimeout(()=>{
+            this.registerAlertError = false;
+            }, 3000);
+        });
+    }
+
+    }
+
+
+
+- Crear un componente alerta para reutilizar las alertas: ``ng generate component components/alert``
+- Editamos el controlador **alert.component.ts**:
+
+.. code-block:: 
+
+    // cargar el modulo Input para recibir parametros:
+    import { Component, Input, OnInit } from '@angular/core';
+
+    @Component({
+    selector: 'app-alert',
+    templateUrl: './alert.component.html',
+    styleUrls: ['./alert.component.css']
+    })
+    export class AlertComponent implements OnInit {
+    // cargar valores recibidos:
+    @Input() alertSuccess: boolean = false;
+    @Input() alertError: boolean = false;
+    // crear mensaje de alerta:
+    @Input() alertMessage: string = "";
+
+    constructor() { }
+
+    ngOnInit(): void {
+        
+    }
+
+    }
+
+
+- Editamos la hoja de alertas **alert.component.css**:
+
+.. code-block:: css 
+
+    .alert-group{
+        position:fixed;
+        top: 0;
+        width: 100%;
+    }
+
+- Ahora creamos la pantalla de alerta **alert.component.html**:
+
+.. code-block::  
+
+    <div class="alert-group">
+        <div *ngIf="alertSuccess == true; else success" class="alert alert-success alert-group" role="alert">
+            {{alertMessage}}
+        </div>
+        <ng-template #success>
+            <div class="alert alert-success fade alert-group" role="alert">
+                {{alertMessage}}
+            </div>
+        </ng-template>
+        <div *ngIf="alertError == true; else error" class="alert alert-danger alert-group" role="alert">
+            {{alertMessage}}
+        </div>
+        <ng-template #error>
+            <div class="alert alert-danger fade alert-group" role="alert">
+                {{alertMessage}}
+            </div>
+        </ng-template>
+    </div>
+
+- Cargamos el alert en el modal **register-modal.component.html**:
+
+.. code-block::  
+
+    <div class="modal fade" id="registerUser" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Registro</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <input [(ngModel)]="registerData.email" type="email" class="form-control mt-3" placeholder="Email" />  
+                        <input [(ngModel)]="registerData.password" type="password" class="form-control mt-3" placeholder="Contraseña" /> 
+                        <input type="button" (click)="register()" class="btn btn-success form-control mt-3" value="Darse de alta" data-bs-dismiss="modal" />
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+    <!-- añadimos la alerta debajo del modal: -->
+    <app-alert [alertSuccess]="registerAlertSuccess" [alertError]="registerAlertError" [alertMessage]="alertMessage"></app-alert>
+
+
+Paso 4: Crear servicio para iniciar sesión 
+******************************************
+
+- Crear nuevo servicio en **user.service.ts**:
+
+.. code-block:: 
+
+    import { Injectable } from '@angular/core';
+    import {HttpClient} from '@angular/common/http';
+    import {map} from 'rxjs/operators';
+    // importar el interface: 
+    import { User } from '../interfaces/user';
+
+    @Injectable({
+    providedIn: 'root'
+    })
+    export class UserService {
+    url_base: string = 'http://localhost:5000/api';
+
+    constructor(private http: HttpClient) { }
+
+    registerUser(user: User): any {
+        return this.http.post(`${this.url_base}/register`, user)
+                .pipe(map((data: object) => {
+                return data;
+                }));
+    }
+
+    // crear servicio para iniciar sesión:
+    loginUser(user: User): any {
+        return this.http.post(`${this.url_base}/login`, user)
+                .pipe(map((data: object) => {
+                return data;
+                }));
+    }
+    }
+
+- A continuación editamos el controlador **login.component.ts**:
+
+.. code-block:: 
+
+    import { Component, OnInit } from '@angular/core';
+    // importar servicio:
+    import { UserService } from 'src/app/services/user.service';
+    // importar el router para redirigir:
+    import {Router} from '@angular/router';
+    // importar el interace:
+    import { User } from 'src/app/interfaces/user';
+
+    @Component({
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.css']
+    })
+
+    export class LoginComponent implements OnInit {
+    // crear atributo para lanzar alerta error y el mensaje ya creado:
+    loginAlertError: boolean = false;
+    loginMessageError: string = "Error al iniciar sesión. Usuario o contraseña incorrectos.";
+
+    // Cargar interface en el tipo de dato:
+    loginData: User = {
+        email: "",
+        password: ""
+    }
+
+    // crear objeto con el servicio y el router para redireccionar:
+    constructor(private userService: UserService, private router: Router) { }
+    
+    ngOnInit(): void{
+    }
+
+    login(): void {
+        // subscribirse al servicio:
+        this.userService.loginUser(this.loginData)
+        .subscribe((res: any)=>{
+            console.log(res);
+            // guardamos el token si existe y redirigimos a la lista de tareas:
+            if(res.token){
+            localStorage.setItem('token', res.token);
+            this.router.navigate(['/']);
+            }else{
+            // en caso contrario lanzamos alerta de error:
+            this.loginAlertError = true;
+            window.setTimeout(()=>{
+                this.loginAlertError = false;
+            }, 3000);
+            }
+        }, (err: object) => {
+            console.log(err);
+            this.loginAlertError =  true;
+            window.setTimeout(()=>{
+            this.loginAlertError = false;
+            }, 3000);
+        });
+    }
+
+    }
+
+- Y finalmente añadimos un alert a la pantalla **login.component.html**:
+
+.. code-block::  
+
+    <div class="bodystyle text-center" cz-shortcut-listen="true">
+        <div class="form-signin text-center">
+            <h1>Por favor inicia sesión</h1>
+            <div class="form-floating">
+                <input type="email" [(ngModel)]="loginData.email" class="form-control" id="floatingInput" placeholder="name@example.com" />
+                <label htmlFor="floatingInput">Email</label>
+            </div>
+            <div class="form-floating">
+                <input type="password" [(ngModel)]="loginData.password" class="form-control" id="floatingPassword" placeholder="Password" />
+                <label htmlFor="floatingPassword">Contraseña</label>
+            </div>
+            <div class="mb-3">
+            <button type="button" class="cursor" data-bs-toggle="modal" data-bs-target="#registerUser">Crear usuario</button>
+            </div>
+            <div class="mb-3">
+            <!-- actualizar el botón para resetear password: -->
+            <button type="button" class="cursor" data-bs-toggle="modal" data-bs-target="#resetPassword">¿has olvidado la contraseña?</button>
+            </div>
+            <button (click)="login()" class="w-100 btn btn-lg btn-primary" type="button">Iniciar sesión</button>
+        </div>
+    </div>
+    <app-register-modal></app-register-modal>
+    <app-reset-modal></app-reset-modal>ç
+    <!-- Añadir el componente alert: -->
+    <app-alert [alertError]="loginAlertError" [alertMessage]="loginMessageError"></app-alert>
+
+Paso 5: Securizar rutas 
+***********************
+
+- Creamos un nuevo guardián: ``ng generate guard jwtAuth``.
+
+- Editamos el servicio del componente **jwt-auth.guard.ts**:
+
+.. code-block:: 
+
+    import { Injectable } from '@angular/core';
+    import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from '@angular/router';
+    import { Observable } from 'rxjs';
+    // importar angular-jwt:
+    import { JwtHelperService } from "@auth0/angular-jwt";
+
+    @Injectable({
+    providedIn: 'root'
+    })
+    export class JwtAuthGuard implements CanActivate {
+    // recuperar token:
+    token: any = localStorage.getItem('token');
+    // crear el objeto helper de jwt:
+    jwtHelperService: JwtHelperService = new JwtHelperService;
+
+
+    canActivate(
+        route: ActivatedRouteSnapshot,
+        state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+        // validar si hay token y comprobar que no esta caducado:
+        if(this.token){
+            console.log(this.token);
+            if(this.jwtHelperService.isTokenExpired(this.token)){
+            // para evitar problemas de inicio de sesión refrescamos la pantalla con una redirección total:
+            window.location.href = '/login';
+            }
+        }else{
+            console.log("No has iniciado sesión");
+            // para evitar problemas de inicio de sesión refrescamos la pantalla con una redirección total:
+            window.location.href = '/login';
+        }
+        // este return lo tenemos que dejar ahí, si no se cumple todo lo anterior nos dará acceso a la ruta:
+        return true;
+    }
+    
+    }
+
+
+- Aseguramos las rutas que queramos en **app-routing.module.ts**:
+
+.. code-block:: 
+
+    import { NgModule } from '@angular/core';
+    import { RouterModule, Routes} from '@angular/router';
+    import { TasksComponent } from './pages/tasks/tasks.component';
+    import {UsersComponent} from './pages/users/users.component';
+    import {LoginComponent} from './pages/login/login.component';
+    import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
+    import {Error404Component} from './pages/error404/error404.component';
+    // importar el guard:
+    import { JwtAuthGuard } from './jwt-auth.guard';
+
+
+    const routes: Routes = [
+    // securizar las rutas con canActivate y el jwtAuthGuard:
+    {path: '', canActivate: [JwtAuthGuard], component: TasksComponent},
+    {path: 'users', canActivate: [JwtAuthGuard], component: UsersComponent},
+    {path: 'login', component: LoginComponent},
+    {path: 'reset/:id/:token', component: ResetPasswordComponent},
+    {path: '**', component: Error404Component}
+    ];
+
+    @NgModule({
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule]
+    })
+    export class AppRoutingModule { }
+
+
+paso 6: Enviar email para restablecer contraseña  
+************************************************
+
+- Añadir un nuevo interface en **user.ts**: 
+
+.. code-block:: 
+
+    export interface User {
+        email: string,
+        password: string
+    }
+    // crear nueva interface para controlar el dato email:
+    export interface ResetEmail {
+        email: string
+    }
+
+- Crear servicio en **user.service.ts**:
+
+.. code-block::
+
+    import { Injectable } from '@angular/core';
+    import {HttpClient} from '@angular/common/http';
+    import {map} from 'rxjs/operators';
+    // importar el interface: 
+    import { User, ResetEmail } from '../interfaces/user';
+
+    @Injectable({
+    providedIn: 'root'
+    })
+    export class UserService {
+    url_base: string = 'http://localhost:5000/api';
+
+    constructor(private http: HttpClient) { }
+
+    registerUser(user: User): any {
+        return this.http.post(`${this.url_base}/register`, user)
+                .pipe(map((data: object) => {
+                return data;
+                }));
+    }
+
+    loginUser(user: User): any {
+        return this.http.post(`${this.url_base}/login`, user)
+                .pipe(map((data: object) => {
+                return data;
+                }));
+    }
+
+    // crear petición para recuperar contraseña:
+    forgotUser(email: ResetEmail): any {
+        return this.http.post(`${this.url_base}/forgot`, email)
+                .pipe(map((data: object) => {
+                return data;
+                }));
+    }
+
+    }
+
+
+- Modificar controlador de **reset-modal.component.ts**:
+
+.. code-block:: 
+
+    import { Component, OnInit } from '@angular/core';
+    // importar el user service:
+    import { UserService } from 'src/app/services/user.service';
+    // importar el interface email:
+    import { ResetEmail } from 'src/app/interfaces/user';
+
+    @Component({
+    selector: 'app-reset-modal',
+    templateUrl: './reset-modal.component.html',
+    styleUrls: ['./reset-modal.component.css']
+    })
+    export class ResetModalComponent implements OnInit {
+    // crear atributos para alertas:
+    restoreAlertSuccess = false;
+    restoreAlertError = false;
+    restoreAlertMessage = "";
+
+    restoreData: ResetEmail = {
+        email: ""
+    }
+
+    // crear objeto de user service:
+    constructor(private userService: UserService) { }
+
+    ngOnInit(): void {
+    }
+
+    // metodo para registrar usuario:
+    restore(): void {
+        // subscribirse al servicio y enviar datos:
+        this.userService.forgotUser(this.restoreData)
+        .subscribe((res: object) => {
+            // devolver una respuesta por consola para hacer pruebas:
+            console.log(res);
+            // cambiar estado del alert:
+            this.restoreAlertSuccess = true;
+            // cambiar mensaje de alerta:
+            this.restoreAlertMessage = "Se ha enviado un correo con un enlace para reestablecer contraseña. Revisa tu bandeja por favor.";
+            // establecer un temporizador para quitar mensaje alerta:
+            window.setTimeout(()=>{
+            this.restoreAlertSuccess = false;
+            }, 3000);
+        }, (err: object) => {
+            console.log(err);
+            this.restoreAlertError =  true;
+            this.restoreAlertMessage = "Error, el email no existe.";
+            window.setTimeout(()=>{
+            this.restoreAlertError = false;
+            }, 3000);
+        });
+    }
+
+    }
+
+- Cargar el componente alert en pantalla **reset-modal.component.html**:
+
+.. code-block::  
+
+    <div class="modal fade" id="resetPassword" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Resetear contraseña</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col text-center">
+                        <input type="email" [(ngModel)]="restoreData.email" class="form-control mt-3" placeholder="Email" />  
+                        <input type="button" (click)="restore()" class="btn btn-success form-control mt-3" value="Enviar email" data-bs-dismiss="modal" />
+                        <small>Recibirás un email que te llevará donde resetear tu contraseña</small>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+    <!-- Cargar el componente alert -->
+    <app-alert [alertSuccess]="restoreAlertSuccess" [alertError]="restoreAlertError" [alertMessage]="restoreAlertMessage"></app-alert>
+
+Paso 7: Reestablecer contraseña 
+*******************************
+
+- Crear un nuevo interface en **user.interface.ts**:
+
+.. code-block:: 
+
+    export interface User {
+        email: string,
+        password: string
+    }
+    export interface ResetEmail {
+        email: string
+    }
+
+    // crear un nuevo interface para validar el tipo de dato del form:
+    export interface ResetPassword {
+        newPassword: "",
+        repitePassword: ""
+    }
+
+- Crear un nuevo servicio en **user.service.ts**: 
+
+.. code-block::
+
+    import { Injectable } from '@angular/core';
+    import {HttpClient} from '@angular/common/http';
+    import {map} from 'rxjs/operators';
+    // importar el interface: 
+    import { User, ResetEmail, ResetPassword } from '../interfaces/user';
+
+    @Injectable({
+    providedIn: 'root'
+    })
+    export class UserService {
+    url_base: string = 'http://localhost:5000/api';
+
+    constructor(private http: HttpClient) { }
+
+    registerUser(user: User): any {
+        return this.http.post(`${this.url_base}/register`, user)
+                .pipe(map((data: object) => {
+                return data;
+                }));
+    }
+
+    loginUser(user: User): any {
+        return this.http.post(`${this.url_base}/login`, user)
+                .pipe(map((data: object) => {
+                return data;
+                }));
+    }
+
+    forgotUser(email: ResetEmail): any {
+        return this.http.post(`${this.url_base}/forgot`, email)
+                .pipe(map((data: object) => {
+                return data;
+                }));
+    }
+
+    // crear peticion para enviar nueva contraseña:
+    resetPassword(password: ResetPassword, id: string, token: string): any {
+        return this.http.put(`${this.url_base}/reset/${id}/${token}`, password)
+                .pipe(map((data: object) => {
+                return data;
+                }));
+    }
+
+    }
+
+
+- Implementar servicio en **reset-password.component.ts**:
+
+.. code-block:: 
+
+    import { Component, OnInit } from '@angular/core';
+    import {ActivatedRoute,Params} from "@angular/router"
+    import {Router} from '@angular/router';
+    // importar user service:
+    import { UserService } from 'src/app/services/user.service';
+    // importar la interface:
+    import { ResetPassword } from 'src/app/interfaces/user';
+
+    @Component({
+    selector: 'app-reset-password',
+    templateUrl: './reset-password.component.html',
+    styleUrls: ['./reset-password.component.css']
+    })
+    export class ResetPasswordComponent implements OnInit {
+    resetData: ResetPassword = {
+        newPassword: "",
+        repitePassword: ""
+    }
+
+    id: string = "";
+    token: string = "";
+
+    // vamos a cambiar el alert de este componente por el alert externo:
+    resetAlertSuccess: boolean = false;
+    resetAlertError: boolean = false;
+    resetAlertMessage: string = "";
+
+    match: boolean = true;
+
+    // construir objeto del user service:
+    constructor(private _activeRouter: ActivatedRoute, private router: Router, private userService: UserService) { }
+
+    ngOnInit(): void {
+        this._activeRouter.params.subscribe((params: Params) =>{
+        this.id = params['id'];
+        this.token = params['token'];
+        });
+    }
+
+    reset(): void{
+        if(this.resetData.newPassword !== this.resetData.repitePassword){
+        this.match = false;
+        }else{
+        // subscribirse al servicio y enviar datos:
+        this.userService.resetPassword(this.resetData, this.id, this.token)
+        .subscribe((res: object) => {
+            // devolver una respuesta por consola para hacer pruebas:
+            console.log(res);
+            // cambiar estado del alert:
+            this.resetAlertSuccess = true;
+            
+            this.match = true;
+            // cambiar mensaje de alerta:
+            this.resetAlertMessage = "La contraseña ha sido reestablecida con éxito. Ya puedes iniciar sesión";
+            // establecer un temporizador para quitar mensaje alerta:
+            window.setTimeout(()=>{
+            this.resetAlertSuccess = false;
+            this.router.navigate(['login']);
+            }, 3000);
+        }, (err: object) => {
+            console.log(err);
+            this.resetAlertError =  true;
+            this.resetAlertMessage = "Error, el email no existe.";
+            window.setTimeout(()=>{
+            this.resetAlertError = false;
+            }, 3000);
+        });
+        this.match = true;
+        }
+    }
+
+    }
+
+
+- Cambiar el alert de **reset-password.component.html**:
+
+.. code-block::  
+
+    <div class="bodystyle text-center" cz-shortcut-listen="true">
+        <div class="form-signin text-center">
+            <h1>Restablecer contraseña</h1>
+            <div class="form-floating">
+                <input type="password" [(ngModel)]="resetData.newPassword" class="form-control" placeholder="Password" />
+                <label htmlFor="floatingPassword">Nueva contraseña</label>
+            </div>
+            <div class="form-floating">
+                <input type="password" [(ngModel)]="resetData.repitePassword" class="form-control" placeholder="Password" />
+                <label htmlFor="floatingPassword">Repetir nueva contraseña</label>
+                <small *ngIf="match == false" class="text-danger">Las contraseñas no coinciden</small>
+            </div>
+            <button class="w-100 btn btn-lg btn-secondary" type="button" (click)="reset()">Cambiar contraseña</button>
+        </div>
+    </div>
+    <!-- cargamos el alert externo: -->
+    <app-alert [alertSuccess]="resetAlertSuccess" [alertError]="resetAlertError" [alertMessage]="resetAlertMessage"></app-alert>
+
+
+Paso 8: Crear tareas 
+********************
+
+- Crear nueva interfaz para tareas: ``ng generate interface interfaces/task``
+- Editamos la interface **task.interface.ts**:
+
+.. code-block:: 
+
+    export interface Task {
+        name: string,
+        description: string
+    }
+
+
+- crear un nuevo componente servicio para tareas: ``ng generate service services/task``
+- Editar servicio **task.service.ts**:
+
+.. code-block:: 
+
+    import { Injectable } from '@angular/core';
+    // cargar httpclient, HttpHeaders y map:
+    import {HttpClient, HttpHeaders} from '@angular/common/http';
+    import {map} from 'rxjs/operators';
+    // importar el guard:
+    import { JwtAuthGuard } from '../jwt-auth.guard';
+    // importar interface: 
+    import { Task } from '../interfaces/task';
+
+    @Injectable({
+    providedIn: 'root'
+    })
+    export class TaskService {
+    // cargamos la url base:
+    url_base: string = 'http://localhost:5000/api';
+    // recuperamos el token del usuario: 
+    token: any = localStorage.getItem('token');
+    // creamos la cabecera con el token:
+    headers: any = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': this.token
+    });
+    // lo pasamos al objeto options:
+    options: any = {headers: this.headers}
+
+    // cargar servicio Httpclient y guard:
+    constructor(private http: HttpClient, private jwtAuthGuard: JwtAuthGuard) { 
+    }
+
+    // crear tarea, le pasamos primero la tarea y luego las opciones con la cabecera de autorización:
+    postTask(task: Task): any {
+        return this.http.post(`${this.url_base}/tasks`, task, this.options)
+        .pipe(map((data: object) => {
+            return data;
+        }));
+    }
+    }
+
+
+- Editar el controlador para crear tareas en **task-table.component.ts**:
+
+.. code-block::
+
+    import { Component, OnInit } from '@angular/core';
+    // importar el servicio task:
+    import { TaskService } from 'src/app/services/task.service';
+    // importar interface task:
+    import { Task } from 'src/app/interfaces/task';
+
+    @Component({
+    selector: 'app-task-table',
+    templateUrl: './task-table.component.html',
+    styleUrls: ['./task-table.component.css']
+    })
+    export class TaskTableComponent implements OnInit {
+    dummyData: any = [
+        {_id: "1", name: "Cocinar", description: "Cocinar galletas el sábado", date_created: "08/08/2022", is_complete: true, date_finish: "10/08/2022"},
+        {_id: "2", name: "Preparar proyecto", description: "Preparar proyecto para presentar en Septiembre", date_created: "15/08/2022", is_complete: false},
+        {_id: "3", name: "Estudiar Java", description: "Aprender Java para cubrir las especificaciones del proyecto", date_created: "19/08/2022", is_complete: false}
+    ]
+
+    taskId: string = "";
+    taskName: string = "";
+
+    task: Task = {
+        name: "",
+        description: ""
+    }
+
+    // crear objeto del servicio task:
+    constructor(private taskService: TaskService) { }
+
+    ngOnInit(): void {
+    }
+
+    getTask(id:string, name:string): void {
+        this.taskId = id;
+        this.taskName = name;
+    }
+
+    createTask(): void {
+        // subscribirse al servicio:
+        this.taskService.postTask(this.task)
+        .subscribe((res: any) => {
+            // devolver una respuesta por consola para hacer pruebas:
+            console.log(res);
+            // agergar elemento al listado dummy:
+            this.dummyData.push(res.task);
+        }, (err: object) => {
+            console.log(err);
+        });
+    }
+
+    }
+
+Paso 9: Recuperar Tareas
+************************
+
+- Editamos el interface **task.interface.ts**:
+
+.. code-block:: 
+
+    export interface Task {
+        name: string,
+        description: string
+    }
+
+    // añadir un nuevo interface con todos los datos de la tarea:
+    export interface TaskData {
+        _id: string,
+        is_complete: boolean,
+        date_finish: Date,
+        date_created: Date,
+        name: string,
+        description: string,
+        owner?: string
+    }
+
+- Creamos un nuevo servicio en **task.service.ts**:
+
+.. code-block:: 
+
+    import { Injectable } from '@angular/core';
+    import {HttpClient, HttpHeaders} from '@angular/common/http';
+    import {map} from 'rxjs/operators';
+    import { JwtAuthGuard } from '../jwt-auth.guard';
+    import { Task } from '../interfaces/task';
+
+    @Injectable({
+    providedIn: 'root'
+    })
+    export class TaskService {
+
+    url_base: string = 'http://localhost:5000/api';
+
+    token: any = localStorage.getItem('token');
+
+    headers: any = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': this.token
+    });
+
+    options: any = {headers: this.headers}
+
+    constructor(private http: HttpClient, private jwtAuthGuard: JwtAuthGuard) { 
+    }
+
+    postTask(task: Task): any {
+        return this.http.post(`${this.url_base}/tasks`, task, this.options)
+        .pipe(map((data: object) => {
+            return data;
+        }));
+    }
+
+    // creamos el nuevo servicio get:
+    getTasks(): any {
+        return this.http.get(`${this.url_base}/tasks`, this.options)
+        .pipe(map((data: object) => {
+            return data;
+        }));
+    }
+    }
+
+- Editamos el controlador **task-table.component.ts**:
+
+.. code-block::
+
+    import { Component, OnInit } from '@angular/core';
+    import { TaskService } from 'src/app/services/task.service';
+    // importar interface taskdata:
+    import { Task, TaskData } from 'src/app/interfaces/task';
+
+    @Component({
+    selector: 'app-task-table',
+    templateUrl: './task-table.component.html',
+    styleUrls: ['./task-table.component.css']
+    })
+    export class TaskTableComponent implements OnInit {
+    // reemplazamos la dummyData por un array de tareas:
+    tasks: Array<TaskData> =  []
+
+    taskId: string = "";
+    taskName: string = "";
+
+    task: Task = {
+        name: "",
+        description: ""
+    }
+
+    constructor(private taskService: TaskService) { }
+
+    ngOnInit(): void {
+        // aqui en oninit llamamos al servicio para recuperar tareas:
+        this.taskService.getTasks().subscribe((res:Array<TaskData>)=>{
+        this.tasks = res;
+        }, (err: object) => {
+        console.log(err);
+        });
+    }
+
+    getTask(id:string, name:string): void {
+        this.taskId = id;
+        this.taskName = name;
+    }
+
+    createTask(): void {
+        this.taskService.postTask(this.task)
+        .subscribe((res: any) => {
+            console.log(res);
+            // actualizar el lugar donde agregar tarea:
+            this.tasks.push(res.task);
+        }, (err: object) => {
+            console.log(err);
+        });
+    }
+
+    }
+
+
+- Ahora hay que modificar la plantilla **task-table.component.html**:
+
+.. code-block::  
+
+    <div class="text-center container">
+        <table class="table mt-4">
+            <thead>
+                <tr>
+                    <th scope="col">Título</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Fecha creación</th>
+                    <th scope="col">Finalizada</th>
+                    <th scope="col">Fecha Finalización</th>
+                    <th scope="col">Operaciones</th>
+                </tr>
+            </thead>
+            <tbody class="text-start">
+                <!-- reemplazamos el array dummy por el de tasks -->
+                <tr *ngFor="let data of tasks">
+                    <td>{{data.name}}</td>
+                    <td>{{data.description}}</td>
+                    <!-- normalizamos las fechas de creación y finalización con un pipe llamado date -->
+                    <td>{{data.date_created|date: 'dd/MM/yyyy hh:mm'}}</td>
+                    <td>
+                        <span *ngIf="data.is_complete == true">Si</span>
+                        <span *ngIf="data.is_complete == false">No</span>
+                    </td>
+                    <td><span *ngIf="data.date_finish != null">{{data.date_finish|date: 'dd/MM/yyyy hh:mm'}}</span></td>
+                    <td class="text-center">
+                        <button (click)="getTask(data._id, data.name)" class="btn btn-sm btn-primary me-2" data-bs-toggle="modal" data-bs-target="#finishModal">finalizar tarea</button>
+                        <button (click)="getTask(data._id, data.name)" class="btn btn-sm btn-danger me-2" data-bs-toggle="modal" data-bs-target="#deleteModal">Eliminar tarea</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="row text-center align-items-end">
+                <div class="col-md-5"></div>
+                <input [(ngModel)]="task.name"  class="col me-2 form-control form-sm" type="text" placeholder="Título"/>
+                <input [(ngModel)]="task.description" class="col me-2 form-control" type="text" placeholder="Descripción" />
+                <input (click)="createTask()" class="col me-2 form-control btn btn-success" type="button" value="Crear tarea" />
+        </div>
+        <app-finish-task-modal [taskId]="taskId" [taskName]="taskName" ></app-finish-task-modal>
+        <app-delete-task-modal [taskId]="taskId" [taskName]="taskName" ></app-delete-task-modal>
+    </div>
+
+Paso 10: Finalizar tarea 
+************************
+
+- Crear servicio en **task.service.ts**:
+
+.. code-block:: 
+
+    import { Injectable } from '@angular/core';
+    import {HttpClient, HttpHeaders} from '@angular/common/http';
+    import {map} from 'rxjs/operators';
+    import { JwtAuthGuard } from '../jwt-auth.guard';
+    import { Task } from '../interfaces/task';
+
+    @Injectable({
+    providedIn: 'root'
+    })
+    export class TaskService {
+
+    url_base: string = 'http://localhost:5000/api';
+
+    token: any = localStorage.getItem('token');
+
+    headers: any = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': this.token
+    });
+
+    options: any = {headers: this.headers}
+
+    constructor(private http: HttpClient, private jwtAuthGuard: JwtAuthGuard) { 
+    }
+
+    postTask(task: Task): any {
+        return this.http.post(`${this.url_base}/tasks`, task, this.options)
+        .pipe(map((data: object) => {
+            return data;
+        }));
+    }
+
+    getTasks(): any {
+        return this.http.get(`${this.url_base}/tasks`, this.options)
+        .pipe(map((data: object) => {
+            return data;
+        }));
+    }
+
+    // servicio para finalizar tareas:
+    finishTask(id:string): any {
+        return this.http.patch(`${this.url_base}/tasks/${id}`, null, this.options)
+        .pipe(map((data: object) => {
+            return data;
+        }));
+    }
+
+    }
+
+- Modificamos el controlador **finish-task-modal.component.ts**:
+
+.. code-block:: 
+
+    // importamos el output para emitir un atributo:
+    import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+    // importamos el servicio:
+    import { TaskService } from 'src/app/services/task.service';
+    // importamos el interface de tareas:
+    import { TaskData } from 'src/app/interfaces/task';
+
+    @Component({
+    selector: 'app-finish-task-modal',
+    templateUrl: './finish-task-modal.component.html',
+    styleUrls: ['./finish-task-modal.component.css']
+    })
+    export class FinishTaskModalComponent implements OnInit {
+    @Input() taskId: string = "";
+    @Input() taskName: string = "";
+    // creamos un nuevo emisor:
+    @Output() task: EventEmitter<TaskData> = new EventEmitter();
+
+    // creamos objeto del servicio:
+    constructor(private taskService: TaskService) { }
+
+    ngOnInit(): void {
+    }
+
+    // creamos la función para finalizar tarea:
+    finishTask(): void {
+        // hacemos la petición:
+        this.taskService.finishTask(this.taskId)
+        .subscribe((res: any) =>{
+        // emitimos la tarea finalizada:
+        this.task.emit(res.task);
+        }, (err: object) => {
+        console.log(err);
+        })
+    }
+
+    }
+
+
+- Asignamos la función en la plantilla **finish-task-modal.component.html**:
+
+.. code-block::  
+
+    <div class="modal fade" id="finishModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Se va a finalizar la siguiente tarea</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>{{taskId}} - {{taskName}}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <!-- Cargamos la función asignandola al evento click -->
+                <button type="button" (click)="finishTask()" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+- Editamos el controlador de la tabla **task-table.component.ts**:
+
+.. code-block:: 
+
+    import { Component, OnInit } from '@angular/core';
+    import { TaskService } from 'src/app/services/task.service';
+    import { Task, TaskData } from 'src/app/interfaces/task';
+
+    @Component({
+    selector: 'app-task-table',
+    templateUrl: './task-table.component.html',
+    styleUrls: ['./task-table.component.css']
+    })
+    export class TaskTableComponent implements OnInit {
+    tasks: Array<TaskData> =  []
+
+    taskId: string = "";
+    taskName: string = "";
+
+    task: Task = {
+        name: "",
+        description: ""
+    }
+
+    constructor(private taskService: TaskService) { }
+
+    ngOnInit(): void {
+        this.taskService.getTasks().subscribe((res:Array<TaskData>)=>{
+        this.tasks = res;
+        }, (err: object) => {
+        console.log(err);
+        });
+    }
+
+    getTask(id:string, name:string): void {
+        this.taskId = id;
+        this.taskName = name;
+    }
+
+    // añadimos un metodo para procesar la información recibida del evento:
+    updateTask($event: any){
+        console.log($event);
+        // cuando se cambie el estado de una tarea se buscará por su id y se cambiará por la que nos devuelva el servidor:
+        this.tasks.map(task =>{
+        if(task._id === $event._id){
+            // reemplazamos los elementos de la tarea que pueden ser actualizados:
+            task.name = $event.name;
+            task.description = $event.description;
+            task.is_complete = $event.is_complete;
+            task.date_finish = $event.date_finish;
+        }
+        });
+    }
+
+    createTask(): void {
+        this.taskService.postTask(this.task)
+        .subscribe((res: any) => {
+            console.log(res);
+            this.tasks.push(res.task);
+        }, (err: object) => {
+            console.log(err);
+        });
+    }
+
+    }
+
+
+
+- Editamos el componente modal en la tabla **task-table.component.html**:
+
+.. code-block::  
+
+    <div class="text-center container">
+        <table class="table mt-4">
+            <thead>
+                <tr>
+                    <th scope="col">Título</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Fecha creación</th>
+                    <th scope="col">Finalizada</th>
+                    <th scope="col">Fecha Finalización</th>
+                    <th scope="col">Operaciones</th>
+                </tr>
+            </thead>
+            <tbody class="text-start">
+                <!-- reemplazamos el array dummy por el de tasks -->
+                <tr *ngFor="let data of tasks">
+                    <td>{{data.name}}</td>
+                    <td>{{data.description}}</td>
+                    <td>{{data.date_created|date: 'dd/MM/yyyy hh:mm'}}</td>
+                    <td>
+                        <span *ngIf="data.is_complete == true">Si</span>
+                        <span *ngIf="data.is_complete == false">No</span>
+                    </td>
+                    <td><span *ngIf="data.date_finish != null">{{data.date_finish|date: 'dd/MM/yyyy hh:mm'}}</span></td>
+                    <td class="text-center">
+                        <button (click)="getTask(data._id, data.name)" class="btn btn-sm btn-primary me-2" data-bs-toggle="modal" data-bs-target="#finishModal">finalizar tarea</button>
+                        <button (click)="getTask(data._id, data.name)" class="btn btn-sm btn-danger me-2" data-bs-toggle="modal" data-bs-target="#deleteModal">Eliminar tarea</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="row text-center align-items-end">
+                <div class="col-md-5"></div>
+                <input [(ngModel)]="task.name"  class="col me-2 form-control form-sm" type="text" placeholder="Título"/>
+                <input [(ngModel)]="task.description" class="col me-2 form-control" type="text" placeholder="Descripción" />
+                <input (click)="createTask()" class="col me-2 form-control btn btn-success" type="button" value="Crear tarea" />
+        </div>
+        <!-- le decimos al modal cual será la función que procese el evento: -->
+        <app-finish-task-modal [taskId]="taskId" [taskName]="taskName" (task)="updateTask($event)"></app-finish-task-modal>
+        <app-delete-task-modal [taskId]="taskId" [taskName]="taskName" ></app-delete-task-modal>
+    </div>
+
+Paso 11: Eliminar tarea 
+***********************
+
+Hacemos algo similar para eliminar tareas. Empezamos editando el servicio **task.service.ts**:
+
+.. code-block:: 
+
+    import { Injectable } from '@angular/core';
+    import {HttpClient, HttpHeaders} from '@angular/common/http';
+    import {map} from 'rxjs/operators';
+    import { JwtAuthGuard } from '../jwt-auth.guard';
+    import { Task } from '../interfaces/task';
+
+    @Injectable({
+    providedIn: 'root'
+    })
+    export class TaskService {
+
+    url_base: string = 'http://localhost:5000/api';
+
+    token: any = localStorage.getItem('token');
+
+    headers: any = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': this.token
+    });
+
+    options: any = {headers: this.headers}
+
+    constructor(private http: HttpClient, private jwtAuthGuard: JwtAuthGuard) { 
+    }
+
+    postTask(task: Task): any {
+        return this.http.post(`${this.url_base}/tasks`, task, this.options)
+        .pipe(map((data: object) => {
+            return data;
+        }));
+    }
+
+    getTasks(): any {
+        return this.http.get(`${this.url_base}/tasks`, this.options)
+        .pipe(map((data: object) => {
+            return data;
+        }));
+    }
+
+    finishTask(id:string): any {
+        return this.http.patch(`${this.url_base}/tasks/${id}`, null, this.options)
+        .pipe(map((data: object) => {
+            return data;
+        }));
+    }
+
+    // crear servicio para eliminar tarea:
+    deleteTask(id:string): any {
+        return this.http.delete(`${this.url_base}/tasks/${id}`, this.options)
+        .pipe(map((data: object) => {
+            return data;
+        }));
+    }
+    }
+
+- Editamos el controlador **delete-task-modal.component.ts**:
+
+.. code-block:: 
+
+    // importamos Output:
+    import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
+    // importar el servicio task:
+    import { TaskService } from 'src/app/services/task.service';
+
+    @Component({
+    selector: 'app-delete-task-modal',
+    templateUrl: './delete-task-modal.component.html',
+    styleUrls: ['./delete-task-modal.component.css']
+    })
+    export class DeleteTaskModalComponent implements OnInit {
+    @Input() taskId: string = "";
+    @Input() taskName: string = "";
+    // cargamos el emisor de output:
+    @Output() task: EventEmitter<object> = new EventEmitter();
+
+    // creamos el objeto del servicio task:
+    constructor(private taskService: TaskService) { }
+
+    ngOnInit(): void {
+    }
+
+    // creamos la función para eliminar tarea:
+    deleteTask(): void {
+        // hacemos la petición:
+        this.taskService.deleteTask(this.taskId)
+        .subscribe((res: any) =>{
+        // emitimos la tarea finalizada:
+        this.task.emit({id: this.taskId, delete:true});
+        }, (err: object) => {
+        console.log(err);
+        })
+    }
+
+    }
+
+
+- Añadimos la función nueva a la pantalla **delete-task-modal.component.html**:
+
+.. code-block::  
+
+    <div class="modal fade" id="deleteModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Se va a eliminar la siguiente tarea</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>{{taskId}} - {{taskName}}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <!-- añadir función al botón: -->
+                <button type="button" (click)="deleteTask()" class="btn btn-danger" data-bs-dismiss="modal">Aceptar</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+- Editamos el componente **task-table.component.ts**:
+
+.. code-block:: 
+
+    import { Component, OnInit } from '@angular/core';
+    import { TaskService } from 'src/app/services/task.service';
+    import { Task, TaskData } from 'src/app/interfaces/task';
+
+    @Component({
+    selector: 'app-task-table',
+    templateUrl: './task-table.component.html',
+    styleUrls: ['./task-table.component.css']
+    })
+    export class TaskTableComponent implements OnInit {
+    tasks: Array<TaskData> =  []
+
+    taskId: string = "";
+    taskName: string = "";
+
+    task: Task = {
+        name: "",
+        description: ""
+    }
+
+    constructor(private taskService: TaskService) { }
+
+    ngOnInit(): void {
+        this.taskService.getTasks().subscribe((res:Array<TaskData>)=>{
+        this.tasks = res;
+        }, (err: object) => {
+        console.log(err);
+        });
+    }
+
+    getTask(id:string, name:string): void {
+        this.taskId = id;
+        this.taskName = name;
+    }
+
+    updateTask($event: any){
+        // validamos si hemos recibido la orden de eliminar:
+        if($event.delete == true){
+        // fitramos la tarea que ya no existe para que no aparezca en la tabla:
+        this.tasks = this.tasks.filter(task => task._id !== $event.id);
+        console.log($event.id);
+        }
+        this.tasks.map(task =>{
+        if(task._id === $event._id){
+            // reemplazamos los elementos de la tarea que pueden ser actualizados:
+            task.name = $event.name;
+            task.description = $event.description;
+            task.is_complete = $event.is_complete;
+            task.date_finish = $event.date_finish;
+        }
+        });
+    }
+
+    createTask(): void {
+        this.taskService.postTask(this.task)
+        .subscribe((res: any) => {
+            console.log(res);
+            this.tasks.push(res.task);
+        }, (err: object) => {
+            console.log(err);
+        });
+    }
+
+    }
+
+
+- Pasar evento al componente modal en pantalla **task-table.component.html**:
+
+.. code-block::  
+
+    <div class="text-center container">
+        <table class="table mt-4">
+            <thead>
+                <tr>
+                    <th scope="col">Título</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Fecha creación</th>
+                    <th scope="col">Finalizada</th>
+                    <th scope="col">Fecha Finalización</th>
+                    <th scope="col">Operaciones</th>
+                </tr>
+            </thead>
+            <tbody class="text-start">
+                <!-- reemplazamos el array dummy por el de tasks -->
+                <tr *ngFor="let data of tasks">
+                    <td>{{data.name}}</td>
+                    <td>{{data.description}}</td>
+                    <td>{{data.date_created|date: 'dd/MM/yyyy hh:mm'}}</td>
+                    <td>
+                        <span *ngIf="data.is_complete == true">Si</span>
+                        <span *ngIf="data.is_complete == false">No</span>
+                    </td>
+                    <td><span *ngIf="data.date_finish != null">{{data.date_finish|date: 'dd/MM/yyyy hh:mm'}}</span></td>
+                    <td class="text-center">
+                        <button (click)="getTask(data._id, data.name)" class="btn btn-sm btn-primary me-2" data-bs-toggle="modal" data-bs-target="#finishModal">finalizar tarea</button>
+                        <button (click)="getTask(data._id, data.name)" class="btn btn-sm btn-danger me-2" data-bs-toggle="modal" data-bs-target="#deleteModal">Eliminar tarea</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="row text-center align-items-end">
+                <div class="col-md-5"></div>
+                <input [(ngModel)]="task.name"  class="col me-2 form-control form-sm" type="text" placeholder="Título"/>
+                <input [(ngModel)]="task.description" class="col me-2 form-control" type="text" placeholder="Descripción" />
+                <input (click)="createTask()" class="col me-2 form-control btn btn-success" type="button" value="Crear tarea" />
+        </div>
+        <app-finish-task-modal [taskId]="taskId" [taskName]="taskName" (task)="updateTask($event)"></app-finish-task-modal>
+        <!-- le decimos al modal cual será la función que procese el evento: -->
+        <app-delete-task-modal [taskId]="taskId" [taskName]="taskName" (task)="updateTask($event)"></app-delete-task-modal>
+    </div>
+
+
+Paso 12: Editar tareas 
+**********************
+
+- Creamos un nuevo servicio en **task.service.ts**:
+
+.. code-block:: 
+
+    import { Injectable } from '@angular/core';
+    import {HttpClient, HttpHeaders} from '@angular/common/http';
+    import {map} from 'rxjs/operators';
+    import { JwtAuthGuard } from '../jwt-auth.guard';
+    import { Task } from '../interfaces/task';
+
+    @Injectable({
+    providedIn: 'root'
+    })
+    export class TaskService {
+
+    url_base: string = 'http://localhost:5000/api';
+
+    token: any = localStorage.getItem('token');
+
+    headers: any = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': this.token
+    });
+
+    options: any = {headers: this.headers}
+
+    constructor(private http: HttpClient, private jwtAuthGuard: JwtAuthGuard) { 
+    }
+
+    postTask(task: Task): any {
+        return this.http.post(`${this.url_base}/tasks`, task, this.options)
+        .pipe(map((data: object) => {
+            return data;
+        }));
+    }
+
+    getTasks(): any {
+        return this.http.get(`${this.url_base}/tasks`, this.options)
+        .pipe(map((data: object) => {
+            return data;
+        }));
+    }
+
+    finishTask(id:string): any {
+        return this.http.patch(`${this.url_base}/tasks/${id}`, null, this.options)
+        .pipe(map((data: object) => {
+            return data;
+        }));
+    }
+
+    deleteTask(id:string): any {
+        return this.http.delete(`${this.url_base}/tasks/${id}`, this.options)
+        .pipe(map((data: object) => {
+            return data;
+        }));
+    }
+
+    // crear servicio para actualizar tareas:
+    updateTask(task:Task, id:string): any {
+        return this.http.put(`${this.url_base}/tasks/${id}`, task, this.options)
+        .pipe(map((data: object) => {
+            return data;
+        }));
+    }
+    }
+
+- Añadimos nueva funcionalidad a la pantalla **task-table.component.html**:
+
+.. code-block::  
+
+    <div class="text-center container">
+        <table class="table mt-4">
+            <thead>
+                <tr>
+                    <th scope="col">Título</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Fecha creación</th>
+                    <th scope="col">Finalizada</th>
+                    <th scope="col">Fecha Finalización</th>
+                    <th scope="col">Operaciones</th>
+                </tr>
+            </thead>
+            <tbody class="text-start">
+                <!-- añadimos una nueva fila con hueco para una tarea con los valores por defecto de la tarea recuperada: -->
+                <tr *ngIf="isUpdateTask == true; else taskList">
+                    <td>
+                        <input [(ngModel)]="task.name" class="col me-2 form-control form-sm" type="text" placeholder="Título" />
+                    </td>
+                    <td>
+                        <input [(ngModel)]="task.description" class="col me-2 form-control" type="text" placeholder="Descripción" />
+                    </td>
+                    <td>{{taskCreated|date: 'dd/MM/yyyy hh:mm'}}</td>
+                    <td>
+                        <span *ngIf="taskIsComplete == true">Si</span>
+                        <span *ngIf="taskIsComplete == false">No</span>
+                    </td>
+                    <td><span *ngIf="taskFinish != null">{{taskFinish|date: 'dd/MM/yyyy hh:mm'}}</span></td>
+                    <td class="text-center">
+                        <button type="button" (click)="updateTask()" class="btn btn-sm btn-success me-2 mb-1">Guardar</button>
+                        <button type="button" (click)="cancelUpdate()" class="btn btn-sm btn-primary me-2 mb-1" >Cancelar</button>
+                    </td>
+                </tr>
+                <!-- movemos el listado a un ng-template que se mostrará cuando no se cumpla la condición anterior -->
+                <ng-template #taskList>
+                    <tr *ngFor="let data of tasks">
+                        <td>{{data.name}}</td>
+                        <td>{{data.description}}</td>
+                        <td>{{data.date_created|date: 'dd/MM/yyyy hh:mm'}}</td>
+                        <td>
+                            <span *ngIf="data.is_complete == true">Si</span>
+                            <span *ngIf="data.is_complete == false">No</span>
+                        </td>
+                        <td><span *ngIf="data.date_finish != null">{{data.date_finish|date: 'dd/MM/yyyy hh:mm'}}</span></td>
+                        <td class="text-center">
+                            <!-- añadimos un nuevo botón para actualizar tarea con los datos id, nombre, descripcion y con true decir que estamos actualizando: -->
+                            <button (click)="editTask(data)" class="btn btn-sm btn-warning me-2">editar tarea</button>
+                            <button (click)="getTask(data._id, data.name)" class="btn btn-sm btn-primary me-2" data-bs-toggle="modal" data-bs-target="#finishModal">finalizar tarea</button>
+                            <button (click)="getTask(data._id, data.name)" class="btn btn-sm btn-danger me-2" data-bs-toggle="modal" data-bs-target="#deleteModal">Eliminar tarea</button>
+                        </td>
+                    </tr>
+                    <!-- metemos aquí la acción de crear tarea para poder ocultarla cuando se edite tarea -->
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>      
+                            <input [(ngModel)]="task.name"  class="col me-2 form-control form-sm" type="text" placeholder="Título"/>
+                        </td>
+                        <td>
+                            <input [(ngModel)]="task.description" class="col me-2 form-control" type="text" placeholder="Descripción" />
+                        </td>
+                        <td>
+                            <input (click)="createTask()" class="col me-2 form-control btn btn-success" type="button" value="Crear tarea" />
+                        </td>
+                    </tr>
+                </ng-template>
+            </tbody>
+        </table>
+        <app-finish-task-modal [taskId]="taskId" [taskName]="taskName" (task)="updateTask($event)"></app-finish-task-modal>
+        <app-delete-task-modal [taskId]="taskId" [taskName]="taskName" (task)="updateTask($event)"></app-delete-task-modal>
+    </div>
+
+
+- Arreglamos la lógica desde el controlador **task-table.controller.ts**:
+
+.. code-block:: 
+
+    import { Component, OnInit } from '@angular/core';
+    import { TaskService } from 'src/app/services/task.service';
+    import { Task, TaskData } from 'src/app/interfaces/task';
+
+    @Component({
+    selector: 'app-task-table',
+    templateUrl: './task-table.component.html',
+    styleUrls: ['./task-table.component.css']
+    })
+    export class TaskTableComponent implements OnInit {
+    tasks: Array<TaskData> =  []
+
+    taskId: string = "";
+    taskName: string = "aaa";
+    // creamos el resto de atributos para la carga del editor:
+    taskCreated:Date = new Date();
+    taskIsComplete: boolean = false;
+    taskFinish:Date = new Date();
+    // creamos un atributo que validará cuando estemos editando una tarea:
+    isUpdateTask: boolean = false;
+    
+
+    task: Task = {
+        name: "",
+        description: ""
+    }
+
+    constructor(private taskService: TaskService) { }
+
+    ngOnInit(): void {
+        this.taskService.getTasks().subscribe((res:Array<TaskData>)=>{
+        this.tasks = res;
+        }, (err: object) => {
+        console.log(err);
+        });
+    }
+
+    getTask(id:string, name:string, description:string = ""): void {
+        this.taskId = id;
+        this.taskName = name;
+    }
+
+    // crear nueva función para actualizar form de edición:
+    editTask(taskData:TaskData){
+        // cargamos los datos que se mostrarán en la vista:
+        this.taskId = taskData._id;
+        this.task.name = taskData.name;
+        this.task.description = taskData.description;
+        this.taskCreated = taskData.date_created;
+        this.taskIsComplete = taskData.is_complete;
+        this.taskFinish = taskData.date_finish;
+        // mostramos los campos para editar tarea:
+        this.isUpdateTask = true;
+    }
+
+    // ponemos el event por defecto a null para poder reutilizar el método:
+    updateTask($event: any = null){
+        if($event && $event.delete == true){
+        this.tasks = this.tasks.filter(task => task._id !== $event.id);
+        console.log($event.id);
+        }
+        // actualizamos este apartado para controlar que estamos actualizando tarea o finalizandola:
+        if(this.isUpdateTask == true){
+        // cvreamos la operación de actualización:
+        this.taskService.updateTask(this.task, this.taskId)
+        .subscribe((res: any) => {
+            this.tasks.map(task =>{
+            if(task._id === this.taskId){
+                task.name = res.task.name;
+                task.description = res.task.description;
+                this.isUpdateTask = false;
+            }
+            });
+        },(err: object) =>{
+            console.log(err);
+        })
+        
+        }else{
+        this.tasks.map(task =>{
+            if(task._id === $event._id){
+            task.name = $event.name;
+            task.description = $event.description;
+            task.is_complete = $event.is_complete;
+            task.date_finish = $event.date_finish;
+            }
+        });
+        }
+
+        
+    }
+
+    // creamos un metodo para cancelar la edición:
+    cancelUpdate(): void{
+        // hay que vaciar los campos del form:
+        this.task.name = "";
+        this.task.description = "";
+        this.isUpdateTask = false;
+    }
+
+    createTask(): void {
+        this.taskService.postTask(this.task)
+        .subscribe((res: any) => {
+            console.log(res);
+            this.tasks.push(res.task);
+        }, (err: object) => {
+            console.log(err);
+        });
+    }
+
+    }
+
+    
+
+Paso 13: Cargar datos de usuario 
+********************************
+
+- Vamos a editar la interfaz **user.interfaces.ts**:
+
+.. code-block:: 
+
+    export interface User {
+        email: string,
+        password: string
+    }
+
+    export interface ResetEmail {
+        email: string
+    }
+
+    export interface ResetPassword {
+        newPassword: "",
+        repitePassword: ""
+    }
+
+    // crear un nuevo interface para validar datos a actualizar del usuario:
+    export interface UserData{ // id y avatar serán opcionales
+        _id?: string,
+        email: string,
+        password: string,
+        name: string,
+        lastname: string,
+        avatar?: any
+    }
+
+- Crear un nuevo servicio en **user.service.ts**:
+
+.. code-block:: 
+
+    import { Injectable } from '@angular/core';
+    // importar HttpHeaders:
+    import {HttpClient} from '@angular/common/http';
+    import {map} from 'rxjs/operators';
+    import { User, ResetEmail, ResetPassword } from '../interfaces/user';
+
+    @Injectable({
+    providedIn: 'root'
+    })
+    export class UserService {
+    url_base: string = 'http://localhost:5000/api';
+
+    // cargar token y añadirlo a la cabecera:
+    token: any = localStorage.getItem('token');
+
+    headers: any = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': this.token
+    });
+
+    options: any = {headers: this.headers}
+
+    constructor(private http: HttpClient) { }
+
+    registerUser(user: User): any {
+        return this.http.post(`${this.url_base}/register`, user)
+                .pipe(map((data: object) => {
+                return data;
+                }));
+    }
+
+    loginUser(user: User): any {
+        return this.http.post(`${this.url_base}/login`, user)
+                .pipe(map((data: object) => {
+                return data;
+                }));
+    }
+
+    forgotUser(email: ResetEmail): any {
+        return this.http.post(`${this.url_base}/forgot`, email)
+                .pipe(map((data: object) => {
+                return data;
+                }));
+    }
+
+    resetPassword(password: ResetPassword, id: string, token: string): any {
+        return this.http.put(`${this.url_base}/reset/${id}/${token}`, password)
+                .pipe(map((data: object) => {
+                return data;
+                }));
+    }
+
+    // crear peticion para recuperar datos de nuestro usuario:
+    getUser(): any {
+        return this.http.get(`${this.url_base}/users`, this.options)
+                .pipe(map((data: object) => {
+                return data;
+                }));
+    }
+
+    }
+
+
+- Ahora mos vamos a editar el controlador **user-form.component.ts**:
+
+.. code-block:: 
+
+    import { Component, OnInit } from '@angular/core';
+    // importar el servicio:
+    import { UserService } from 'src/app/services/user.service';
+    // importar el interface:
+    import { UserData } from 'src/app/interfaces/user';
+
+    @Component({
+    selector: 'app-user-form',
+    templateUrl: './user-form.component.html',
+    styleUrls: ['./user-form.component.css']
+    })
+    export class UserFormComponent implements OnInit {
+    // crear atributo preparado para cargar datos del usuario:
+    userData: any = null;
+
+    avatar: string = "./assets/avatar.png";
+
+    user: UserData = {
+        name: "",
+        lastname: "",
+        email: "",
+        password: "",
+        avatar: ""
+    }
+    // crear objeto con el servicio:
+    constructor(private userService: UserService) {}
+
+    ngOnInit(): void {
+        // cargamos los datos en el atributo user llamando al servicio:
+        this.userService.getUser().subscribe((res: any) => {
+        console.log(res);
+        this.userData = res.user;
+        // pasar los valores al formulario (hay que hacerlo a mano porque sino dará errores ya que algunos campos no tienen porque estar disponibles):
+        this.user.name = this.userData.name;
+        this.user.lastname = this.userData.lastname;
+        this.user.email = this.userData.email;
+        
+        }, (err:object) =>{
+        console.log(err);
+        });
+    }
+
+    updateUser(): any {
+        console.log(this.user); 
+        
+    }
+
+    }
+
+
+Paso 14: Editar datos de usuario 
+********************************
+
+- Comenzamos creando el nuevo servicio en el archivo **user.service.ts**:
+
+.. code-block:: 
+
+    import { Injectable } from '@angular/core';
+    import {HttpClient, HttpHeaders} from '@angular/common/http';
+    import {map} from 'rxjs/operators';
+    // importar el interface UserData: 
+    import { User, ResetEmail, ResetPassword, UserData } from '../interfaces/user';
+
+    @Injectable({
+    providedIn: 'root'
+    })
+    export class UserService {
+    url_base: string = 'http://localhost:5000/api';
+
+    // cargar token y añadirlo a la cabecera:
+    token: any = localStorage.getItem('token');
+
+    headers: any = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': this.token
+    });
+
+    options: any = {headers: this.headers}
+
+    constructor(private http: HttpClient) { }
+
+    registerUser(user: User): any {
+        return this.http.post(`${this.url_base}/register`, user)
+                .pipe(map((data: object) => {
+                return data;
+                }));
+    }
+
+    loginUser(user: User): any {
+        return this.http.post(`${this.url_base}/login`, user)
+                .pipe(map((data: object) => {
+                return data;
+                }));
+    }
+
+    forgotUser(email: ResetEmail): any {
+        return this.http.post(`${this.url_base}/forgot`, email)
+                .pipe(map((data: object) => {
+                return data;
+                }));
+    }
+
+    resetPassword(password: ResetPassword, id: string, token: string): any {
+        return this.http.put(`${this.url_base}/reset/${id}/${token}`, password)
+                .pipe(map((data: object) => {
+                return data;
+                }));
+    }
+
+    getUser(): any {
+        return this.http.get(`${this.url_base}/users`, this.options)
+                .pipe(map((data: object) => {
+                return data;
+                }));
+    }
+
+   // actualizar usuario:
+    putUser(user:any, avatar:File, id: string): any {
+        // crear un formData:
+        var formData = new FormData();
+
+        // cambiar los headers para que acepte un multipart:
+        this.headers = new HttpHeaders({
+        'Accept': 'multipart/form-data',
+        'Authorization': this.token,
+        });
+        
+        this.options = {headers: this.headers}
+
+        // comprobar si existen datos:
+        formData.append('avatar', avatar);
+        // Añadir el resto de campos:
+        formData.append('name', user.name);
+        formData.append('lastname', user.lastname);
+        if(user.email.length > 5){
+        formData.append('email', user.email);
+        }
+        if(user.password.length > 0){
+        formData.append('password', user.password);
+        }
+
+        console.log(formData);
+
+        return this.http.put(`${this.url_base}/users/${id}`, formData, this.options, )
+                .pipe(map((data: object) => {
+                return data;
+                }));
+    }
+
+    }
+
+- Editamos el controlador **user-form.component.ts**:
+
+.. code-block:: 
+
+    import { Component, OnInit } from '@angular/core';
+    import { UserService } from 'src/app/services/user.service';
+    import { UserData } from 'src/app/interfaces/user';
+
+    @Component({
+    selector: 'app-user-form',
+    templateUrl: './user-form.component.html',
+    styleUrls: ['./user-form.component.css']
+    })
+    export class UserFormComponent implements OnInit {
+    userData: any = null;
+    // crear un atributo id:
+    id: string = "";
+
+    avatar: string = "./assets/avatar.png";
+
+    user: UserData = {
+        name: "",
+        lastname: "",
+        email: "",
+        password: "",
+        avatar: null
+    }
+
+    selectAvatar: any = null;
+
+    constructor(private userService: UserService) {}
+
+    ngOnInit(): void {
+
+        this.userService.getUser().subscribe((res: any) => {
+        console.log(res);
+        this.userData = res.user;
+
+        // cargar el id recuperado del servicio en el atributo id:
+        this.id = this.userData._id;
+        this.user.name = this.userData.name;
+        this.user.lastname = this.userData.lastname;
+        this.user.email = this.userData.email;
+        // mostrar el nuevo avatar:
+        if(this.userData.avatar){
+            this.avatar = `http://localhost:5000/api/users/avatar/${this.userData.avatar}`;
+        }
+
+        }, (err:object) =>{
+        console.log(err);
+        });
+    }
+    
+    updateUser(): void {
+        console.log(this.user);
+        
+        // enviamos los datos del user, el avatar y el id:
+        this.userService.putUser(this.user, this.selectAvatar, this.id)
+        .subscribe((res: any) => {
+        console.log(res);
+        if(res.avatar){
+            this.avatar = `http://localhost:5000/api/users/avatar/${res.avatar}`;
+        }
+        },(err: object)=>{
+        console.log(err);
+        });
+    }
+    // crear metodo para recuperar el avatar:
+    getAvatar($event: any): void{
+        this.selectAvatar = $event.target.files[0];
+        
+        console.log(this.selectAvatar);
+    }
+
+    }
+
+
+- Mejoramos la plantilla **user-form.component.html**:
+
+.. code-block::  
+
+    <div class="container mt-4 text-center">
+        <div class="row">
+            <div class="col">
+                <h3>Datos de usuario</h3>
+                <hr />
+                <img src={{avatar}} class="avatarEdit rounded img-thumbnail img-fluid"  alt="Avatar" />
+                <input type="file" class="form-control mt-3" placeholder="Subir avatar" (change)="getAvatar($event)" />
+                <input type="text" class="form-control mt-3" placeholder="Nombre" [(ngModel)]="user.name" />   
+                <input type="text" class="form-control mt-3" placeholder="Apellidos" [(ngModel)]="user.lastname" />  
+                <input type="email" class="form-control mt-3" placeholder="Email" [(ngModel)]="user.email" />  
+                <input type="password" class="form-control mt-3" placeholder="nueva contraseña (dejar en blanco para no cambiar)" [(ngModel)]="user.password" /> 
+                <input type="button" class="btn btn-success form-control mt-3" value="Actualizar datos" (click)="updateUser()" />
+            </div>
+        </div>
+    </div>
+    
+Paso 15: Actualizar usuario navbar 
+**********************************
+
+- Vamos a editar el controlador de navbar **navbar.component.ts**:
+
+.. code-block:: 
+
+    import { Component, OnInit } from '@angular/core';
+    // importamos el servicio:
+    import { UserService } from 'src/app/services/user.service';
+
+    @Component({
+    selector: 'app-navbar',
+    templateUrl: './navbar.component.html',
+    styleUrls: ['./navbar.component.css']
+    })
+    export class NavbarComponent implements OnInit {
+    // creamos una variable para el avatar: 
+    avatar: string = "./assets/avatar.png";
+
+    // creamos el objeto del servicio:
+    constructor(private userService: UserService) { }
+
+    ngOnInit(): void {
+        // implementamos el servicio para recuperar la imagen:
+        this.userService.getUser().subscribe((res: any) =>{
+        
+        // si tenemos un avatar lo cargamos:
+        if(res.user.avatar && res.user.avatar != null){
+            this.avatar = `http://localhost:5000/api/users/avatar/${res.user.avatar}`;
+            console.log(this.avatar);
+        }
+        }, (err: object)=>{
+        console.log(err);
+        });
+    }
+
+    }
+
+
+
+- Ahora editamos la pantalla **navbar.component.html**:
+
+.. code-block::  
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="col-md-11 align-items-start ms-2" >
+            <!-- cambiar href por routerLink -->
+            <a routerLink="/" class="navbar-brand">Task Learn</a>
+        </div>
+        
+        <ul class="navbar-nav mb-2 mb-lg-0 col-md-1 align-items-end me-3">
+            <li class="nav-item align-items-end">
+                <!-- cambiar href por routerLink -->
+                <a routerLink="/users" class="nav-link text-center">
+                    <!-- cargamos el atributo avatar en la ruta de la imagen -->
+                    <img class="avatar rounded img-thumbnail img-fluid" src={{avatar}} alt="foto" />
+                    <div class="col">
+                        <small>Usuario</small>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+Paso 16: Crear botón para eliminar usuario 
+******************************************
+
+- Creamos el último servicio de **user.service.ts**:
+
+.. code-block:: 
+
+    import { Injectable } from '@angular/core';
+    import {HttpClient, HttpHeaders} from '@angular/common/http';
+    import {map} from 'rxjs/operators';
+    // importar el interface UserData: 
+    import { User, ResetEmail, ResetPassword, UserData } from '../interfaces/user';
+
+    @Injectable({
+    providedIn: 'root'
+    })
+    export class UserService {
+    url_base: string = 'http://localhost:5000/api';
+
+    // cargar token y añadirlo a la cabecera:
+    token: any = localStorage.getItem('token');
+
+    headers: any = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': this.token
+    });
+
+    options: any = {headers: this.headers}
+
+    constructor(private http: HttpClient) { }
+
+    registerUser(user: User): any {
+        return this.http.post(`${this.url_base}/register`, user)
+                .pipe(map((data: object) => {
+                return data;
+                }));
+    }
+
+    loginUser(user: User): any {
+        return this.http.post(`${this.url_base}/login`, user)
+                .pipe(map((data: object) => {
+                return data;
+                }));
+    }
+
+    forgotUser(email: ResetEmail): any {
+        return this.http.post(`${this.url_base}/forgot`, email)
+                .pipe(map((data: object) => {
+                return data;
+                }));
+    }
+
+    resetPassword(password: ResetPassword, id: string, token: string): any {
+        return this.http.put(`${this.url_base}/reset/${id}/${token}`, password)
+                .pipe(map((data: object) => {
+                return data;
+                }));
+    }
+
+    getUser(): any {
+        return this.http.get(`${this.url_base}/users`, this.options)
+                .pipe(map((data: object) => {
+                return data;
+                }));
+    }
+
+    putUser(user:any, avatar:File, id: string): any {
+        var formData = new FormData();
+
+        this.headers = new HttpHeaders({
+        'Accept': 'multipart/form-data',
+        'Authorization': this.token,
+        });
+        
+        this.options = {headers: this.headers}
+
+        formData.append('avatar', avatar);
+        formData.append('name', user.name);
+        formData.append('lastname', user.lastname);
+        if(user.email.length > 5){
+        formData.append('email', user.email);
+        }
+        if(user.password.length > 0){
+        formData.append('password', user.password);
+        }
+
+
+        return this.http.put(`${this.url_base}/users/${id}`, formData, this.options, )
+                .pipe(map((data: object) => {
+                return data;
+                }));
+    }
+    // crear servicio para eliminar usuario:
+    deleteUser(id:string): any {
+        return this.http.delete(`${this.url_base}/users/${id}`, this.options, )
+                .pipe(map((data: object) => {
+                return data;
+                }));
+    }
+
+    }
+
+- Crear nuevo modal para eliminar usuario: ``ng generate component components/deleteUserModal``
+
+- Añadir nuevo botón y modal en **user-form.component.html**:
+
+.. code-block::  
+
+    <div class="container mt-4 text-center">
+        <div class="row">
+            <div class="col">
+                <h3>Datos de usuario</h3>
+                <hr />
+                <img src={{avatar}} class="avatarEdit rounded img-thumbnail img-fluid"  alt="Avatar" />
+                <input type="file" class="form-control mt-3" placeholder="Subir avatar" (change)="getAvatar($event)" />
+                <input type="text" class="form-control mt-3" placeholder="Nombre" [(ngModel)]="user.name" />   
+                <input type="text" class="form-control mt-3" placeholder="Apellidos" [(ngModel)]="user.lastname" />  
+                <input type="email" class="form-control mt-3" placeholder="Email" [(ngModel)]="user.email" />  
+                <input type="password" class="form-control mt-3" placeholder="nueva contraseña (dejar en blanco para no cambiar)" [(ngModel)]="user.password" /> 
+                <input type="button" class="btn btn-success form-control mt-3" value="Actualizar datos" (click)="updateUser()" />
+            </div>
+        </div>
+        <!-- cargamos un nuevo botón para invocar el modal que eliminará al usuario: -->
+        <div class="row">
+            <div class="col">
+                <hr />
+                <button type="button" class="cursor me-2 mb-1" data-bs-toggle="modal" data-bs-target="#deleteUserModal">Dar de baja usuario</button>
+            </div>
+        </div>
+        <!-- cargamos el componente con el modal y le pasamos el id de usuario: -->
+        <app-delete-user-modal [id]="id"></app-delete-user-modal>
+    </div>
+
+- Crear nueva clase para quitar decorado del botón **user-form.component.css**:
+
+.. code-block:: css 
+
+    .avatarEdit{
+        width: 200px;
+        height: 200px;
+    }
+
+    .cursor{
+        border: 0px;
+        background: transparent;
+    }
+
+- Preparar lógica para el modal **delete-user-modal.component.ts**:
+
+.. code-block:: 
+
+    // cargar Input para recibir el id:
+    import { Component, OnInit, Input } from '@angular/core';
+    // importar el servicio:
+    import { UserService } from 'src/app/services/user.service';
+
+    @Component({
+    selector: 'app-delete-user-modal',
+    templateUrl: './delete-user-modal.component.html',
+    styleUrls: ['./delete-user-modal.component.css']
+    })
+    export class DeleteUserModalComponent implements OnInit {
+    // crear atributo input para recibir id:
+    @Input() id: string = "";
+
+    // crear el objeto servicio:
+    constructor(private userService: UserService) { }
+
+    ngOnInit(): void {
+    }
+
+    // crear metodo que eliminará el usuario:
+    delete(): void {
+        this.userService.deleteUser(this.id).subscribe((res: object)=>{
+        // eliminar token cuando se borre usuario:
+        localStorage.clear();
+        // redirigir a la pantalla de login:
+        window.location.href = "/";
+        }, (err: object)=>{
+        console.log(err);
+        });
+    }
+
+    }
+
+- Ahora vamos a crear el modal en **delete-user-modal.component.html**:
+
+.. code-block::  
+
+    <div class="modal fade" id="deleteUserModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 className="modal-title" id="exampleModalLabel">Cerrar cuenta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Se va a eliminar su cuenta de usuario junto a todas sus tareas</p>
+                <p>Esta operación no tiene retorno, ¿proceder?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <!-- añadir función al botón: -->
+                <button type="button" (click)="delete()" class="btn btn-danger" data-bs-dismiss="modal">Aceptar</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+Paso 17: Subir cambios a GitHub  
+*******************************
+
+- Parar ejecución de app.
+- Añadir cambios: ``git add .``
+- Realizar un commit: ``git commit -am "Phase 2 complete"``
+- Subir cambios a Github con el nombre de la rama actual: ``git push origin feature/phase-2-connect-to-service``
+- Desde gitHub presionar botón **Compare & pull request**.
+- cambiar rama base **master** por **developer** y pulsar **Create pull request**
+- Pulsar en **Merge pull request** y a continuación en **Confirm merge**.
+- Una vez terminado volvemos a local y cambiamos de rama a developer: ``git checkout developer``
+- Actualizamos rama developer: ``git pull origin developer`` 
+
+Y con esto concluye la segunda fase del proyecto.
+
+.. raw:: html 
+
+    <hr><br>`
+    
+Fase 3: Diseño responsivo 
+#########################
+
+En esta fase vamos a mejorar el diseño responsive de la aplicación para poder utilizarla en dispositivos móviles.
+
+Paso 1: Preparar proyecto 
+*************************
+
+- Crear rama feature a partir de developer: ``git checkout -b feature/phase-3-modify-responsive``
+- Arrancar proyecto desde la raiz: ``ng serve --port 3000``
+- En el navegador pulsar tecla F12 y pinchar sobre el icono del dispositivo movil
+
+Paso 2: Ajustar Tabla de tareas  
+*******************************
+
+- En este apartado tendremos un controlador nuevo para cambiar la tabla por un listado cuando se muestre en dispositivos móviles. Para ello vamos a mover parte de la lógica de la tabla a la página de tareas **task.component.ts**:
+
+.. code-block:: 
+
+    import { Component, OnInit } from '@angular/core';
+    // importar servicio e interfaces:
+    import { Task, TaskData } from 'src/app/interfaces/task';
+    import { TaskService } from 'src/app/services/task.service';
+
+    @Component({
+    selector: 'app-tasks',
+    templateUrl: './tasks.component.html',
+    styleUrls: ['./tasks.component.css']
+    })
+    export class TasksComponent implements OnInit {
+    // creamos un nuevo array de elementos tipo taskData para cargar las tareas:
+    tasks: Array<TaskData> =  []
+    // vamos a optimizar los datos recogidos por tarea creando un objeto:
+    taskForUpdate: TaskData = {
+        _id: "",
+        name: "",
+        description: "",
+        date_created: new Date(),
+        is_complete: false,
+        date_finish: new Date()
+    }
+    // recuperamos aquí el modelo de intercambio de datos:
+    task: Task = {
+        name: "",
+        description: ""
+    }
+    // también recuperamos estos atributos para intercambiar información:
+    taskId: string = "";
+    taskName: string = "";
+
+    // creamos el objeto del servicio:
+    constructor(private taskService: TaskService) { }
+
+    ngOnInit(): void {
+        // movemos la petición para recuperar las tareas:
+        this.taskService.getTasks().subscribe((res:Array<TaskData>)=>{
+        this.tasks = res;
+        }, (err: object) => {
+        console.log(err);
+        });
+    }
+    // movemos parte de la lógica de este método (solo la que trabaja con los modals):
+    updateTask($event: any){
+        console.log('hola 1');
+        if($event.delete == true){
+        this.tasks = this.tasks.filter(task => task._id !== $event.id);
+        console.log($event.id);
+        console.log('hola malo');
+        }else{
+        this.tasks.map(task =>{
+            if(task._id === $event._id){
+            task.name = $event.name;
+            task.description = $event.description;
+            task.is_complete = $event.is_complete;
+            task.date_finish = $event.date_finish;
+            }
+        });
+        }
+    }
+    // añadimos un método que escuche eventos:
+    getTask($event: any): void{
+        this.taskId = $event.taskId;
+        this.taskName = $event.taskName;
+    }
+    }
+
+- Preparamos la pantalla de la página **task.component.html**:
+
+.. code-block::  
+
+    <app-navbar></app-navbar>
+    <!-- ocultar la tabla cuando se encuentre en dispositivos móviles: -->
+    <div class="d-none d-sm-block">
+        <app-task-table [tasks]="tasks" [taskForUpdate]="taskForUpdate" [task]="task" (taskState)="getTask($event)"></app-task-table>
+    </div>
+    <div class="d-sm-none">
+        <!-- aquí vendrá el nuevo componente que mostrará un listado de tareas en el móvil -->
+    </div>
+    <!-- añadir aquí los componentes de modal: -->
+    <app-finish-task-modal [taskId]="taskId" [taskName]="taskName" (task)="updateTask($event)"></app-finish-task-modal>
+    <app-delete-task-modal [taskId]="taskId" [taskName]="taskName" (task)="updateTask($event)"></app-delete-task-modal>
+
+- Arreglamos la lógica del controlador de tabla **task-table.component.ts**:
+
+.. code-block:: 
+
+    // cargamos input y output para comunicarse entre componentes:
+    import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
+    import { TaskService } from 'src/app/services/task.service';
+    import { Task, TaskData } from 'src/app/interfaces/task';
+
+    @Component({
+    selector: 'app-task-table',
+    templateUrl: './task-table.component.html',
+    styleUrls: ['./task-table.component.css']
+    })
+    export class TaskTableComponent implements OnInit {
+    // traemos las tareas del padre: 
+    @Input() tasks: Array<TaskData> = []
+    // traemos el nuevo componente para gestionar una tarea del padre:
+    @Input() taskForUpdate: TaskData = {
+        _id: "",
+        name: "",
+        description: "",
+        date_created: new Date(),
+        is_complete: false,
+        date_finish: new Date()
+    }
+    // y también el componente de comunicación:
+    @Input() task: Task = {
+        name: "",
+        description: ""
+    }
+    // preparamos un evento para emitir una tarea seleccionada:
+    @Output() taskState: EventEmitter<any> = new EventEmitter();
+    
+    isUpdateTask: boolean = false;
+    
+    constructor(private taskService: TaskService) { }
+
+    ngOnInit(): void {
+        
+    }
+    // creamos un emisor encaragdo de transmitir la tarea:
+    getTask(id:string, name:string): void {
+        this.taskState.emit({taskId: id, taskName: name});
+    }
+
+    editTask(taskData:TaskData){
+        this.taskForUpdate = taskData;
+        this.isUpdateTask = true;
+    }
+
+    updateTask(){
+        // hemos quitado la lógica que trabaja con los eventos del modal:
+        if(this.isUpdateTask == true){
+        this.taskService.updateTask(this.taskForUpdate, this.taskForUpdate._id)
+        .subscribe((res: any) => {
+            this.tasks.map(task =>{
+            if(task._id === this.taskForUpdate._id){
+                task.name = res.task.name;
+                task.description = res.task.description;
+                this.isUpdateTask = false;
+            }
+            });
+        },(err: object) =>{
+            console.log(err);
+        })
+        
+        }
+
+        
+    }
+
+    cancelUpdate(): void{
+        this.task.name = "";
+        this.task.description = "";
+        this.isUpdateTask = false;
+    }
+
+    createTask(): void {
+        this.taskService.postTask(this.task)
+        .subscribe((res: any) => {
+            console.log(res);
+            this.tasks.push(res.task);
+        }, (err: object) => {
+            console.log(err);
+        });
+    }
+
+    }
+
+- modificamos la pantalla de la tabla **task-table.component.html**:
+
+.. code-block::  
+
+    <div class="text-center container">
+        <table class="table mt-4">
+            <thead>
+                <tr>
+                    <th scope="col">Título</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Fecha creación</th>
+                    <th scope="col">Finalizada</th>
+                    <th scope="col">Fecha Finalización</th>
+                    <th scope="col">Operaciones</th>
+                </tr>
+            </thead>
+            <tbody class="text-start">
+                <tr *ngIf="isUpdateTask == true; else taskList">
+                <!-- a partir de ahora cuando se edite una tarea se usará el atributo taskForUpdate -->
+                    <td>
+                        <input [(ngModel)]="taskForUpdate.name" class="col me-2 form-control form-sm" type="text" placeholder="Título" />
+                    </td>
+                    <td>
+                        <input [(ngModel)]="taskForUpdate.description" class="col me-2 form-control" type="text" placeholder="Descripción" />
+                    </td>
+                    <td>{{taskForUpdate.date_created|date: 'dd/MM/yyyy hh:mm'}}</td>
+                    <td>
+                        <span *ngIf="taskForUpdate.is_complete == true">Si</span>
+                        <span *ngIf="taskForUpdate.is_complete == false">No</span>
+                    </td>
+                    <td><span *ngIf="taskForUpdate.date_finish != null">{{taskForUpdate.date_finish|date: 'dd/MM/yyyy hh:mm'}}</span></td>
+                    <td class="text-center">
+                        <button type="button" (click)="updateTask()" class="btn btn-sm btn-success me-2 mb-1">Guardar</button>
+                        <button type="button" (click)="cancelUpdate()" class="btn btn-sm btn-primary me-2 mb-1" >Cancelar</button>
+                    </td>
+                </tr>
+                <!-- movemos el listado a un ng-template que se mostrará cuando no se cumpla la condición anterior -->
+                <ng-template #taskList>
+                    <tr *ngFor="let data of tasks">
+                        <td>{{data.name}}</td>
+                        <td>{{data.description}}</td>
+                        <td>{{data.date_created|date: 'dd/MM/yyyy hh:mm'}}</td>
+                        <td>
+                            <span *ngIf="data.is_complete == true">Si</span>
+                            <span *ngIf="data.is_complete == false">No</span>
+                        </td>
+                        <td><span *ngIf="data.date_finish != null">{{data.date_finish|date: 'dd/MM/yyyy hh:mm'}}</span></td>
+                        <td class="text-center">
+                            <!-- añadimos un nuevo botón para actualizar tarea con los datos id, nombre, descripcion y con true decir que estamos actualizando: -->
+                            <button (click)="editTask(data)" class="btn btn-sm btn-warning me-2">editar tarea</button>
+                            <button (click)="getTask(data._id, data.name)" class="btn btn-sm btn-primary me-2" data-bs-toggle="modal" data-bs-target="#finishModal">finalizar tarea</button>
+                            <button (click)="getTask(data._id, data.name)" class="btn btn-sm btn-danger me-2" data-bs-toggle="modal" data-bs-target="#deleteModal">Eliminar tarea</button>
+                        </td>
+                    </tr>
+                    <!-- metemos aquí la acción de crear tarea para poder ocultarla cuando se edite tarea -->
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>      
+                            <input [(ngModel)]="task.name"  class="col me-2 form-control form-sm" type="text" placeholder="Título"/>
+                        </td>
+                        <td>
+                            <input [(ngModel)]="task.description" class="col me-2 form-control" type="text" placeholder="Descripción" />
+                        </td>
+                        <td>
+                            <input (click)="createTask()" class="col me-2 form-control btn btn-success" type="button" value="Crear tarea" />
+                        </td>
+                    </tr>
+                </ng-template>
+            </tbody>
+        </table>
+    </div>
+
+
+- Crear nuevo componente ``ng generate component components/taskListMobile``
+- Editar el controlador de **task-list-mobile.component.ts**:
+
+.. code-block:: 
+
+   import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+    import { TaskService } from 'src/app/services/task.service';
+    import { Task, TaskData } from 'src/app/interfaces/task';
+
+    @Component({
+    selector: 'app-task-list-mobile',
+    templateUrl: './task-list-mobile.component.html',
+    styleUrls: ['./task-list-mobile.component.css']
+    })
+    export class TaskListMobileComponent implements OnInit {
+    @Input() tasks: Array<TaskData> = []
+
+    @Input() taskForUpdate: TaskData = {
+        _id: "",
+        name: "",
+        description: "",
+        date_created: new Date(),
+        is_complete: false,
+        date_finish: new Date()
+    }
+
+    @Input() task: Task = {
+        name: "",
+        description: ""
+    }
+
+    @Output() taskState: EventEmitter<any> = new EventEmitter();
+
+    taskId: string = "";
+    taskName: string = "";
+    
+    isUpdateTask: boolean = false;
+
+    constructor(private taskService: TaskService) { }
+
+    ngOnInit(): void {
+    }
+
+    getTask(): void {
+        this.taskState.emit({taskId: this.taskForUpdate._id, taskName: this.taskForUpdate.name});
+    }
+
+    // Editamos la función que recoge los datos de la tarea a actualizar creando una nueva:
+    selectTask(taskData:TaskData){
+        this.taskForUpdate = taskData;
+    }
+
+    editTask(){
+        this.isUpdateTask = true;
+    }
+
+    updateTask(){
+        if(this.isUpdateTask == true){
+        this.task.name = this.taskForUpdate.name;
+        this.task.description = this.taskForUpdate.description;
+        this.taskId = this.taskForUpdate._id;
+        this.taskService.updateTask(this.task, this.taskId)
+        .subscribe((res: any) => {
+            this.tasks.map(task =>{
+            if(task._id === this.taskId){
+                task.name = res.task.name;
+                task.description = res.task.description;
+                this.isUpdateTask = false;
+            }
+            });
+        },(err: object) =>{
+            console.log(err);
+        })
+        }
+
+        
+    }
+
+    cancelUpdate(): void{
+        this.taskForUpdate.name = "";
+        this.taskForUpdate.description = "";
+        this.isUpdateTask = false;
+    }
+
+    createTask(): void {
+        this.taskService.postTask(this.task)
+        .subscribe((res: any) => {
+            console.log(res);
+            this.tasks.push(res.task);
+        }, (err: object) => {
+            console.log(err);
+        });
+    }
+
+    }
+
+- Editar **task-list-mobile.component.html**:
+
+.. code-block::  
+
+    <div>
+        <div class="list-group ms-1 me-1 mt-3">
+            <div *ngIf="isUpdateTask == true; else taskList" class="list-group-item list-group-item-action" aria-current="true" >
+                <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1"><input name="name" [(ngModel)]="taskForUpdate.name" class="col me-2 form-control form-sm" type="text" placeholder="Título" /></h5>
+                <small>{{taskForUpdate.date_created|date: 'dd/MM/yyyy hh:mm'}}</small>
+                </div>
+                <p class="mb-1"><input name="description" [(ngModel)]="taskForUpdate.description" class="col me-2 form-control" type="text" placeholder="Descripción" /></p>
+                <small *ngIf="taskForUpdate.is_complete != null; else todo" >Finalizada: {{taskForUpdate.date_finish|date: 'dd/MM/yyyy hh:mm'}}</small>
+                <ng-template #todo><small>En curso</small></ng-template>
+            </div>    
+            <ng-template #taskList>
+                <div *ngFor="let data of tasks" >
+                    <div class="list-group-item list-group-item-action" aria-current="true" (click)="selectTask(data)" >
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{data.name}}</h5>
+                            <small>{{data.date_created|date: 'dd/MM/yyyy hh:mm'}}</small>
+                        </div>
+                        <p class="mb-1">{{data.description}}</p>
+                        <small *ngIf="data.date_finish != null; else todo" >Finalizada: {{data.date_finish|date: 'dd/MM/yyyy hh:mm'}}</small>
+                        <ng-template #todo><small>En curso</small></ng-template>
+                    </div>
+                </div>
+                <div class="list-group-item list-group-item-action" aria-current="true" >
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1"><input name="name" [(ngModel)]="task.name" class="col me-2 form-control form-sm" type="text" placeholder="Título" /></h5>
+                        <small>NUEVA TAREA</small>
+                    </div>
+                    <p class="mb-1"><input name="description" [(ngModel)]="task.description" class="col me-2 form-control" type="text" placeholder="Descripción" /></p>
+                    <small><button type="button" class="btn btn-success" (click)="createTask()" >crear tarea</button></small>
+                </div>
+            </ng-template>
+        </div>
+        <br /><br /><br /><br />
+        <nav class="navbar fixed-bottom navbar-dark bg-dark" >
+            <div class="container-fluid text-center">
+                <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                    <button *ngIf="isUpdateTask == false"  type="button" class="btn btn-warning" (click)="editTask()" >Editar</button>
+                    <button *ngIf="isUpdateTask == false" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#finishModal" (click)="getTask()">Finalizar</button>
+                    <button *ngIf="isUpdateTask == false" type="button" class="btn btn-danger" data-bs-toggle="modal" (click)="getTask()" data-bs-target="#deleteModal">Eliminar</button>
+                    <button *ngIf="isUpdateTask == true" type="button" class="btn btn-success"  (click)="updateTask()">Guardar cambios</button>
+                    <button *ngIf="isUpdateTask == true" type="button" class="btn btn-secondary" (click)="cancelUpdate()" >Cerrar</button>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+
+- Cargar el componente en la pagina **task.component.html**:
+
+.. code-block::  
+
+   <app-navbar></app-navbar>
+    <div class="d-none d-sm-block">
+        <app-task-table [tasks]="tasks" [taskForUpdate]="taskForUpdate" [task]="task" (taskState)="getTask($event)"></app-task-table>
+    </div>
+    <div class="d-sm-none">
+        <!-- añadimos el componente para listar tareas en móvil: -->
+        <app-task-list-mobile [tasks]="tasks" [taskForUpdate]="taskForUpdate" [task]="task" (taskState)="getTask($event)"></app-task-list-mobile>
+    </div>
+    <app-finish-task-modal [taskId]="taskId" [taskName]="taskName" (task)="updateTask($event)"></app-finish-task-modal>
+    <app-delete-task-modal [taskId]="taskId" [taskName]="taskName" (task)="updateTask($event)"></app-delete-task-modal>
+
+Paso 3: Subir cambios a GitHub  
+******************************
+
+- Parar ejecución de app.
+- Añadir cambios: ``git add .``
+- Realizar un commit: ``git commit -am "Phase 3 complete"``
+- Subir cambios a Github con el nombre de la rama actual: ``git push origin feature/phase-3-modify-responsive``
+- Desde gitHub presionar botón **Compare & pull request**.
+- cambiar rama base **master** por **developer** y pulsar **Create pull request**
+- Pulsar en **Merge pull request** y a continuación en **Confirm merge**.
+- Una vez terminado volvemos a local y cambiamos de rama a developer: ``git checkout developer``
+- Actualizamos rama developer: ``git pull origin developer`` 
+
+Y con esto concluye la tercera fase del proyecto.
+
+.. raw:: html 
+
+    <hr><br>

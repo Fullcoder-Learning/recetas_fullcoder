@@ -17,5 +17,6 @@ Recetas Fullcoder - Agile Learning Practico
    :caption: Proyectos Frontend
 
    frontend/react
+   frontend/angular
 
  

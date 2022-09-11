@@ -1890,7 +1890,7 @@ Paso 3: Enviar email (controller)
 
     }
 
-    // crear función para recuperar password:
+     // crear función para recuperar password:
     function forgot(req, res){
         // recibir parámetros:
         const email = req.body.email;
@@ -1901,47 +1901,48 @@ Paso 3: Enviar email (controller)
             // recuperar usuario:
             User.findOne({email: email}, async (err, userData)=>{
                 if(err){
-                    res.status(400).send({msg: "Error: email doesn't exists"});
+                    res.status(500).send({msg: "Server status error"});
                 }else{
-                    // crear un token para 1 hora:
-                    token =  await jwt.createToken(userData, "1h");
-                    // preparar el email:
-                    const transporter = nodemailer.createTransport({
-                        host: process.env.EMAIL_HOST, 
-                        port: 2525,
-                        auth: {
-                            user: process.env.EMAIL_USER,
-                            pass: process.env.EMAIL_PASS
-                        }
-                    });
+                    if(!userData){
+                        res.status(400).send({msg: "Error: email doesn't exists"});
+                    }else{
+                        // crear un token para 1 hora:
+                        token =  await jwt.createToken(userData, "1h");
+                        // preparar el email:
+                        const transporter = nodemailer.createTransport({
+                            host: process.env.EMAIL_HOST, 
+                            port: 2525,
+                            auth: {
+                                user: process.env.EMAIL_USER,
+                                pass: process.env.EMAIL_PASS
+                            }
+                        });
 
 
-                    // preparar las opciones del correo:
-                    const mailOptions = { // mailtrap no nos da una dirección así que usaremos aquella con la que nos registramos:
-                        from: 'pytonicus@gmail.com',
-                        to: userData.email,
-                        subject: 'Reestablecer contraseña | Task Learn',
-                        // ruta del frontend para resetear password:
-                        text: `http://localhost:3000/reset/${userData.id}/${token}` // ruta del frontend
-                    };
+                        // preparar las opciones del correo:
+                        const mailOptions = { // mailtrap no nos da una dirección así que usaremos aquella con la que nos registramos:
+                            from: 'pytonicus@gmail.com',
+                            to: userData.email,
+                            subject: 'Reestablecer contraseña | Task Learn',
+                            // ruta del frontend para resetear password:
+                            text: `http://localhost:3000/reset/${userData.id}/${token}` // ruta del frontend
+                        };
 
-                    // enviar email:
-                    transporter.sendMail(mailOptions, (err, response)=>{
-                        if(err){
-                            res.status(500).send({msg: "Server status error"});
-                        }else{
-                            res.status(200).send({msg: "Email has send"});
-                        }
-                    });
+                        // enviar email:
+                        transporter.sendMail(mailOptions, (err, response)=>{
+                            if(err){
+                                res.status(500).send({msg: "Server status error"});
+                            }else{
+                                res.status(200).send({msg: "Email has send"});
+                            }
+                        });
+                    }
                 }
             });
         }catch(error){
             req.status(500).send(error);
         }
     }
-
-    // TODO: Crear función para cambiar password haciendo update solo del password.
-
 
     module.exports = {
         postUser,
@@ -2421,7 +2422,7 @@ Paso 3: Recuperar usuario y actualizar imagen de usuario (controller)
                         }
 
                         // si tenemos el campo avatar de tipo file seguimos adelante:
-                        if(req.files.avatar){
+                        if(req.files && req.files.avatar){
                             // obtener el path del fichero:
                             const filePath = req.files.avatar.path;
                             // separar el id del archivo de la ruta upload:
@@ -2705,7 +2706,7 @@ paso 5: Recuperar avatar (controller)
                             userData.password = await bcryptjs.hash(params.password, salt);
                         }
 
-                        if(req.files.avatar){
+                        if(req.files && req.files.avatar){
                             const filePath = req.files.avatar.path;
                             let fileSplit = path.resolve(filePath).split(path.sep);
                             let filename = fileSplit[fileSplit.length-1];
@@ -2986,7 +2987,7 @@ Paso 7: Eliminar usuario (controller)
                             userData.password = await bcryptjs.hash(params.password, salt);
                         }
 
-                        if(req.files.avatar){
+                        if(req.files && req.files.avatar){
                             const filePath = req.files.avatar.path;
                             let fileSplit = path.resolve(filePath).split(path.sep);
                             let filename = fileSplit[fileSplit.length-1];

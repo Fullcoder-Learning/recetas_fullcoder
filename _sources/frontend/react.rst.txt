@@ -32,8 +32,8 @@ Paso 1 (opcional): Instalar Dependencias
 Paso 2: Preparar proyecto 
 *************************
 
-- Instalar React con npx desde la carpeta del proyecto: ``npx create-react-app task-learn-frontend`` 
-- Regresar a la raiz del proyecto **task-learn-frontend**.
+- Instalar React con npx desde la carpeta del proyecto: ``npx create-react-app react-task-learn-frontend`` 
+- Regresar a la raiz del proyecto **react-task-learn-frontend**.
 - Instalar bootstrap 5: ``npm install bootstrap --save``
 - Instalar react router: ``npm install react-router-dom --save``
 - Limpiar el archivo **App.css** y añadir la siguiente línea para cargar Bootstrap:
@@ -133,7 +133,7 @@ Paso 3: Crear página de tareas
 Paso 4: Crear componentes navbar
 ********************************
 
-- Descargamos la siguiente imagen y la guardamos en una nueva carpeta dentro de **src** llamada **assets**: TODO...
+- Descargamos la siguiente imagen y la guardamos en una nueva carpeta dentro de **src** llamada **assets**: https://raw.githubusercontent.com/Fullcoder-Learning/-task-learning-frontend/master/src/assets/avatar.png
 - Vamos a la carpeta **common** y creamos la hoja de estilos **NavbarCommon.css**:
 
 .. code-block:: css 
@@ -3791,6 +3791,7 @@ Paso 1: Preparar proyecto
 - Crear rama feature a partir de developer: ``git checkout -b feature/phase-3-modify-forms``
 - Instalar Axios: ``npm install react-hook-form --save``
 - Arrancar proyecto desde la raiz: ``npm start``
+- En el navegador pulsar tecla F12 y pinchar sobre el icono del dispositivo movil
 
 Paso 2: Ajustar Tabla de tareas  
 *******************************
@@ -4136,7 +4137,7 @@ Paso 4: Subir cambios a GitHub
 - Parar ejecución de app.
 - Añadir cambios: ``git add .``
 - Realizar un commit: ``git commit -am "Phase 3 complete"``
-- Subir cambios a Github con el nombre de la rama actual: ``git push origin feature/phase-2-connect-to-service``
+- Subir cambios a Github con el nombre de la rama actual: ``git push origin feature/phase-3-modify-forms``
 - Desde gitHub presionar botón **Compare & pull request**.
 - cambiar rama base **master** por **developer** y pulsar **Create pull request**
 - Pulsar en **Merge pull request** y a continuación en **Confirm merge**.
