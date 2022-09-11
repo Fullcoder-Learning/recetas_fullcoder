@@ -17,7 +17,7 @@ Frontend aplicación listado de tareas desarrollada con React.
   
 Fase 1: Diseño de la aplicación   
 ###############################
-
+ 
 En esta fase se van a crear todas las pantallas de la aplicación. 
 
 Paso 1 (opcional): Instalar Dependencias  
