@@ -124,6 +124,10 @@
                 
                   <li class="toctree-l2"><a href="#fase-4-manejo-de-archivos" class="reference internal">Fase 4: Manejo de archivos</a></li>
                 
+                  <li class="toctree-l2"><a href="#fase-5-crear-documentacion" class="reference internal">Fase 5: Crear documentación</a></li>
+                
+                  <li class="toctree-l2"><a href="#fase-6-despliegue-de-node-en-heroku-y-base-de-datos-en-mongodb-atlas" class="reference internal">Fase 6: Despliegue de Node en Heroku y Base de datos en MongoDB Atlas</a></li>
+                
               </ul>
             
           </li>
@@ -188,7 +192,7 @@
           <div class="content" role="main" v-pre>
             
   <section id="backend-nodejs-expressjs-api-task-learn">
-<h1><a class="toc-backref" href="#id3">Backend NodeJS + ExpressJS - API Task Learn</a><a class="headerlink" href="#backend-nodejs-expressjs-api-task-learn" title="Enlazar permanentemente con este título">¶</a></h1>
+<h1><a class="toc-backref" href="#id6">Backend NodeJS + ExpressJS - API Task Learn</a><a class="headerlink" href="#backend-nodejs-expressjs-api-task-learn" title="Enlazar permanentemente con este título">¶</a></h1>
 <a class="reference internal image-reference" href="../_images/logo-node-express-mongo.png"><img alt="Logo NodeJS" class="align-center" src="../_images/logo-node-express-mongo.png" style="width: 750.0px; height: 240.0px;" /></a>
 <p>Servicio API Rest para listado de tareas creada con Nodejs + Express + MongoDB</p>
 <ul class="simple">
@@ -199,80 +203,102 @@
 <div class="contents topic" id="indice">
 <p class="topic-title">Índice</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#backend-nodejs-expressjs-api-task-learn" id="id3">Backend NodeJS + ExpressJS - API Task Learn</a></p>
+<li><p><a class="reference internal" href="#backend-nodejs-expressjs-api-task-learn" id="id6">Backend NodeJS + ExpressJS - API Task Learn</a></p>
 <ul>
-<li><p><a class="reference internal" href="#fase-1-sistema-de-tareas" id="id4">Fase 1: Sistema de Tareas</a></p>
+<li><p><a class="reference internal" href="#fase-1-sistema-de-tareas" id="id7">Fase 1: Sistema de Tareas</a></p>
 <ul>
-<li><p><a class="reference internal" href="#paso-1-instalaciones" id="id5">Paso 1: Instalaciones</a></p>
+<li><p><a class="reference internal" href="#paso-1-instalaciones" id="id8">Paso 1: Instalaciones</a></p>
 <ul>
-<li><p><a class="reference internal" href="#en-windows" id="id6">En Windows</a></p></li>
+<li><p><a class="reference internal" href="#en-windows" id="id9">En Windows</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#paso-2-preparar-proyecto" id="id7">Paso 2: Preparar proyecto</a></p></li>
-<li><p><a class="reference internal" href="#paso-3-archivo-de-rutas-y-dependencias" id="id8">Paso 3: Archivo de rutas y dependencias</a></p></li>
-<li><p><a class="reference internal" href="#paso-4-archivo-de-entrada" id="id9">Paso 4: Archivo de entrada</a></p></li>
-<li><p><a class="reference internal" href="#paso-5-opcional-ejecutar-servidor-en-modo-depuracion" id="id10">Paso 5 (opcional): Ejecutar servidor en modo depuración</a></p></li>
-<li><p><a class="reference internal" href="#paso-6-crear-controlador" id="id11">Paso 6: Crear controlador</a></p></li>
-<li><p><a class="reference internal" href="#paso-7-crear-ruta-a-controlador" id="id12">Paso 7: Crear ruta a controlador</a></p></li>
-<li><p><a class="reference internal" href="#paso-8-opcional-crear-coleccion-postman" id="id13">Paso 8 (opcional): Crear colección Postman</a></p></li>
-<li><p><a class="reference internal" href="#paso-9-cargar-punto-de-ruta" id="id14">Paso 9: Cargar punto de ruta</a></p></li>
-<li><p><a class="reference internal" href="#paso-10-conectar-a-base-de-datos-mongodb" id="id15">Paso 10: Conectar a base de datos MongoDB</a></p></li>
-<li><p><a class="reference internal" href="#paso-11-crear-modelo-de-datos" id="id16">Paso 11: Crear modelo de datos</a></p></li>
-<li><p><a class="reference internal" href="#paso-12-crear-tareas-controller" id="id17">Paso 12: Crear tareas (controller)</a></p></li>
-<li><p><a class="reference internal" href="#paso-13-crear-tareas-routes" id="id18">Paso 13: Crear tareas (routes)</a></p></li>
-<li><p><a class="reference internal" href="#paso-14-opcional-comprobar-datos-en-studio3t" id="id19">Paso 14 (Opcional): Comprobar datos en Studio3T</a></p></li>
-<li><p><a class="reference internal" href="#paso-15-listar-tareas-controller" id="id20">Paso 15: Listar tareas (controller)</a></p></li>
-<li><p><a class="reference internal" href="#paso-16-mostrar-una-tarea-controller" id="id21">Paso 16: Mostrar una tarea (controller)</a></p></li>
-<li><p><a class="reference internal" href="#paso-17-mostrar-una-tarea-router" id="id22">Paso 17: Mostrar una tarea (router)</a></p></li>
-<li><p><a class="reference internal" href="#paso-18-actualizar-datos-de-una-tarea-controller" id="id23">Paso 18: Actualizar datos de una tarea (controller)</a></p></li>
-<li><p><a class="reference internal" href="#paso-19-actualizar-datos-de-una-tarea-router" id="id24">Paso 19: Actualizar datos de una tarea (router)</a></p></li>
-<li><p><a class="reference internal" href="#paso-18-eliminar-una-tarea-controller" id="id25">Paso 18: Eliminar una tarea (controller)</a></p></li>
-<li><p><a class="reference internal" href="#paso-19-eliminar-una-tarea-router" id="id26">Paso 19: Eliminar una tarea (router)</a></p></li>
-<li><p><a class="reference internal" href="#paso-20-cambiar-estado-de-tarea-controller" id="id27">Paso 20: Cambiar estado de tarea (controller)</a></p></li>
-<li><p><a class="reference internal" href="#paso-21-cambiar-estado-de-tarea-router" id="id28">Paso 21: Cambiar estado de tarea (router)</a></p></li>
-<li><p><a class="reference internal" href="#paso-22-subir-cambios-a-github" id="id29">Paso 22: Subir cambios a GitHub</a></p></li>
+<li><p><a class="reference internal" href="#paso-2-preparar-proyecto" id="id10">Paso 2: Preparar proyecto</a></p></li>
+<li><p><a class="reference internal" href="#paso-3-archivo-de-rutas-y-dependencias" id="id11">Paso 3: Archivo de rutas y dependencias</a></p></li>
+<li><p><a class="reference internal" href="#paso-4-archivo-de-entrada" id="id12">Paso 4: Archivo de entrada</a></p></li>
+<li><p><a class="reference internal" href="#paso-5-opcional-ejecutar-servidor-en-modo-depuracion" id="id13">Paso 5 (opcional): Ejecutar servidor en modo depuración</a></p></li>
+<li><p><a class="reference internal" href="#paso-6-crear-controlador" id="id14">Paso 6: Crear controlador</a></p></li>
+<li><p><a class="reference internal" href="#paso-7-crear-ruta-a-controlador" id="id15">Paso 7: Crear ruta a controlador</a></p></li>
+<li><p><a class="reference internal" href="#paso-8-opcional-crear-coleccion-postman" id="id16">Paso 8 (opcional): Crear colección Postman</a></p></li>
+<li><p><a class="reference internal" href="#paso-9-cargar-punto-de-ruta" id="id17">Paso 9: Cargar punto de ruta</a></p></li>
+<li><p><a class="reference internal" href="#paso-10-conectar-a-base-de-datos-mongodb" id="id18">Paso 10: Conectar a base de datos MongoDB</a></p></li>
+<li><p><a class="reference internal" href="#paso-11-crear-modelo-de-datos" id="id19">Paso 11: Crear modelo de datos</a></p></li>
+<li><p><a class="reference internal" href="#paso-12-crear-tareas-controller" id="id20">Paso 12: Crear tareas (controller)</a></p></li>
+<li><p><a class="reference internal" href="#paso-13-crear-tareas-routes" id="id21">Paso 13: Crear tareas (routes)</a></p></li>
+<li><p><a class="reference internal" href="#paso-14-opcional-comprobar-datos-en-studio3t" id="id22">Paso 14 (Opcional): Comprobar datos en Studio3T</a></p></li>
+<li><p><a class="reference internal" href="#paso-15-listar-tareas-controller" id="id23">Paso 15: Listar tareas (controller)</a></p></li>
+<li><p><a class="reference internal" href="#paso-16-mostrar-una-tarea-controller" id="id24">Paso 16: Mostrar una tarea (controller)</a></p></li>
+<li><p><a class="reference internal" href="#paso-17-mostrar-una-tarea-router" id="id25">Paso 17: Mostrar una tarea (router)</a></p></li>
+<li><p><a class="reference internal" href="#paso-18-actualizar-datos-de-una-tarea-controller" id="id26">Paso 18: Actualizar datos de una tarea (controller)</a></p></li>
+<li><p><a class="reference internal" href="#paso-19-actualizar-datos-de-una-tarea-router" id="id27">Paso 19: Actualizar datos de una tarea (router)</a></p></li>
+<li><p><a class="reference internal" href="#paso-18-eliminar-una-tarea-controller" id="id28">Paso 18: Eliminar una tarea (controller)</a></p></li>
+<li><p><a class="reference internal" href="#paso-19-eliminar-una-tarea-router" id="id29">Paso 19: Eliminar una tarea (router)</a></p></li>
+<li><p><a class="reference internal" href="#paso-20-cambiar-estado-de-tarea-controller" id="id30">Paso 20: Cambiar estado de tarea (controller)</a></p></li>
+<li><p><a class="reference internal" href="#paso-21-cambiar-estado-de-tarea-router" id="id31">Paso 21: Cambiar estado de tarea (router)</a></p></li>
+<li><p><a class="reference internal" href="#paso-22-subir-cambios-a-github" id="id32">Paso 22: Subir cambios a GitHub</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#fase-2-usuarios-y-securizacion" id="id30">Fase 2: Usuarios y securización</a></p>
+<li><p><a class="reference internal" href="#fase-2-usuarios-y-securizacion" id="id33">Fase 2: Usuarios y securización</a></p>
 <ul>
-<li><p><a class="reference internal" href="#paso-1-preparar-proyecto" id="id31">Paso 1: Preparar proyecto</a></p></li>
-<li><p><a class="reference internal" href="#paso-2-crear-modelo-de-usuarios" id="id32">Paso 2: Crear modelo de usuarios</a></p></li>
-<li><p><a class="reference internal" href="#paso-3-registro-de-usuarios-controller" id="id33">Paso 3: Registro de usuarios (controller)</a></p></li>
-<li><p><a class="reference internal" href="#paso-4-registro-de-usuarios-router" id="id34">Paso 4: Registro de usuarios (router)</a></p></li>
-<li><p><a class="reference internal" href="#paso-5-registrar-rutas-de-usuarios" id="id35">Paso 5: Registrar rutas de usuarios</a></p></li>
-<li><p><a class="reference internal" href="#paso-6-crear-variables-de-entorno" id="id36">Paso 6: Crear variables de entorno</a></p></li>
-<li><p><a class="reference internal" href="#paso-7-crear-servicio-jwt" id="id37">Paso 7: Crear servicio JWT</a></p></li>
-<li><p><a class="reference internal" href="#paso-8-crear-login-controller" id="id38">Paso 8: Crear login (controller)</a></p></li>
-<li><p><a class="reference internal" href="#paso-9-crear-login-router" id="id39">Paso 9: Crear login (router)</a></p></li>
-<li><p><a class="reference internal" href="#paso-10-crear-middleware-para-securizar-rutas" id="id40">Paso 10: Crear middleware para securizar rutas</a></p></li>
-<li><p><a class="reference internal" href="#paso-11-proteger-endpoints-de-tareas" id="id41">Paso 11: Proteger endpoints de tareas</a></p></li>
-<li><p><a class="reference internal" href="#paso-12-relacionar-tareas-con-usuarios" id="id42">Paso 12: Relacionar tareas con usuarios</a></p></li>
-<li><p><a class="reference internal" href="#paso-13-crear-middleware-para-recuperar-usuario" id="id43">Paso 13: Crear middleware para recuperar usuario</a></p></li>
-<li><p><a class="reference internal" href="#paso-14-modificar-modulos-de-controlador-task" id="id44">Paso 14: Modificar modulos de controlador task</a></p></li>
-<li><p><a class="reference internal" href="#paso-15-subir-cambios-a-github" id="id45">Paso 15: Subir cambios a GitHub</a></p></li>
+<li><p><a class="reference internal" href="#paso-1-preparar-proyecto" id="id34">Paso 1: Preparar proyecto</a></p></li>
+<li><p><a class="reference internal" href="#paso-2-crear-modelo-de-usuarios" id="id35">Paso 2: Crear modelo de usuarios</a></p></li>
+<li><p><a class="reference internal" href="#paso-3-registro-de-usuarios-controller" id="id36">Paso 3: Registro de usuarios (controller)</a></p></li>
+<li><p><a class="reference internal" href="#paso-4-registro-de-usuarios-router" id="id37">Paso 4: Registro de usuarios (router)</a></p></li>
+<li><p><a class="reference internal" href="#paso-5-registrar-rutas-de-usuarios" id="id38">Paso 5: Registrar rutas de usuarios</a></p></li>
+<li><p><a class="reference internal" href="#paso-6-crear-variables-de-entorno" id="id39">Paso 6: Crear variables de entorno</a></p></li>
+<li><p><a class="reference internal" href="#paso-7-crear-servicio-jwt" id="id40">Paso 7: Crear servicio JWT</a></p></li>
+<li><p><a class="reference internal" href="#paso-8-crear-login-controller" id="id41">Paso 8: Crear login (controller)</a></p></li>
+<li><p><a class="reference internal" href="#paso-9-crear-login-router" id="id42">Paso 9: Crear login (router)</a></p></li>
+<li><p><a class="reference internal" href="#paso-10-crear-middleware-para-securizar-rutas" id="id43">Paso 10: Crear middleware para securizar rutas</a></p></li>
+<li><p><a class="reference internal" href="#paso-11-proteger-endpoints-de-tareas" id="id44">Paso 11: Proteger endpoints de tareas</a></p></li>
+<li><p><a class="reference internal" href="#paso-12-relacionar-tareas-con-usuarios" id="id45">Paso 12: Relacionar tareas con usuarios</a></p></li>
+<li><p><a class="reference internal" href="#paso-13-crear-middleware-para-recuperar-usuario" id="id46">Paso 13: Crear middleware para recuperar usuario</a></p></li>
+<li><p><a class="reference internal" href="#paso-14-modificar-modulos-de-controlador-task" id="id47">Paso 14: Modificar modulos de controlador task</a></p></li>
+<li><p><a class="reference internal" href="#paso-15-subir-cambios-a-github" id="id48">Paso 15: Subir cambios a GitHub</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#fase-3-recuperacion-de-contrasenas" id="id46">Fase 3: Recuperación de contraseñas</a></p>
+<li><p><a class="reference internal" href="#fase-3-recuperacion-de-contrasenas" id="id49">Fase 3: Recuperación de contraseñas</a></p>
 <ul>
-<li><p><a class="reference internal" href="#id1" id="id47">Paso 2: Preparar proyecto</a></p></li>
-<li><p><a class="reference internal" href="#paso-3-enviar-email-controller" id="id48">Paso 3: Enviar email (controller)</a></p></li>
-<li><p><a class="reference internal" href="#paso-4-enviar-email-router" id="id49">Paso 4: Enviar email (router)</a></p></li>
-<li><p><a class="reference internal" href="#paso-5-reestablecer-contrasena-controller" id="id50">Paso 5: Reestablecer contraseña (controller)</a></p></li>
-<li><p><a class="reference internal" href="#paso-6-reestablecer-contrasena-router" id="id51">Paso 6: Reestablecer contraseña (router)</a></p></li>
-<li><p><a class="reference internal" href="#paso-7-subir-cambios-a-github" id="id52">Paso 7: Subir cambios a GitHub</a></p></li>
+<li><p><a class="reference internal" href="#id1" id="id50">Paso 2: Preparar proyecto</a></p></li>
+<li><p><a class="reference internal" href="#paso-3-enviar-email-controller" id="id51">Paso 3: Enviar email (controller)</a></p></li>
+<li><p><a class="reference internal" href="#paso-4-enviar-email-router" id="id52">Paso 4: Enviar email (router)</a></p></li>
+<li><p><a class="reference internal" href="#paso-5-reestablecer-contrasena-controller" id="id53">Paso 5: Reestablecer contraseña (controller)</a></p></li>
+<li><p><a class="reference internal" href="#paso-6-reestablecer-contrasena-router" id="id54">Paso 6: Reestablecer contraseña (router)</a></p></li>
+<li><p><a class="reference internal" href="#paso-7-subir-cambios-a-github" id="id55">Paso 7: Subir cambios a GitHub</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#fase-4-manejo-de-archivos" id="id53">Fase 4: Manejo de archivos</a></p>
+<li><p><a class="reference internal" href="#fase-4-manejo-de-archivos" id="id56">Fase 4: Manejo de archivos</a></p>
 <ul>
-<li><p><a class="reference internal" href="#id2" id="id54">Paso 1: Preparar proyecto</a></p></li>
-<li><p><a class="reference internal" href="#paso-2-editar-modelo-usuarios" id="id55">Paso 2: Editar modelo usuarios</a></p></li>
-<li><p><a class="reference internal" href="#paso-3-recuperar-usuario-y-actualizar-imagen-de-usuario-controller" id="id56">Paso 3: Recuperar usuario y actualizar imagen de usuario (controller)</a></p></li>
-<li><p><a class="reference internal" href="#paso-4-recuperar-usuario-y-actualizar-imagen-de-usuario-router" id="id57">Paso 4: Recuperar usuario y actualizar imagen de usuario (router)</a></p></li>
-<li><p><a class="reference internal" href="#paso-5-recuperar-avatar-controller" id="id58">paso 5: Recuperar avatar (controller)</a></p></li>
-<li><p><a class="reference internal" href="#paso-6-recuperar-avatar-router" id="id59">paso 6: Recuperar avatar (router)</a></p></li>
-<li><p><a class="reference internal" href="#paso-7-eliminar-usuario-controller" id="id60">Paso 7: Eliminar usuario (controller)</a></p></li>
-<li><p><a class="reference internal" href="#paso-8-eliminar-usuario-router" id="id61">Paso 8: Eliminar usuario (router)</a></p></li>
-<li><p><a class="reference internal" href="#paso-9-subir-cambios-a-github" id="id62">Paso 9: Subir cambios a GitHub</a></p></li>
+<li><p><a class="reference internal" href="#id2" id="id57">Paso 1: Preparar proyecto</a></p></li>
+<li><p><a class="reference internal" href="#paso-2-editar-modelo-usuarios" id="id58">Paso 2: Editar modelo usuarios</a></p></li>
+<li><p><a class="reference internal" href="#paso-3-recuperar-usuario-y-actualizar-imagen-de-usuario-controller" id="id59">Paso 3: Recuperar usuario y actualizar imagen de usuario (controller)</a></p></li>
+<li><p><a class="reference internal" href="#paso-4-recuperar-usuario-y-actualizar-imagen-de-usuario-router" id="id60">Paso 4: Recuperar usuario y actualizar imagen de usuario (router)</a></p></li>
+<li><p><a class="reference internal" href="#paso-5-recuperar-avatar-controller" id="id61">paso 5: Recuperar avatar (controller)</a></p></li>
+<li><p><a class="reference internal" href="#paso-6-recuperar-avatar-router" id="id62">paso 6: Recuperar avatar (router)</a></p></li>
+<li><p><a class="reference internal" href="#paso-7-eliminar-usuario-controller" id="id63">Paso 7: Eliminar usuario (controller)</a></p></li>
+<li><p><a class="reference internal" href="#paso-8-eliminar-usuario-router" id="id64">Paso 8: Eliminar usuario (router)</a></p></li>
+<li><p><a class="reference internal" href="#paso-9-subir-cambios-a-github" id="id65">Paso 9: Subir cambios a GitHub</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#fase-5-crear-documentacion" id="id66">Fase 5: Crear documentación</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id3" id="id67">Paso 1: Preparar proyecto</a></p></li>
+<li><p><a class="reference internal" href="#paso-2-crear-archivo-de-configuracion" id="id68">Paso 2: Crear archivo de configuración</a></p></li>
+<li><p><a class="reference internal" href="#id4" id="id69">Paso 1: Preparar proyecto</a></p></li>
+<li><p><a class="reference internal" href="#id5" id="id70">Paso 2: Crear archivo de configuración</a></p></li>
+<li><p><a class="reference internal" href="#paso-3-crear-schema-de-tareas" id="id71">Paso 3: Crear Schema de tareas</a></p></li>
+<li><p><a class="reference internal" href="#paso-4-crear-peticiones-de-las-rutas" id="id72">Paso 4: Crear peticiones de las rutas</a></p></li>
+<li><p><a class="reference internal" href="#paso-5-crear-scheme-y-peticiones-de-user" id="id73">Paso 5: Crear scheme y peticiones de User</a></p></li>
+<li><p><a class="reference internal" href="#paso-6-subir-cambios-a-github" id="id74">Paso 6: Subir cambios a GitHub</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#fase-6-despliegue-de-node-en-heroku-y-base-de-datos-en-mongodb-atlas" id="id75">Fase 6: Despliegue de Node en Heroku y Base de datos en MongoDB Atlas</a></p>
+<ul>
+<li><p><a class="reference internal" href="#paso-1-crear-nueva-base-de-datos-en-mongodb-atlas" id="id76">Paso 1: Crear nueva base de datos en MongoDB Atlas</a></p></li>
+<li><p><a class="reference internal" href="#paso-2-conectar-la-base-de-datos" id="id77">Paso 2: Conectar la base de datos</a></p></li>
+<li><p><a class="reference internal" href="#paso-3-crear-proyecto-en-heroku" id="id78">Paso 3: Crear proyecto en Heroku</a></p></li>
+<li><p><a class="reference internal" href="#paso-4-preparar-aplicacion-para-el-despliegue" id="id79">Paso 4: Preparar aplicación para el despliegue</a></p></li>
+<li><p><a class="reference internal" href="#paso-5-crear-variables-de-entorno" id="id80">Paso 5: Crear variables de entorno</a></p></li>
+<li><p><a class="reference internal" href="#paso-6-iniciar-despliegue" id="id81">Paso 6: Iniciar despliegue</a></p></li>
 </ul>
 </li>
 </ul>
@@ -280,12 +306,12 @@
 </ul>
 </div>
 <section id="fase-1-sistema-de-tareas">
-<h2><a class="toc-backref" href="#id4">Fase 1: Sistema de Tareas</a><a class="headerlink" href="#fase-1-sistema-de-tareas" title="Enlazar permanentemente con este título">¶</a></h2>
+<h2><a class="toc-backref" href="#id7">Fase 1: Sistema de Tareas</a><a class="headerlink" href="#fase-1-sistema-de-tareas" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>En esta fase se va a crear la base del proyecto y todo el CRUD de tareas.</p>
 <section id="paso-1-instalaciones">
-<h3><a class="toc-backref" href="#id5">Paso 1: Instalaciones</a><a class="headerlink" href="#paso-1-instalaciones" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id8">Paso 1: Instalaciones</a><a class="headerlink" href="#paso-1-instalaciones" title="Enlazar permanentemente con este título">¶</a></h3>
 <section id="en-windows">
-<h4><a class="toc-backref" href="#id6">En Windows</a><a class="headerlink" href="#en-windows" title="Enlazar permanentemente con este título">¶</a></h4>
+<h4><a class="toc-backref" href="#id9">En Windows</a><a class="headerlink" href="#en-windows" title="Enlazar permanentemente con este título">¶</a></h4>
 <ul class="simple">
 <li><p>Instalar NodeJS desde su sitio oficial: <a class="reference external" href="https://nodejs.org/es/">https://nodejs.org/es/</a></p></li>
 <li><p>Instalar MongoDB desde su sitio oficial:  <a class="reference external" href="https://www.mongodb.com/try/download/community">https://www.mongodb.com/try/download/community</a></p></li>
@@ -300,7 +326,7 @@
 </section>
 </section>
 <section id="paso-2-preparar-proyecto">
-<h3><a class="toc-backref" href="#id7">Paso 2: Preparar proyecto</a><a class="headerlink" href="#paso-2-preparar-proyecto" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id10">Paso 2: Preparar proyecto</a><a class="headerlink" href="#paso-2-preparar-proyecto" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Crear una carpeta para el proyecto con el nombre por ejemplo: <strong>task-learn-api</strong>.</p></li>
 <li><p>Crear un repositorio en github, gitlab o simil.</p></li>
@@ -342,7 +368,7 @@ en cada carpeta vacía. No lo haremos en estos casos ya que no van a estarlo en 
 </div>
 </section>
 <section id="paso-3-archivo-de-rutas-y-dependencias">
-<h3><a class="toc-backref" href="#id8">Paso 3: Archivo de rutas y dependencias</a><a class="headerlink" href="#paso-3-archivo-de-rutas-y-dependencias" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id11">Paso 3: Archivo de rutas y dependencias</a><a class="headerlink" href="#paso-3-archivo-de-rutas-y-dependencias" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Editar <strong>app.js</strong>:</p></li>
 </ul>
@@ -365,7 +391,7 @@ en cada carpeta vacía. No lo haremos en estos casos ya que no van a estarlo en 
 </div>
 </section>
 <section id="paso-4-archivo-de-entrada">
-<h3><a class="toc-backref" href="#id9">Paso 4: Archivo de entrada</a><a class="headerlink" href="#paso-4-archivo-de-entrada" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id12">Paso 4: Archivo de entrada</a><a class="headerlink" href="#paso-4-archivo-de-entrada" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Editar <strong>index.js</strong>:</p></li>
 </ul>
@@ -385,7 +411,7 @@ en cada carpeta vacía. No lo haremos en estos casos ya que no van a estarlo en 
 </ul>
 </section>
 <section id="paso-5-opcional-ejecutar-servidor-en-modo-depuracion">
-<h3><a class="toc-backref" href="#id10">Paso 5 (opcional): Ejecutar servidor en modo depuración</a><a class="headerlink" href="#paso-5-opcional-ejecutar-servidor-en-modo-depuracion" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id13">Paso 5 (opcional): Ejecutar servidor en modo depuración</a><a class="headerlink" href="#paso-5-opcional-ejecutar-servidor-en-modo-depuracion" title="Enlazar permanentemente con este título">¶</a></h3>
 <p>Si estás usando <strong>Visual Studio Code</strong> presiona el botón con el icono que tiene un símbolo de <strong>play</strong> y un <strong>bicho</strong>:
 - Haz clic en el texto <strong>cree un archivo launch.json</strong> y selecciona la opción <strong>node.js</strong>.
 - Modificar el archivo que se muestra para que trabaje con <strong>nodemon</strong> y pueda hacer fastReload:</p>
@@ -418,7 +444,7 @@ en cada carpeta vacía. No lo haremos en estos casos ya que no van a estarlo en 
 <p>De este modo podremos depurar punto a punto la aplicación.</p>
 </section>
 <section id="paso-6-crear-controlador">
-<h3><a class="toc-backref" href="#id11">Paso 6: Crear controlador</a><a class="headerlink" href="#paso-6-crear-controlador" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id14">Paso 6: Crear controlador</a><a class="headerlink" href="#paso-6-crear-controlador" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Crear un archivo llamado <strong>taskController.js</strong> dentro de la carpeta <strong>controllers</strong>:</p></li>
 </ul>
@@ -435,7 +461,7 @@ en cada carpeta vacía. No lo haremos en estos casos ya que no van a estarlo en 
 </div>
 </section>
 <section id="paso-7-crear-ruta-a-controlador">
-<h3><a class="toc-backref" href="#id12">Paso 7: Crear ruta a controlador</a><a class="headerlink" href="#paso-7-crear-ruta-a-controlador" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id15">Paso 7: Crear ruta a controlador</a><a class="headerlink" href="#paso-7-crear-ruta-a-controlador" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Crear un archivo llamado <strong>taskRoutes.js</strong> dentro de la carpeta <strong>routes</strong>:</p></li>
 </ul>
@@ -455,7 +481,7 @@ en cada carpeta vacía. No lo haremos en estos casos ya que no van a estarlo en 
 </div>
 </section>
 <section id="paso-8-opcional-crear-coleccion-postman">
-<h3><a class="toc-backref" href="#id13">Paso 8 (opcional): Crear colección Postman</a><a class="headerlink" href="#paso-8-opcional-crear-coleccion-postman" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id16">Paso 8 (opcional): Crear colección Postman</a><a class="headerlink" href="#paso-8-opcional-crear-coleccion-postman" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Ejecutar Postman y pulsar el botón <strong>+</strong> para crear nueva colección con el nombre <strong>Task learn API</strong>.</p></li>
 <li><p>Arriba a la derecha justo después del texto <strong>No Envionment</strong> pinchar en el icono que muestra un cuadro con un ojo y luego en el texto <strong>Add</strong></p></li>
@@ -471,7 +497,7 @@ en cada carpeta vacía. No lo haremos en estos casos ya que no van a estarlo en 
 </div>
 </section>
 <section id="paso-9-cargar-punto-de-ruta">
-<h3><a class="toc-backref" href="#id14">Paso 9: Cargar punto de ruta</a><a class="headerlink" href="#paso-9-cargar-punto-de-ruta" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id17">Paso 9: Cargar punto de ruta</a><a class="headerlink" href="#paso-9-cargar-punto-de-ruta" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Hay que cargar el archivo de rutas en un nuevo punto de ruta en <strong>app.js</strong>:</p></li>
 </ul>
@@ -502,7 +528,7 @@ en cada carpeta vacía. No lo haremos en estos casos ya que no van a estarlo en 
 </div>
 </section>
 <section id="paso-10-conectar-a-base-de-datos-mongodb">
-<h3><a class="toc-backref" href="#id15">Paso 10: Conectar a base de datos MongoDB</a><a class="headerlink" href="#paso-10-conectar-a-base-de-datos-mongodb" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id18">Paso 10: Conectar a base de datos MongoDB</a><a class="headerlink" href="#paso-10-conectar-a-base-de-datos-mongodb" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Editar el archivo <strong>index.js</strong>:</p></li>
 </ul>
@@ -536,7 +562,7 @@ en cada carpeta vacía. No lo haremos en estos casos ya que no van a estarlo en 
 </ul>
 </section>
 <section id="paso-11-crear-modelo-de-datos">
-<h3><a class="toc-backref" href="#id16">Paso 11: Crear modelo de datos</a><a class="headerlink" href="#paso-11-crear-modelo-de-datos" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id19">Paso 11: Crear modelo de datos</a><a class="headerlink" href="#paso-11-crear-modelo-de-datos" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Crear un modelo de datos para las tareas en la carpeta <strong>models</strong> con el nombre <strong>taskModel.js</strong>:</p></li>
 </ul>
@@ -581,7 +607,7 @@ en cada carpeta vacía. No lo haremos en estos casos ya que no van a estarlo en 
 </div>
 </section>
 <section id="paso-12-crear-tareas-controller">
-<h3><a class="toc-backref" href="#id17">Paso 12: Crear tareas (controller)</a><a class="headerlink" href="#paso-12-crear-tareas-controller" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id20">Paso 12: Crear tareas (controller)</a><a class="headerlink" href="#paso-12-crear-tareas-controller" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Editamos el controlador <strong>taskController.js</strong> y añadimos una nueva función:</p></li>
 </ul>
@@ -632,7 +658,7 @@ en cada carpeta vacía. No lo haremos en estos casos ya que no van a estarlo en 
 </div>
 </section>
 <section id="paso-13-crear-tareas-routes">
-<h3><a class="toc-backref" href="#id18">Paso 13: Crear tareas (routes)</a><a class="headerlink" href="#paso-13-crear-tareas-routes" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id21">Paso 13: Crear tareas (routes)</a><a class="headerlink" href="#paso-13-crear-tareas-routes" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Editamos el archivo de rutas <strong>taskRoutes.js</strong>:</p></li>
 </ul>
@@ -675,7 +701,7 @@ en cada carpeta vacía. No lo haremos en estos casos ya que no van a estarlo en 
 </div>
 </section>
 <section id="paso-14-opcional-comprobar-datos-en-studio3t">
-<h3><a class="toc-backref" href="#id19">Paso 14 (Opcional): Comprobar datos en Studio3T</a><a class="headerlink" href="#paso-14-opcional-comprobar-datos-en-studio3t" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id22">Paso 14 (Opcional): Comprobar datos en Studio3T</a><a class="headerlink" href="#paso-14-opcional-comprobar-datos-en-studio3t" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Abrimos el programa Studio3T y pinchamos en <strong>New Connection</strong> si es la primera vez que lo abrimos.</p></li>
 <li><p>añadimos la ruta <strong>mongodb://localhost:27017</strong> y pinchamos en <strong>Next</strong></p></li>
@@ -688,7 +714,7 @@ en cada carpeta vacía. No lo haremos en estos casos ya que no van a estarlo en 
 </div>
 </section>
 <section id="paso-15-listar-tareas-controller">
-<h3><a class="toc-backref" href="#id20">Paso 15: Listar tareas (controller)</a><a class="headerlink" href="#paso-15-listar-tareas-controller" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id23">Paso 15: Listar tareas (controller)</a><a class="headerlink" href="#paso-15-listar-tareas-controller" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Editar la función <strong>getTasks</strong> del archivo <strong>taskController.js</strong></p></li>
 </ul>
@@ -744,7 +770,7 @@ en cada carpeta vacía. No lo haremos en estos casos ya que no van a estarlo en 
 </ul>
 </section>
 <section id="paso-16-mostrar-una-tarea-controller">
-<h3><a class="toc-backref" href="#id21">Paso 16: Mostrar una tarea (controller)</a><a class="headerlink" href="#paso-16-mostrar-una-tarea-controller" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id24">Paso 16: Mostrar una tarea (controller)</a><a class="headerlink" href="#paso-16-mostrar-una-tarea-controller" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Para recuperar una tarea por su id, creamos la tarea <strong>getTask</strong> en el archivo <strong>taskController.js</strong></p></li>
 </ul>
@@ -812,7 +838,7 @@ en cada carpeta vacía. No lo haremos en estos casos ya que no van a estarlo en 
 </div>
 </section>
 <section id="paso-17-mostrar-una-tarea-router">
-<h3><a class="toc-backref" href="#id22">Paso 17: Mostrar una tarea (router)</a><a class="headerlink" href="#paso-17-mostrar-una-tarea-router" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id25">Paso 17: Mostrar una tarea (router)</a><a class="headerlink" href="#paso-17-mostrar-una-tarea-router" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Añadir la ruta al archivo <strong>taskRouter.js</strong></p></li>
 </ul>
@@ -834,7 +860,7 @@ en cada carpeta vacía. No lo haremos en estos casos ya que no van a estarlo en 
 </ul>
 </section>
 <section id="paso-18-actualizar-datos-de-una-tarea-controller">
-<h3><a class="toc-backref" href="#id23">Paso 18: Actualizar datos de una tarea (controller)</a><a class="headerlink" href="#paso-18-actualizar-datos-de-una-tarea-controller" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id26">Paso 18: Actualizar datos de una tarea (controller)</a><a class="headerlink" href="#paso-18-actualizar-datos-de-una-tarea-controller" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Ahora se va a añadir la función <strong>putTask</strong> para modificar los datos de la tarea, editamos <strong>taskController.js</strong>:</p></li>
 </ul>
@@ -942,7 +968,7 @@ en cada carpeta vacía. No lo haremos en estos casos ya que no van a estarlo en 
 </div>
 </section>
 <section id="paso-19-actualizar-datos-de-una-tarea-router">
-<h3><a class="toc-backref" href="#id24">Paso 19: Actualizar datos de una tarea (router)</a><a class="headerlink" href="#paso-19-actualizar-datos-de-una-tarea-router" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id27">Paso 19: Actualizar datos de una tarea (router)</a><a class="headerlink" href="#paso-19-actualizar-datos-de-una-tarea-router" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Crear una nueva ruta en <strong>taskRoutes.js</strong>:</p></li>
 </ul>
@@ -972,7 +998,7 @@ en cada carpeta vacía. No lo haremos en estos casos ya que no van a estarlo en 
 </div>
 </section>
 <section id="paso-18-eliminar-una-tarea-controller">
-<h3><a class="toc-backref" href="#id25">Paso 18: Eliminar una tarea (controller)</a><a class="headerlink" href="#paso-18-eliminar-una-tarea-controller" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id28">Paso 18: Eliminar una tarea (controller)</a><a class="headerlink" href="#paso-18-eliminar-una-tarea-controller" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Ahora se va a añadir la función <strong>deleteTask</strong> para eliminar la tarea, editamos <strong>taskController.js</strong>:</p></li>
 </ul>
@@ -1093,7 +1119,7 @@ en cada carpeta vacía. No lo haremos en estos casos ya que no van a estarlo en 
 </div>
 </section>
 <section id="paso-19-eliminar-una-tarea-router">
-<h3><a class="toc-backref" href="#id26">Paso 19: Eliminar una tarea (router)</a><a class="headerlink" href="#paso-19-eliminar-una-tarea-router" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id29">Paso 19: Eliminar una tarea (router)</a><a class="headerlink" href="#paso-19-eliminar-una-tarea-router" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Crear una nueva ruta en <strong>taskRoutes.js</strong>:</p></li>
 </ul>
@@ -1120,7 +1146,7 @@ en cada carpeta vacía. No lo haremos en estos casos ya que no van a estarlo en 
 </ul>
 </section>
 <section id="paso-20-cambiar-estado-de-tarea-controller">
-<h3><a class="toc-backref" href="#id27">Paso 20: Cambiar estado de tarea (controller)</a><a class="headerlink" href="#paso-20-cambiar-estado-de-tarea-controller" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id30">Paso 20: Cambiar estado de tarea (controller)</a><a class="headerlink" href="#paso-20-cambiar-estado-de-tarea-controller" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Cambiar estado de tarea a terminada y su fecha de finalización, editar <strong>taskRoutes.js</strong>:</p></li>
 </ul>
@@ -1276,7 +1302,7 @@ en cada carpeta vacía. No lo haremos en estos casos ya que no van a estarlo en 
 </div>
 </section>
 <section id="paso-21-cambiar-estado-de-tarea-router">
-<h3><a class="toc-backref" href="#id28">Paso 21: Cambiar estado de tarea (router)</a><a class="headerlink" href="#paso-21-cambiar-estado-de-tarea-router" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id31">Paso 21: Cambiar estado de tarea (router)</a><a class="headerlink" href="#paso-21-cambiar-estado-de-tarea-router" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Crear una nueva ruta en <strong>taskRoutes.js</strong>:</p></li>
 </ul>
@@ -1302,7 +1328,7 @@ en cada carpeta vacía. No lo haremos en estos casos ya que no van a estarlo en 
 </ul>
 </section>
 <section id="paso-22-subir-cambios-a-github">
-<h3><a class="toc-backref" href="#id29">Paso 22: Subir cambios a GitHub</a><a class="headerlink" href="#paso-22-subir-cambios-a-github" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id32">Paso 22: Subir cambios a GitHub</a><a class="headerlink" href="#paso-22-subir-cambios-a-github" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Parar depuración de Visual studio code.</p></li>
 <li><p>Añadir cambios: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span> <span class="pre">.</span></code></p></li>
@@ -1318,11 +1344,11 @@ en cada carpeta vacía. No lo haremos en estos casos ya que no van a estarlo en 
 <hr><br></section>
 </section>
 <section id="fase-2-usuarios-y-securizacion">
-<h2><a class="toc-backref" href="#id30">Fase 2: Usuarios y securización</a><a class="headerlink" href="#fase-2-usuarios-y-securizacion" title="Enlazar permanentemente con este título">¶</a></h2>
+<h2><a class="toc-backref" href="#id33">Fase 2: Usuarios y securización</a><a class="headerlink" href="#fase-2-usuarios-y-securizacion" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>En esta fase se va a crear el CRUD de usuarios, la autenticación vía JWT, securizar los endpoints y establecer
 una relación entre tareas y usuarios para saber que tareas pertenece a cada usuario.</p>
 <section id="paso-1-preparar-proyecto">
-<h3><a class="toc-backref" href="#id31">Paso 1: Preparar proyecto</a><a class="headerlink" href="#paso-1-preparar-proyecto" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id34">Paso 1: Preparar proyecto</a><a class="headerlink" href="#paso-1-preparar-proyecto" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Desde la rama <strong>developer</strong> crear rama <strong>git checkout -b feature/auth-jwt-and-securize-tasks</strong></p></li>
 <li><p>Se instalará <cite>moment</cite> para controlar las fechas: <code class="docutils literal notranslate"><span class="pre">npm</span> <span class="pre">install</span> <span class="pre">moment</span> <span class="pre">--save</span></code></p></li>
@@ -1332,7 +1358,7 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 </ul>
 </section>
 <section id="paso-2-crear-modelo-de-usuarios">
-<h3><a class="toc-backref" href="#id32">Paso 2: Crear modelo de usuarios</a><a class="headerlink" href="#paso-2-crear-modelo-de-usuarios" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id35">Paso 2: Crear modelo de usuarios</a><a class="headerlink" href="#paso-2-crear-modelo-de-usuarios" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>En la carpeta <strong>models</strong> crear el archivo <strong>userModel.js</strong>:</p></li>
 </ul>
@@ -1364,7 +1390,7 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 </div>
 </section>
 <section id="paso-3-registro-de-usuarios-controller">
-<h3><a class="toc-backref" href="#id33">Paso 3: Registro de usuarios (controller)</a><a class="headerlink" href="#paso-3-registro-de-usuarios-controller" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id36">Paso 3: Registro de usuarios (controller)</a><a class="headerlink" href="#paso-3-registro-de-usuarios-controller" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Crear un nuevo controlador en la carpeta <strong>controllers</strong> llamado <strong>userController.js</strong>:</p></li>
 </ul>
@@ -1406,7 +1432,7 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 </div>
 </section>
 <section id="paso-4-registro-de-usuarios-router">
-<h3><a class="toc-backref" href="#id34">Paso 4: Registro de usuarios (router)</a><a class="headerlink" href="#paso-4-registro-de-usuarios-router" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id37">Paso 4: Registro de usuarios (router)</a><a class="headerlink" href="#paso-4-registro-de-usuarios-router" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Crear archivo para las rutas en <strong>routes</strong> llamado <strong>userRoutes.js</strong>:</p></li>
 </ul>
@@ -1425,7 +1451,7 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 </div>
 </section>
 <section id="paso-5-registrar-rutas-de-usuarios">
-<h3><a class="toc-backref" href="#id35">Paso 5: Registrar rutas de usuarios</a><a class="headerlink" href="#paso-5-registrar-rutas-de-usuarios" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id38">Paso 5: Registrar rutas de usuarios</a><a class="headerlink" href="#paso-5-registrar-rutas-de-usuarios" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Editar <strong>app.js</strong> y añadir el archivo de rutas:</p></li>
 </ul>
@@ -1472,7 +1498,7 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 </div>
 </section>
 <section id="paso-6-crear-variables-de-entorno">
-<h3><a class="toc-backref" href="#id36">Paso 6: Crear variables de entorno</a><a class="headerlink" href="#paso-6-crear-variables-de-entorno" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id39">Paso 6: Crear variables de entorno</a><a class="headerlink" href="#paso-6-crear-variables-de-entorno" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Antes de poder crear variables de entorno, hay que configurar dotenv. Editamos <strong>index.js</strong>:</p></li>
 </ul>
@@ -1514,7 +1540,7 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 </div>
 </section>
 <section id="paso-7-crear-servicio-jwt">
-<h3><a class="toc-backref" href="#id37">Paso 7: Crear servicio JWT</a><a class="headerlink" href="#paso-7-crear-servicio-jwt" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id40">Paso 7: Crear servicio JWT</a><a class="headerlink" href="#paso-7-crear-servicio-jwt" title="Enlazar permanentemente con este título">¶</a></h3>
 <p>Para poder hacer login vamos a crear un nuevo servicio que maneje JWT:</p>
 <ul class="simple">
 <li><p>Editamos el archivo <strong>.env</strong>:</p></li>
@@ -1554,7 +1580,7 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 </div>
 </section>
 <section id="paso-8-crear-login-controller">
-<h3><a class="toc-backref" href="#id38">Paso 8: Crear login (controller)</a><a class="headerlink" href="#paso-8-crear-login-controller" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id41">Paso 8: Crear login (controller)</a><a class="headerlink" href="#paso-8-crear-login-controller" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Crear una función <strong>login</strong> en <strong>userController.js</strong>:</p></li>
 </ul>
@@ -1634,7 +1660,7 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 </div>
 </section>
 <section id="paso-9-crear-login-router">
-<h3><a class="toc-backref" href="#id39">Paso 9: Crear login (router)</a><a class="headerlink" href="#paso-9-crear-login-router" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id42">Paso 9: Crear login (router)</a><a class="headerlink" href="#paso-9-crear-login-router" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Crear la ruta <strong>login</strong> en <strong>userRoutes.js</strong>:</p></li>
 </ul>
@@ -1673,7 +1699,7 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 </ul>
 </section>
 <section id="paso-10-crear-middleware-para-securizar-rutas">
-<h3><a class="toc-backref" href="#id40">Paso 10: Crear middleware para securizar rutas</a><a class="headerlink" href="#paso-10-crear-middleware-para-securizar-rutas" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id43">Paso 10: Crear middleware para securizar rutas</a><a class="headerlink" href="#paso-10-crear-middleware-para-securizar-rutas" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Para securizar las rutas del proyectos creamos una carpeta en la raiz llamada <strong>middlewares</strong> y dentro de ella el archivo <strong>authMiddleware.js</strong>:</p></li>
 </ul>
@@ -1718,7 +1744,7 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 </div>
 </section>
 <section id="paso-11-proteger-endpoints-de-tareas">
-<h3><a class="toc-backref" href="#id41">Paso 11: Proteger endpoints de tareas</a><a class="headerlink" href="#paso-11-proteger-endpoints-de-tareas" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id44">Paso 11: Proteger endpoints de tareas</a><a class="headerlink" href="#paso-11-proteger-endpoints-de-tareas" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Añadir el middleware a cada endpoint en <strong>taskRoutes.js</strong>:</p></li>
 </ul>
@@ -1750,7 +1776,7 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 <p>Ahora están todas las rutas aseguradas. Será necesario tener un token válido para poder trabajar con ellas.</p>
 </section>
 <section id="paso-12-relacionar-tareas-con-usuarios">
-<h3><a class="toc-backref" href="#id42">Paso 12: Relacionar tareas con usuarios</a><a class="headerlink" href="#paso-12-relacionar-tareas-con-usuarios" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id45">Paso 12: Relacionar tareas con usuarios</a><a class="headerlink" href="#paso-12-relacionar-tareas-con-usuarios" title="Enlazar permanentemente con este título">¶</a></h3>
 <p>Relacionar colección de tareas con la de usuarios de modo que cada usuario tenga sus propias tareas:
 - Editar modelo <strong>taskModel.js</strong>:</p>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// se importa mongoose para mongodb y se inicializa el modulo schema para hacer un modelo:</span><span class="w"></span>
@@ -1794,7 +1820,7 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 </div>
 </section>
 <section id="paso-13-crear-middleware-para-recuperar-usuario">
-<h3><a class="toc-backref" href="#id43">Paso 13: Crear middleware para recuperar usuario</a><a class="headerlink" href="#paso-13-crear-middleware-para-recuperar-usuario" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id46">Paso 13: Crear middleware para recuperar usuario</a><a class="headerlink" href="#paso-13-crear-middleware-para-recuperar-usuario" title="Enlazar permanentemente con este título">¶</a></h3>
 <p>Para poder aprovechar el token y los datos que ofrece, especialmente el ID de usuario. Vamos a añadir la función <strong>getUser</strong> al archivo <strong>authMiddleware.js</strong>:</p>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">moment</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;moment&#39;</span><span class="p">);</span><span class="w"></span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">jwt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../services/jwtService&#39;</span><span class="p">);</span><span class="w"></span>
@@ -1838,7 +1864,7 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 </div>
 </section>
 <section id="paso-14-modificar-modulos-de-controlador-task">
-<h3><a class="toc-backref" href="#id44">Paso 14: Modificar modulos de controlador task</a><a class="headerlink" href="#paso-14-modificar-modulos-de-controlador-task" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id47">Paso 14: Modificar modulos de controlador task</a><a class="headerlink" href="#paso-14-modificar-modulos-de-controlador-task" title="Enlazar permanentemente con este título">¶</a></h3>
 <p>Ahora se va a modificar el controlador <strong>taskController.js</strong> para validar el propietario:</p>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">Task</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../models/taskModel&#39;</span><span class="p">);</span><span class="w"></span>
 <span class="c1">// cargar middleware authMiddleware:</span><span class="w"></span>
@@ -2037,7 +2063,7 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 </ul>
 </section>
 <section id="paso-15-subir-cambios-a-github">
-<h3><a class="toc-backref" href="#id45">Paso 15: Subir cambios a GitHub</a><a class="headerlink" href="#paso-15-subir-cambios-a-github" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id48">Paso 15: Subir cambios a GitHub</a><a class="headerlink" href="#paso-15-subir-cambios-a-github" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Parar depuración de Visual studio code.</p></li>
 <li><p>Añadir cambios: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span> <span class="pre">.</span></code></p></li>
@@ -2053,10 +2079,10 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 <hr><br></section>
 </section>
 <section id="fase-3-recuperacion-de-contrasenas">
-<h2><a class="toc-backref" href="#id46">Fase 3: Recuperación de contraseñas</a><a class="headerlink" href="#fase-3-recuperacion-de-contrasenas" title="Enlazar permanentemente con este título">¶</a></h2>
+<h2><a class="toc-backref" href="#id49">Fase 3: Recuperación de contraseñas</a><a class="headerlink" href="#fase-3-recuperacion-de-contrasenas" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>En esta fase se va a crear un endpoint para recuperar contraseñas usando el email del usuario.</p>
 <section id="id1">
-<h3><a class="toc-backref" href="#id47">Paso 2: Preparar proyecto</a><a class="headerlink" href="#id1" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id50">Paso 2: Preparar proyecto</a><a class="headerlink" href="#id1" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Desde la rama <strong>developer</strong> crear rama <strong>git checkout -b feature/create-recovery-method</strong></p></li>
 <li><p>Instalar nodemailer: <code class="docutils literal notranslate"><span class="pre">npm</span> <span class="pre">install</span> <span class="pre">nodemailer</span> <span class="pre">--save</span></code></p></li>
@@ -2064,7 +2090,7 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 </ul>
 </section>
 <section id="paso-3-enviar-email-controller">
-<h3><a class="toc-backref" href="#id48">Paso 3: Enviar email (controller)</a><a class="headerlink" href="#paso-3-enviar-email-controller" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id51">Paso 3: Enviar email (controller)</a><a class="headerlink" href="#paso-3-enviar-email-controller" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Lo primero será editar las variables de entorno y añadir los datos de nuestro servidor de email:</p></li>
 </ul>
@@ -2209,7 +2235,7 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 </div>
 </section>
 <section id="paso-4-enviar-email-router">
-<h3><a class="toc-backref" href="#id49">Paso 4: Enviar email (router)</a><a class="headerlink" href="#paso-4-enviar-email-router" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id52">Paso 4: Enviar email (router)</a><a class="headerlink" href="#paso-4-enviar-email-router" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Crear el endpoint en el archivo <strong>userRoutes.js</strong>:</p></li>
 </ul>
@@ -2240,7 +2266,7 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 </ul>
 </section>
 <section id="paso-5-reestablecer-contrasena-controller">
-<h3><a class="toc-backref" href="#id50">Paso 5: Reestablecer contraseña (controller)</a><a class="headerlink" href="#paso-5-reestablecer-contrasena-controller" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id53">Paso 5: Reestablecer contraseña (controller)</a><a class="headerlink" href="#paso-5-reestablecer-contrasena-controller" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Vamos a crear la función para reestablecer contraseña en el controlador <strong>userController.js</strong>:</p></li>
 </ul>
@@ -2388,7 +2414,7 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 </div>
 </section>
 <section id="paso-6-reestablecer-contrasena-router">
-<h3><a class="toc-backref" href="#id51">Paso 6: Reestablecer contraseña (router)</a><a class="headerlink" href="#paso-6-reestablecer-contrasena-router" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id54">Paso 6: Reestablecer contraseña (router)</a><a class="headerlink" href="#paso-6-reestablecer-contrasena-router" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Ahora hay que crear la ruta que recibirá dos parámetros en <strong>userController.js</strong>:</p></li>
 </ul>
@@ -2420,7 +2446,7 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 <p>Si todo ha ido bien ahora se podrá hacer login con la nueva contraseña.</p>
 </section>
 <section id="paso-7-subir-cambios-a-github">
-<h3><a class="toc-backref" href="#id52">Paso 7: Subir cambios a GitHub</a><a class="headerlink" href="#paso-7-subir-cambios-a-github" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id55">Paso 7: Subir cambios a GitHub</a><a class="headerlink" href="#paso-7-subir-cambios-a-github" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Parar depuración de Visual studio code.</p></li>
 <li><p>Añadir cambios: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span> <span class="pre">.</span></code></p></li>
@@ -2436,17 +2462,17 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 <hr><br></section>
 </section>
 <section id="fase-4-manejo-de-archivos">
-<h2><a class="toc-backref" href="#id53">Fase 4: Manejo de archivos</a><a class="headerlink" href="#fase-4-manejo-de-archivos" title="Enlazar permanentemente con este título">¶</a></h2>
+<h2><a class="toc-backref" href="#id56">Fase 4: Manejo de archivos</a><a class="headerlink" href="#fase-4-manejo-de-archivos" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>En esta fase vamos a trabajar con archivos de cara al servidor. Se va a añadir las funcionalidades de mostrar datos de usuario y actualizarlos, incluido un avatar.</p>
 <section id="id2">
-<h3><a class="toc-backref" href="#id54">Paso 1: Preparar proyecto</a><a class="headerlink" href="#id2" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id57">Paso 1: Preparar proyecto</a><a class="headerlink" href="#id2" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Desde la rama <strong>developer</strong> crear rama <strong>git checkout -b feature/upload-data-service</strong></p></li>
 <li><p>Se instalará <strong>multipary</strong> para trabajar con archivos y formularios: <code class="docutils literal notranslate"><span class="pre">npm</span> <span class="pre">install</span> <span class="pre">connect-multiparty</span> <span class="pre">--save</span></code></p></li>
 </ul>
 </section>
 <section id="paso-2-editar-modelo-usuarios">
-<h3><a class="toc-backref" href="#id55">Paso 2: Editar modelo usuarios</a><a class="headerlink" href="#paso-2-editar-modelo-usuarios" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id58">Paso 2: Editar modelo usuarios</a><a class="headerlink" href="#paso-2-editar-modelo-usuarios" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Se va a añadir un nuevo campo al modelo de usuarios llamado <strong>avatar</strong>, editamos <strong>userModel.js</strong>:</p></li>
 </ul>
@@ -2482,7 +2508,7 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 </div>
 </section>
 <section id="paso-3-recuperar-usuario-y-actualizar-imagen-de-usuario-controller">
-<h3><a class="toc-backref" href="#id56">Paso 3: Recuperar usuario y actualizar imagen de usuario (controller)</a><a class="headerlink" href="#paso-3-recuperar-usuario-y-actualizar-imagen-de-usuario-controller" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id59">Paso 3: Recuperar usuario y actualizar imagen de usuario (controller)</a><a class="headerlink" href="#paso-3-recuperar-usuario-y-actualizar-imagen-de-usuario-controller" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Para la lógica de esta aplicación, el usuario cambia su imagen solo después de registrarse. Así que haremos una función esclusiva para este fin. Editamos <strong>userController.js</strong>:</p></li>
 </ul>
@@ -2735,7 +2761,7 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 </div>
 </section>
 <section id="paso-4-recuperar-usuario-y-actualizar-imagen-de-usuario-router">
-<h3><a class="toc-backref" href="#id57">Paso 4: Recuperar usuario y actualizar imagen de usuario (router)</a><a class="headerlink" href="#paso-4-recuperar-usuario-y-actualizar-imagen-de-usuario-router" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id60">Paso 4: Recuperar usuario y actualizar imagen de usuario (router)</a><a class="headerlink" href="#paso-4-recuperar-usuario-y-actualizar-imagen-de-usuario-router" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Añadir la nueva ruta a <strong>userRoutes.js</strong>:</p></li>
 </ul>
@@ -2778,7 +2804,7 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 </ul>
 </section>
 <section id="paso-5-recuperar-avatar-controller">
-<h3><a class="toc-backref" href="#id58">paso 5: Recuperar avatar (controller)</a><a class="headerlink" href="#paso-5-recuperar-avatar-controller" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id61">paso 5: Recuperar avatar (controller)</a><a class="headerlink" href="#paso-5-recuperar-avatar-controller" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Ahora vamos a recuperar una imagen guardada en el servidor. Editamos <strong>userController.js</strong>:</p></li>
 </ul>
@@ -3029,7 +3055,7 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 </div>
 </section>
 <section id="paso-6-recuperar-avatar-router">
-<h3><a class="toc-backref" href="#id59">paso 6: Recuperar avatar (router)</a><a class="headerlink" href="#paso-6-recuperar-avatar-router" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id62">paso 6: Recuperar avatar (router)</a><a class="headerlink" href="#paso-6-recuperar-avatar-router" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Ahora vamos a crear el endpoint para recuperar el avatar en <strong>userRoutes.js</strong>:</p></li>
 </ul>
@@ -3055,7 +3081,7 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 </div>
 </section>
 <section id="paso-7-eliminar-usuario-controller">
-<h3><a class="toc-backref" href="#id60">Paso 7: Eliminar usuario (controller)</a><a class="headerlink" href="#paso-7-eliminar-usuario-controller" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id63">Paso 7: Eliminar usuario (controller)</a><a class="headerlink" href="#paso-7-eliminar-usuario-controller" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Vamos a crear una función para eliminar usuarios llamada <strong>deleteUser</strong> en <strong>userController.js</strong>:</p></li>
 </ul>
@@ -3364,7 +3390,7 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 </div>
 </section>
 <section id="paso-8-eliminar-usuario-router">
-<h3><a class="toc-backref" href="#id61">Paso 8: Eliminar usuario (router)</a><a class="headerlink" href="#paso-8-eliminar-usuario-router" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id64">Paso 8: Eliminar usuario (router)</a><a class="headerlink" href="#paso-8-eliminar-usuario-router" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Ahora vamos a cargar la ruta para eliminar el usuario en <strong>userRoutes.js</strong>:</p></li>
 </ul>
@@ -3394,7 +3420,7 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 </ul>
 </section>
 <section id="paso-9-subir-cambios-a-github">
-<h3><a class="toc-backref" href="#id62">Paso 9: Subir cambios a GitHub</a><a class="headerlink" href="#paso-9-subir-cambios-a-github" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id65">Paso 9: Subir cambios a GitHub</a><a class="headerlink" href="#paso-9-subir-cambios-a-github" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
 <li><p>Parar depuración de Visual studio code.</p></li>
 <li><p>Añadir cambios: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span> <span class="pre">.</span></code></p></li>
@@ -3408,6 +3434,982 @@ una relación entre tareas y usuarios para saber que tareas pertenece a cada usu
 </ul>
 <p>Y con esto concluye la cuarta fase del proyecto.</p>
 <hr><br></section>
+</section>
+<section id="fase-5-crear-documentacion">
+<h2><a class="toc-backref" href="#id66">Fase 5: Crear documentación</a><a class="headerlink" href="#fase-5-crear-documentacion" title="Enlazar permanentemente con este título">¶</a></h2>
+<p>En esta fase vamos a instalar una librería en el proyecto que genera documentación automáticamente siguiendo las anotaciones que vamos dejando en el código.</p>
+<section id="id3">
+<h3><a class="toc-backref" href="#id67">Paso 1: Preparar proyecto</a><a class="headerlink" href="#id3" title="Enlazar permanentemente con este título">¶</a></h3>
+<ul class="simple">
+<li><p>Desde la rama <strong>developer</strong> crear rama <strong>git checkout -b feature/generate-api-docu</strong></p></li>
+<li><p>Se instalará <strong>JSDoc</strong> para crear documentación: <code class="docutils literal notranslate"><span class="pre">npm</span> <span class="pre">install</span> <span class="pre">jsdoc</span> <span class="pre">--save</span></code></p></li>
+</ul>
+</section>
+<section id="paso-2-crear-archivo-de-configuracion">
+<h3><a class="toc-backref" href="#id68">Paso 2: Crear archivo de configuración</a><a class="headerlink" href="#paso-2-crear-archivo-de-configuracion" title="Enlazar permanentemente con este título">¶</a></h3>
+<ul class="simple">
+<li><p>En la raiz del proyecto creamos un nuevo archivo de configuración llamado <strong>jsdoc.json</strong>:</p></li>
+</ul>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;plugins&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[],</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;source&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;include&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">],</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;includePattern&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;.js$&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;excludePattern&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;(node_modules|uploads|documents)&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;templates&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;cleverLinks&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;monospaceLinks&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<span class="w">    </span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;opts&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;destination&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;./documents&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Lo mas destacado aquí es <strong>source</strong>, donde indicamos en include la carpeta donde revisar los archivos del proyecto, que formato debe buscar «.js» y que carpetas no debe mirar como <strong>node_modules</strong>, <strong>uploads</strong> y la carpeta que se genera llamada <strong>documents</strong>.
+En opts definimos la carpeta de destino donde se va a crear la documentación, en este caso le hemos puesto <strong>documents</strong>.</p>
+<ul class="simple">
+<li><p>Vamos a añadir la carpeta <strong>documents</strong> a <strong>.gitignore</strong>:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">node_modules</span><span class="o">/</span>
+<span class="o">.</span><span class="n">env</span>
+<span class="n">uploads</span><span class="o">/</span>
+<span class="n">documents</span><span class="o">/</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Ahora creamos un script en <strong>package.json</strong>:</p></li>
+</ul>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;task-learn-api&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;version&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;0.0.1&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;description&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;API from Task Learn&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;main&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;index.js&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;scripts&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;test&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;start&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;node index.js&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;document&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;jsdoc -c jsdoc.json&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;author&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Guillermo Granados Gómez&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;license&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;MIT&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;dependencies&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;bcryptjs&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;^2.4.3&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;connect-multiparty&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;^2.2.0&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;cors&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;^2.8.5&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;dotenv&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;^16.0.2&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;express&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;^4.18.1&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;jsdoc&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;^3.6.11&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;jsonwebtoken&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;^8.5.1&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;moment&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;^2.29.4&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;mongoose&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;^6.5.4&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;nodemailer&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;^6.7.8&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;underscore&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;^1.13.4&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;devDependencies&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;nodemon&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;^2.0.19&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Para generar la documentación se ejecuta ahora: <code class="docutils literal notranslate"><span class="pre">npm</span> <span class="pre">run</span> <span class="pre">document</span></code>.</p></li>
+<li><p>Una vez tengamos la documentación creada creamos un enlace a la misma en <strong>app.js</strong>:</p></li>
+</ul>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">express</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;express&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">express</span><span class="p">();</span><span class="w"></span>
+<span class="c1">// cargar librería path:</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">);</span><span class="w"></span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">cors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;cors&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span><span class="w"></span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">urlencoded</span><span class="p">({</span><span class="nx">extended</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">}));</span><span class="w"></span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">cors</span><span class="p">());</span><span class="w"></span>
+
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">taskRoutes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./routes/taskRoutes&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">userRoutes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./routes/userRoutes&#39;</span><span class="p">);</span><span class="w"></span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s2">&quot;/api&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">taskRoutes</span><span class="p">);</span><span class="w"></span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s2">&quot;/api&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">userRoutes</span><span class="p">);</span><span class="w"></span>
+<span class="c1">// definir donde se encuentra la documentación:</span><span class="w"></span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/api/docs&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">express</span><span class="p">.</span><span class="k">static</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;documents&#39;</span><span class="p">)));</span><span class="w"></span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">app</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Paso 3: Cr</p>
+</section>
+<section id="id4">
+<h3><a class="toc-backref" href="#id69">Paso 1: Preparar proyecto</a><a class="headerlink" href="#id4" title="Enlazar permanentemente con este título">¶</a></h3>
+<ul class="simple">
+<li><p>Desde la rama <strong>developer</strong> crear rama <strong>git checkout -b feature/generate-api-docu</strong></p></li>
+<li><p>Se instalará <strong>Swagger</strong> para crear documentación: <code class="docutils literal notranslate"><span class="pre">npm</span> <span class="pre">install</span> <span class="pre">swagger-ui-express</span> <span class="pre">swagger-jsdoc</span> <span class="pre">-S</span></code></p></li>
+<li><p>añadimos también el endpoint de <strong>swagger</strong>: <code class="docutils literal notranslate"><span class="pre">npm</span> <span class="pre">install</span> <span class="pre">&#64;types/swagger-jsdoc</span> <span class="pre">&#64;types/swagger-ui-express</span> <span class="pre">-D</span></code></p></li>
+<li><p>En la raiz crear carpeta <strong>docs</strong></p></li>
+</ul>
+</section>
+<section id="id5">
+<h3><a class="toc-backref" href="#id70">Paso 2: Crear archivo de configuración</a><a class="headerlink" href="#id5" title="Enlazar permanentemente con este título">¶</a></h3>
+<ul class="simple">
+<li><p>Vamos a editar <strong>app.js</strong> para añadir la configuración de <strong>swagger</strong>:</p></li>
+</ul>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">express</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;express&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">express</span><span class="p">();</span><span class="w"></span>
+<span class="c1">// importar swaggerUi y swaggerJsDoc:</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">swaggerUi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;swagger-ui-express&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">swaggerJsDoc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;swagger-jsdoc&#39;</span><span class="p">);</span><span class="w"></span>
+
+<span class="c1">// crear las especificaciones:</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">swaggerOptions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">definition</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">openapi</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;3.0.0&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nx">info</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nx">title</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Task Learn API documentation&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nx">version</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;1.0.0&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="p">},</span><span class="w"></span>
+<span class="w">        </span><span class="nx">servers</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="nx">url</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;http://localhost:5000&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">],</span><span class="w"></span>
+<span class="w">        </span><span class="nx">components</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nx">securitySchemes</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="nx">ApiKeyAuth</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;apiKey&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">                    </span><span class="ow">in</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;header&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">                    </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Authorization&#39;</span><span class="w"></span>
+<span class="w">                </span><span class="p">}</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">},</span><span class="w"></span>
+<span class="w">        </span><span class="nx">security</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="nx">ApiKeyAuth</span><span class="o">:</span><span class="w"> </span><span class="p">[]</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="nx">apis</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;./routes/*.js&quot;</span><span class="p">]</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">swaggerSpec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">swaggerJsDoc</span><span class="p">(</span><span class="nx">swaggerOptions</span><span class="p">);</span><span class="w"></span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">cors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;cors&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span><span class="w"></span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">urlencoded</span><span class="p">({</span><span class="nx">extended</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">}));</span><span class="w"></span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">cors</span><span class="p">());</span><span class="w"></span>
+
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">taskRoutes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./routes/taskRoutes&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">userRoutes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./routes/userRoutes&#39;</span><span class="p">);</span><span class="w"></span>
+
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s2">&quot;/api&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">taskRoutes</span><span class="p">);</span><span class="w"></span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s2">&quot;/api&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">userRoutes</span><span class="p">);</span><span class="w"></span>
+<span class="c1">// creamos una ruta para la documentación:</span><span class="w"></span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s2">&quot;/api/docs&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">swaggerUi</span><span class="p">.</span><span class="nx">serve</span><span class="p">,</span><span class="w"> </span><span class="nx">swaggerUi</span><span class="p">.</span><span class="nx">setup</span><span class="p">(</span><span class="nx">swaggerSpec</span><span class="p">));</span><span class="w"></span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">app</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="paso-3-crear-schema-de-tareas">
+<h3><a class="toc-backref" href="#id71">Paso 3: Crear Schema de tareas</a><a class="headerlink" href="#paso-3-crear-schema-de-tareas" title="Enlazar permanentemente con este título">¶</a></h3>
+<ul class="simple">
+<li><p>Vamos a crear un schema en el archivo de rutas <strong>taskRouter.js</strong>:</p></li>
+</ul>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">express</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;express&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../app&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">api</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">express</span><span class="p">.</span><span class="nx">Router</span><span class="p">();</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">authMiddleware</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;../middlewares/authMiddleware&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">taskController</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;../controllers/taskController&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="c1">// añadir el schema de swagger:</span><span class="w"></span>
+<span class="cm">/**</span>
+<span class="cm">* @swagger</span>
+<span class="cm">* components:</span>
+<span class="cm">*  schemas:</span>
+<span class="cm">*      Task:</span>
+<span class="cm">*          type: object</span>
+<span class="cm">*          properties:</span>
+<span class="cm">*              name:</span>
+<span class="cm">*                  type: string</span>
+<span class="cm">*                  description: título de la tarea</span>
+<span class="cm">*              description:</span>
+<span class="cm">*                  type: string</span>
+<span class="cm">*                  description: descripción de la tarea</span>
+<span class="cm">*              is_complete:</span>
+<span class="cm">*                  type: boolean</span>
+<span class="cm">*                  description: cambia a true si la tarea esta finalizada</span>
+<span class="cm">*              date_created:</span>
+<span class="cm">*                  type: string</span>
+<span class="cm">*                  description: fecha de creación de la tarea</span>
+<span class="cm">*              date_finish:</span>
+<span class="cm">*                  type: string</span>
+<span class="cm">*                  description: fecha de finalización de la tarea</span>
+<span class="cm">*              owner:</span>
+<span class="cm">*                  type: string</span>
+<span class="cm">*                  description: id del propietario de la tarea</span>
+<span class="cm">*          required:</span>
+<span class="cm">*              - name</span>
+<span class="cm">*              - description</span>
+<span class="cm">*          example:</span>
+<span class="cm">*              name: Comprar galletas</span>
+<span class="cm">*              description: ir a comprar galletas al super</span>
+<span class="cm">*/</span><span class="w"></span>
+
+<span class="nx">api</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s2">&quot;/tasks&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nx">authMiddleware</span><span class="p">.</span><span class="nx">secureRoute</span><span class="p">],</span><span class="w"> </span><span class="nx">taskController</span><span class="p">.</span><span class="nx">postTask</span><span class="p">);</span><span class="w"></span>
+<span class="nx">api</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;/tasks&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nx">authMiddleware</span><span class="p">.</span><span class="nx">secureRoute</span><span class="p">],</span><span class="w"> </span><span class="nx">taskController</span><span class="p">.</span><span class="nx">getTasks</span><span class="p">);</span><span class="w"></span>
+<span class="nx">api</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;/tasks/:id&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nx">authMiddleware</span><span class="p">.</span><span class="nx">secureRoute</span><span class="p">],</span><span class="w"> </span><span class="nx">taskController</span><span class="p">.</span><span class="nx">getTask</span><span class="p">);</span><span class="w"></span>
+<span class="nx">api</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s2">&quot;/tasks/:id&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nx">authMiddleware</span><span class="p">.</span><span class="nx">secureRoute</span><span class="p">],</span><span class="w"> </span><span class="nx">taskController</span><span class="p">.</span><span class="nx">putTask</span><span class="p">);</span><span class="w"></span>
+<span class="nx">api</span><span class="p">.</span><span class="ow">delete</span><span class="p">(</span><span class="s2">&quot;/tasks/:id&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nx">authMiddleware</span><span class="p">.</span><span class="nx">secureRoute</span><span class="p">],</span><span class="w"> </span><span class="nx">taskController</span><span class="p">.</span><span class="nx">deleteTask</span><span class="p">);</span><span class="w"></span>
+<span class="nx">api</span><span class="p">.</span><span class="nx">patch</span><span class="p">(</span><span class="s2">&quot;/tasks/:id&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nx">authMiddleware</span><span class="p">.</span><span class="nx">secureRoute</span><span class="p">],</span><span class="w"> </span><span class="nx">taskController</span><span class="p">.</span><span class="nx">changeTask</span><span class="p">);</span><span class="w"></span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">api</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="paso-4-crear-peticiones-de-las-rutas">
+<h3><a class="toc-backref" href="#id72">Paso 4: Crear peticiones de las rutas</a><a class="headerlink" href="#paso-4-crear-peticiones-de-las-rutas" title="Enlazar permanentemente con este título">¶</a></h3>
+<ul class="simple">
+<li><p>Editamos nuevamente el archivo de rutas <strong>taskRouter.js</strong>:</p></li>
+</ul>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">express</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;express&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../app&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">api</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">express</span><span class="p">.</span><span class="nx">Router</span><span class="p">();</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">authMiddleware</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;../middlewares/authMiddleware&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">taskController</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;../controllers/taskController&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="cm">/**</span>
+<span class="cm">* @swagger</span>
+<span class="cm">* components:</span>
+<span class="cm">*  schemas:</span>
+<span class="cm">*      Task:</span>
+<span class="cm">*          type: object</span>
+<span class="cm">*          properties:</span>
+<span class="cm">*              name:</span>
+<span class="cm">*                  type: string</span>
+<span class="cm">*                  description: título de la tarea</span>
+<span class="cm">*              description:</span>
+<span class="cm">*                  type: string</span>
+<span class="cm">*                  description: descripción de la tarea</span>
+<span class="cm">*              is_complete:</span>
+<span class="cm">*                  type: boolean</span>
+<span class="cm">*                  description: cambia a true si la tarea esta finalizada</span>
+<span class="cm">*              date_created:</span>
+<span class="cm">*                  type: string</span>
+<span class="cm">*                  description: fecha de creación de la tarea</span>
+<span class="cm">*              date_finish:</span>
+<span class="cm">*                  type: string</span>
+<span class="cm">*                  description: fecha de finalización de la tarea</span>
+<span class="cm">*              owner:</span>
+<span class="cm">*                  type: string</span>
+<span class="cm">*                  description: id del propietario de la tarea</span>
+<span class="cm">*          required:</span>
+<span class="cm">*              - name</span>
+<span class="cm">*              - description</span>
+<span class="cm">*          example:</span>
+<span class="cm">*              name: Comprar galletas</span>
+<span class="cm">*              description: ir a comprar galletas al super</span>
+<span class="cm">*/</span><span class="w"></span>
+
+
+<span class="c1">// crear una petición post en la documentación:</span><span class="w"></span>
+<span class="cm">/**</span>
+<span class="cm">* @swagger</span>
+<span class="cm">* /api/tasks:</span>
+<span class="cm">*  post:</span>
+<span class="cm">*      summary: Crear nueva tarea</span>
+<span class="cm">*      tags: [Task]</span>
+<span class="cm">*      description: Crea una nueva tarea y retorna la misma como resultado.</span>
+<span class="cm">*      requestBody:</span>
+<span class="cm">*          required: true</span>
+<span class="cm">*          content:</span>
+<span class="cm">*              application/json:</span>
+<span class="cm">*                  schema:</span>
+<span class="cm">*                      type: object</span>
+<span class="cm">*                      $ref: &#39;#/components/schemas/Task&#39;</span>
+<span class="cm">*      responses:</span>
+<span class="cm">*          201:</span>
+<span class="cm">*              description: Retorna la tarea ya creada</span>
+<span class="cm">*          400:</span>
+<span class="cm">*              description: No se puede crear la tarea</span>
+<span class="cm">*          403:</span>
+<span class="cm">*              description: No se han provisto las credenciales</span>
+<span class="cm">*</span>
+<span class="cm">*/</span><span class="w"></span>
+<span class="nx">api</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s2">&quot;/tasks&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nx">authMiddleware</span><span class="p">.</span><span class="nx">secureRoute</span><span class="p">],</span><span class="w"> </span><span class="nx">taskController</span><span class="p">.</span><span class="nx">postTask</span><span class="p">);</span><span class="w"></span>
+
+<span class="c1">// crear una petición get en la documentación:</span><span class="w"></span>
+<span class="cm">/**</span>
+<span class="cm">* @swagger</span>
+<span class="cm">* /api/tasks:</span>
+<span class="cm">*  get:</span>
+<span class="cm">*      summary: Listado de tareas</span>
+<span class="cm">*      tags: [Task]</span>
+<span class="cm">*      description: Recuperar listado de tareas de cada usuario.</span>
+<span class="cm">*      responses:</span>
+<span class="cm">*          200:</span>
+<span class="cm">*              description: Retorna un litado de tareas</span>
+<span class="cm">*          400:</span>
+<span class="cm">*              description: No se puede obtener las tareas</span>
+<span class="cm">*          403:</span>
+<span class="cm">*              description: No se han provisto las credenciales</span>
+<span class="cm">*</span>
+<span class="cm">*/</span><span class="w"></span>
+<span class="nx">api</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;/tasks&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nx">authMiddleware</span><span class="p">.</span><span class="nx">secureRoute</span><span class="p">],</span><span class="w"> </span><span class="nx">taskController</span><span class="p">.</span><span class="nx">getTasks</span><span class="p">);</span><span class="w"></span>
+
+<span class="c1">// crear una petición get en la documentación de una tarea:</span><span class="w"></span>
+<span class="cm">/**</span>
+<span class="cm">* @swagger</span>
+<span class="cm">* /api/tasks/{id}:</span>
+<span class="cm">*  get:</span>
+<span class="cm">*      summary: Recuperar una tarea</span>
+<span class="cm">*      tags: [Task]</span>
+<span class="cm">*      description: Recuperar tarea de un usuario a través de su id.</span>
+<span class="cm">*      parameters:</span>
+<span class="cm">*          - in: path</span>
+<span class="cm">*            name: id</span>
+<span class="cm">*            schema:</span>
+<span class="cm">*              type: string</span>
+<span class="cm">*            required: true</span>
+<span class="cm">*            description: id de la tarea</span>
+<span class="cm">*      responses:</span>
+<span class="cm">*          200:</span>
+<span class="cm">*              description: Retorna una tarea</span>
+<span class="cm">*          400:</span>
+<span class="cm">*              description: No se puede obtener la tarea</span>
+<span class="cm">*          403:</span>
+<span class="cm">*              description: No se han provisto las credenciales</span>
+<span class="cm">*</span>
+<span class="cm">*/</span><span class="w"></span>
+<span class="nx">api</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;/tasks/:id&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nx">authMiddleware</span><span class="p">.</span><span class="nx">secureRoute</span><span class="p">],</span><span class="w"> </span><span class="nx">taskController</span><span class="p">.</span><span class="nx">getTask</span><span class="p">);</span><span class="w"></span>
+
+<span class="c1">// crear una petición put en la documentación de una tarea:</span><span class="w"></span>
+<span class="cm">/**</span>
+<span class="cm">* @swagger</span>
+<span class="cm">* /api/tasks/{id}:</span>
+<span class="cm">*  put:</span>
+<span class="cm">*      summary: Modificar una tarea</span>
+<span class="cm">*      tags: [Task]</span>
+<span class="cm">*      description: Modificar tarea de un usuario a través de su id.</span>
+<span class="cm">*      parameters:</span>
+<span class="cm">*          - in: path</span>
+<span class="cm">*            name: id</span>
+<span class="cm">*            schema:</span>
+<span class="cm">*              type: string</span>
+<span class="cm">*            required: true</span>
+<span class="cm">*            description: id de la tarea</span>
+<span class="cm">*      requestBody:</span>
+<span class="cm">*          required: true</span>
+<span class="cm">*          content:</span>
+<span class="cm">*              application/json:</span>
+<span class="cm">*                  schema:</span>
+<span class="cm">*                      type: object</span>
+<span class="cm">*                      $ref: &#39;#/components/schemas/Task&#39;</span>
+<span class="cm">*      responses:</span>
+<span class="cm">*          201:</span>
+<span class="cm">*              description: Actualiza una tarea</span>
+<span class="cm">*          400:</span>
+<span class="cm">*              description: La tarea no existe</span>
+<span class="cm">*          403:</span>
+<span class="cm">*              description: No se han provisto las credenciales</span>
+<span class="cm">*          404:</span>
+<span class="cm">*              description: La tarea no existe</span>
+<span class="cm">*</span>
+<span class="cm">*/</span><span class="w"></span>
+<span class="nx">api</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s2">&quot;/tasks/:id&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nx">authMiddleware</span><span class="p">.</span><span class="nx">secureRoute</span><span class="p">],</span><span class="w"> </span><span class="nx">taskController</span><span class="p">.</span><span class="nx">putTask</span><span class="p">);</span><span class="w"></span>
+
+<span class="c1">// crear una petición put en la documentación de una tarea:</span><span class="w"></span>
+<span class="cm">/**</span>
+<span class="cm">* @swagger</span>
+<span class="cm">* /api/tasks/{id}:</span>
+<span class="cm">*  delete:</span>
+<span class="cm">*      summary: Eliminar una tarea</span>
+<span class="cm">*      tags: [Task]</span>
+<span class="cm">*      description: Eliminar tarea de un usuario a través de su id.</span>
+<span class="cm">*      parameters:</span>
+<span class="cm">*          - in: path</span>
+<span class="cm">*            name: id</span>
+<span class="cm">*            schema:</span>
+<span class="cm">*              type: string</span>
+<span class="cm">*            required: true</span>
+<span class="cm">*            description: id de la tarea</span>
+<span class="cm">*      responses:</span>
+<span class="cm">*          201:</span>
+<span class="cm">*              description: Actualiza una tarea</span>
+<span class="cm">*          400:</span>
+<span class="cm">*              description: La tarea no existe</span>
+<span class="cm">*          403:</span>
+<span class="cm">*              description: No se han provisto las credenciales</span>
+<span class="cm">*          404:</span>
+<span class="cm">*              description: La tarea no existe</span>
+<span class="cm">*</span>
+<span class="cm">*/</span><span class="w"></span>
+<span class="nx">api</span><span class="p">.</span><span class="ow">delete</span><span class="p">(</span><span class="s2">&quot;/tasks/:id&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nx">authMiddleware</span><span class="p">.</span><span class="nx">secureRoute</span><span class="p">],</span><span class="w"> </span><span class="nx">taskController</span><span class="p">.</span><span class="nx">deleteTask</span><span class="p">);</span><span class="w"></span>
+
+<span class="c1">// crear una petición put en la documentación de una tarea:</span><span class="w"></span>
+<span class="cm">/**</span>
+<span class="cm">* @swagger</span>
+<span class="cm">* /api/tasks/{id}:</span>
+<span class="cm">*  patch:</span>
+<span class="cm">*      summary: Finalizar una tarea</span>
+<span class="cm">*      tags: [Task]</span>
+<span class="cm">*      description: Finaliza la tarea de un usuario a través de su id.</span>
+<span class="cm">*      parameters:</span>
+<span class="cm">*          - in: path</span>
+<span class="cm">*            name: id</span>
+<span class="cm">*            schema:</span>
+<span class="cm">*              type: string</span>
+<span class="cm">*            required: true</span>
+<span class="cm">*            description: id de la tarea</span>
+<span class="cm">*      responses:</span>
+<span class="cm">*          200:</span>
+<span class="cm">*              description: Actualiza una tarea</span>
+<span class="cm">*          400:</span>
+<span class="cm">*              description: La tarea no existe</span>
+<span class="cm">*          403:</span>
+<span class="cm">*              description: No se han provisto las credenciales</span>
+<span class="cm">*          404:</span>
+<span class="cm">*              description: La tarea no existe</span>
+<span class="cm">*</span>
+<span class="cm">*/</span><span class="w"></span>
+<span class="nx">api</span><span class="p">.</span><span class="nx">patch</span><span class="p">(</span><span class="s2">&quot;/tasks/:id&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nx">authMiddleware</span><span class="p">.</span><span class="nx">secureRoute</span><span class="p">],</span><span class="w"> </span><span class="nx">taskController</span><span class="p">.</span><span class="nx">changeTask</span><span class="p">);</span><span class="w"></span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">api</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="paso-5-crear-scheme-y-peticiones-de-user">
+<h3><a class="toc-backref" href="#id73">Paso 5: Crear scheme y peticiones de User</a><a class="headerlink" href="#paso-5-crear-scheme-y-peticiones-de-user" title="Enlazar permanentemente con este título">¶</a></h3>
+<ul class="simple">
+<li><p>Hacemos los dos pasos anteriores en el archivo de rutas <strong>userRequest.js</strong>:</p></li>
+</ul>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">express</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;express&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">multiparty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;connect-multiparty&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">userController</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../controllers/userController&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">authMiddleware</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../middlewares/authMiddleware&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">uploadAvatarMiddleware</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">multiparty</span><span class="p">({</span><span class="nx">uploadDir</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;./uploads/avatars&#39;</span><span class="p">});</span><span class="w"></span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">api</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">express</span><span class="p">.</span><span class="nx">Router</span><span class="p">();</span><span class="w"></span>
+
+<span class="cm">/**</span>
+<span class="cm">* @swagger</span>
+<span class="cm">* components:</span>
+<span class="cm">*  schemas:</span>
+<span class="cm">*      User:</span>
+<span class="cm">*          type: object</span>
+<span class="cm">*          properties:</span>
+<span class="cm">*              name:</span>
+<span class="cm">*                  type: string</span>
+<span class="cm">*                  description: nombre del usuario</span>
+<span class="cm">*              lastname:</span>
+<span class="cm">*                  type: string</span>
+<span class="cm">*                  description: apellidos del usuario</span>
+<span class="cm">*              email:</span>
+<span class="cm">*                  type: string</span>
+<span class="cm">*                  description: email del usuario (se usa para iniciar sesión)</span>
+<span class="cm">*              password:</span>
+<span class="cm">*                  type: string</span>
+<span class="cm">*                  description: contraseña del usuario</span>
+<span class="cm">*              avatar:</span>
+<span class="cm">*                  type: string</span>
+<span class="cm">*                  description: Imagen para el perfil de usuario</span>
+<span class="cm">*          required:</span>
+<span class="cm">*              - email</span>
+<span class="cm">*              - password</span>
+<span class="cm">*          example:</span>
+<span class="cm">*              email: pytonicus@gmail.com</span>
+<span class="cm">*              password: &quot;1234&quot;</span>
+<span class="cm">*/</span><span class="w"></span>
+
+
+<span class="c1">// crear una petición post para registro en la documentación:</span><span class="w"></span>
+<span class="cm">/**</span>
+<span class="cm">* @swagger</span>
+<span class="cm">* /api/register:</span>
+<span class="cm">*  post:</span>
+<span class="cm">*      summary: Crear nuevo usuario</span>
+<span class="cm">*      tags: [User]</span>
+<span class="cm">*      description: Crea un nuevo usuario a partir de su email y password</span>
+<span class="cm">*      requestBody:</span>
+<span class="cm">*          required: true</span>
+<span class="cm">*          content:</span>
+<span class="cm">*              application/json:</span>
+<span class="cm">*                  schema:</span>
+<span class="cm">*                      type: object</span>
+<span class="cm">*                      $ref: &#39;#/components/schemas/User&#39;</span>
+<span class="cm">*      responses:</span>
+<span class="cm">*          201:</span>
+<span class="cm">*              description: El usuario ha sido creado</span>
+<span class="cm">*          500:</span>
+<span class="cm">*              description: El email ya existe</span>
+<span class="cm">*</span>
+<span class="cm">*/</span><span class="w"></span>
+<span class="nx">api</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s2">&quot;/register&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">userController</span><span class="p">.</span><span class="nx">postUser</span><span class="p">);</span><span class="w"></span>
+
+<span class="c1">// crear otra petición post para login en la documentación:</span><span class="w"></span>
+<span class="cm">/**</span>
+<span class="cm">* @swagger</span>
+<span class="cm">* /api/login:</span>
+<span class="cm">*  post:</span>
+<span class="cm">*      summary: Contraseña olvidada</span>
+<span class="cm">*      tags: [User]</span>
+<span class="cm">*      description: Se le pasa un email al que enviará una url con los datos para crear nueva contraseña.</span>
+<span class="cm">*      requestBody:</span>
+<span class="cm">*          required: true</span>
+<span class="cm">*          content:</span>
+<span class="cm">*              application/json:</span>
+<span class="cm">*                  schema:</span>
+<span class="cm">*                      type: object</span>
+<span class="cm">*                      $ref: &#39;#/components/schemas/User&#39;</span>
+<span class="cm">*      responses:</span>
+<span class="cm">*          200:</span>
+<span class="cm">*              description: Se ha enviado el email</span>
+<span class="cm">*          400:</span>
+<span class="cm">*              description: El email no existe</span>
+<span class="cm">*</span>
+<span class="cm">*/</span><span class="w"></span>
+<span class="nx">api</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s2">&quot;/login&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">userController</span><span class="p">.</span><span class="nx">login</span><span class="p">);</span><span class="w"></span>
+
+<span class="c1">// crear otra petición post para restaurar contraseña en la documentación:</span><span class="w"></span>
+<span class="cm">/**</span>
+<span class="cm">* @swagger</span>
+<span class="cm">* /api/forgot:</span>
+<span class="cm">*  post:</span>
+<span class="cm">*      summary: Recuperar contraseña</span>
+<span class="cm">*      tags: [User]</span>
+<span class="cm">*      description: Envía un email para restaurar la contraseña olvidada.</span>
+<span class="cm">*      requestBody:</span>
+<span class="cm">*          required: true</span>
+<span class="cm">*          content:</span>
+<span class="cm">*              application/json:</span>
+<span class="cm">*                  schema:</span>
+<span class="cm">*                      type: object</span>
+<span class="cm">*                      properties:</span>
+<span class="cm">*                          email:</span>
+<span class="cm">*                              type: string</span>
+<span class="cm">*                              description: email del usuario (para recuperar contraseña)</span>
+<span class="cm">*</span>
+<span class="cm">*                      example:</span>
+<span class="cm">*                          email: pytonicus@gmail.com</span>
+<span class="cm">*      responses:</span>
+<span class="cm">*          200:</span>
+<span class="cm">*              description: Se ha iniciado sesión con éxito</span>
+<span class="cm">*          400:</span>
+<span class="cm">*              description: El email no existe</span>
+<span class="cm">*</span>
+<span class="cm">*/</span><span class="w"></span>
+<span class="nx">api</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s2">&quot;/forgot&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">userController</span><span class="p">.</span><span class="nx">forgot</span><span class="p">);</span><span class="w"></span>
+
+<span class="c1">// crear petición put para restaurar contraseña en la documentación:</span><span class="w"></span>
+<span class="cm">/**</span>
+<span class="cm">* @swagger</span>
+<span class="cm">* /api/reset/{id}/{token}:</span>
+<span class="cm">*  put:</span>
+<span class="cm">*      summary: Resetear contraseña</span>
+<span class="cm">*      tags: [User]</span>
+<span class="cm">*      description: Recibe dos contraseñas que deben ser idénticas y genera una nueva contraseña.</span>
+<span class="cm">*      parameters:</span>
+<span class="cm">*          - in: path</span>
+<span class="cm">*            name: id</span>
+<span class="cm">*            schema:</span>
+<span class="cm">*              type: string</span>
+<span class="cm">*            required: true</span>
+<span class="cm">*            description: id de usuario</span>
+<span class="cm">*          - in: path</span>
+<span class="cm">*            name: token</span>
+<span class="cm">*            schema:</span>
+<span class="cm">*              type: string</span>
+<span class="cm">*            required: true</span>
+<span class="cm">*            description: token del usuario otorgado por el endpoint de arriba y que dura 1 hora</span>
+<span class="cm">*      requestBody:</span>
+<span class="cm">*          required: true</span>
+<span class="cm">*          content:</span>
+<span class="cm">*              application/json:</span>
+<span class="cm">*                  schema:</span>
+<span class="cm">*                      type: object</span>
+<span class="cm">*                      properties:</span>
+<span class="cm">*                          newPassword:</span>
+<span class="cm">*                              type: string</span>
+<span class="cm">*                              description: contraseña que va a sustituir la antigua.</span>
+<span class="cm">*                          repitePassword:</span>
+<span class="cm">*                              type: string</span>
+<span class="cm">*                              description: contraseña que debe ser exactamente igual a newPassword</span>
+<span class="cm">*</span>
+<span class="cm">*                      example:</span>
+<span class="cm">*                          newPassword: &quot;5678&quot;</span>
+<span class="cm">*                          repitePassword: &quot;5678&quot;</span>
+<span class="cm">*      responses:</span>
+<span class="cm">*          200:</span>
+<span class="cm">*              description: La contraseña se ha cambiado con éxito</span>
+<span class="cm">*          400:</span>
+<span class="cm">*              description: El token ha expirado</span>
+<span class="cm">*          403:</span>
+<span class="cm">*              description: Petición no autorizada</span>
+<span class="cm">*          404:</span>
+<span class="cm">*              description: El usuario no existe</span>
+<span class="cm">*</span>
+<span class="cm">*/</span><span class="w"></span>
+<span class="nx">api</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s2">&quot;/reset/:id/:token&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">userController</span><span class="p">.</span><span class="nx">resetPassword</span><span class="p">);</span><span class="w"></span>
+
+<span class="c1">// crear una petición get en la documentación:</span><span class="w"></span>
+<span class="cm">/**</span>
+<span class="cm">* @swagger</span>
+<span class="cm">* /api/users:</span>
+<span class="cm">*  get:</span>
+<span class="cm">*      summary: Recuperar usuario</span>
+<span class="cm">*      tags: [User]</span>
+<span class="cm">*      description: Recuperar datos del usuario (excepto contraseña)</span>
+<span class="cm">*      responses:</span>
+<span class="cm">*          200:</span>
+<span class="cm">*              description: Retorna los datos del usuario que coinciden con su token</span>
+<span class="cm">*          400:</span>
+<span class="cm">*              description: El usuario no existe</span>
+<span class="cm">*          403:</span>
+<span class="cm">*              description: Acceso no autorizado</span>
+<span class="cm">*</span>
+<span class="cm">*/</span><span class="w"></span>
+<span class="nx">api</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;/users&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nx">authMiddleware</span><span class="p">.</span><span class="nx">secureRoute</span><span class="p">],</span><span class="w"> </span><span class="nx">userController</span><span class="p">.</span><span class="nx">getUser</span><span class="p">);</span><span class="w"></span>
+
+<span class="c1">// crear petición put para actualizar datos de usuario en la documentación:</span><span class="w"></span>
+<span class="cm">/**</span>
+<span class="cm">* @swagger</span>
+<span class="cm">* /api/users/{id}:</span>
+<span class="cm">*  put:</span>
+<span class="cm">*      summary: Actualizar usuario</span>
+<span class="cm">*      tags: [User]</span>
+<span class="cm">*      description: Actualizar datos de usuario mediante formData para poder cargar imágenes en el servidor</span>
+<span class="cm">*      parameters:</span>
+<span class="cm">*          - in: path</span>
+<span class="cm">*            name: id</span>
+<span class="cm">*            schema:</span>
+<span class="cm">*              type: string</span>
+<span class="cm">*            required: true</span>
+<span class="cm">*            description: id de usuario</span>
+<span class="cm">*      requestBody:</span>
+<span class="cm">*          required: true</span>
+<span class="cm">*          content:</span>
+<span class="cm">*              multipart/form-data:</span>
+<span class="cm">*                  schema:</span>
+<span class="cm">*                      type: object</span>
+<span class="cm">*                      properties:</span>
+<span class="cm">*                          name:</span>
+<span class="cm">*                              type: string</span>
+<span class="cm">*                              description: nombre de usuario.</span>
+<span class="cm">*                          lastname:</span>
+<span class="cm">*                              type: string</span>
+<span class="cm">*                              description: apellidos del usuario.</span>
+<span class="cm">*                          email:</span>
+<span class="cm">*                              type: string</span>
+<span class="cm">*                              description: email del usuario</span>
+<span class="cm">*                          password:</span>
+<span class="cm">*                              type: string</span>
+<span class="cm">*                              description: contraseña del usuario</span>
+<span class="cm">*                          avatar:</span>
+<span class="cm">*                              type: string</span>
+<span class="cm">*                              format: binary</span>
+<span class="cm">*                              description: avatar del usuario</span>
+<span class="cm">*                      example:</span>
+<span class="cm">*                          name: &quot;Guillermo&quot;</span>
+<span class="cm">*                          lastname: &quot;Granados&quot;</span>
+<span class="cm">*                          email: &quot;pytonicus@gmail.com&quot;</span>
+<span class="cm">*                          password: &quot;5678&quot;</span>
+<span class="cm">*                          avatar: &quot;foto.jpg&quot;</span>
+<span class="cm">*      responses:</span>
+<span class="cm">*          201:</span>
+<span class="cm">*              description: El usuario se ha actualizado</span>
+<span class="cm">*          403:</span>
+<span class="cm">*              description: Petición no autorizada</span>
+<span class="cm">*          404:</span>
+<span class="cm">*              description: El usuario no existe</span>
+<span class="cm">*</span>
+<span class="cm">*/</span><span class="w"></span>
+<span class="nx">api</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s2">&quot;/users/:id&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nx">authMiddleware</span><span class="p">.</span><span class="nx">secureRoute</span><span class="p">,</span><span class="w"> </span><span class="nx">uploadAvatarMiddleware</span><span class="p">],</span><span class="w"> </span><span class="nx">userController</span><span class="p">.</span><span class="nx">putUser</span><span class="p">);</span><span class="w"></span>
+
+<span class="c1">// crear una petición get para recuperar imagen en la documentación:</span><span class="w"></span>
+<span class="cm">/**</span>
+<span class="cm">* @swagger</span>
+<span class="cm">* /api/users/avatar/{avatar}:</span>
+<span class="cm">*  get:</span>
+<span class="cm">*      summary: Recuperar imagen</span>
+<span class="cm">*      tags: [User]</span>
+<span class="cm">*      description: Recuperar imagen de avatar</span>
+<span class="cm">*      parameters:</span>
+<span class="cm">*          - in: path</span>
+<span class="cm">*            name: avatar</span>
+<span class="cm">*            schema:</span>
+<span class="cm">*              type: string</span>
+<span class="cm">*            required: true</span>
+<span class="cm">*            description: nombre del archivo</span>
+<span class="cm">*      responses:</span>
+<span class="cm">*          200:</span>
+<span class="cm">*              description: Muestra una imagen en el navegador</span>
+<span class="cm">*          404:</span>
+<span class="cm">*              description: El avatar no existe</span>
+<span class="cm">*</span>
+<span class="cm">*/</span><span class="w"></span>
+<span class="nx">api</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;/users/avatar/:avatarName&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">userController</span><span class="p">.</span><span class="nx">getAvatar</span><span class="p">);</span><span class="w"></span>
+
+<span class="c1">// crear una petición get para recuperar imagen en la documentación:</span><span class="w"></span>
+<span class="cm">/**</span>
+<span class="cm">* @swagger</span>
+<span class="cm">* /api/users/{id}:</span>
+<span class="cm">*  delete:</span>
+<span class="cm">*      summary: Elimina un usuario</span>
+<span class="cm">*      tags: [User]</span>
+<span class="cm">*      description: Elimina por completo a un usuario y todas sus tareas</span>
+<span class="cm">*      parameters:</span>
+<span class="cm">*          - in: path</span>
+<span class="cm">*            name: id</span>
+<span class="cm">*            schema:</span>
+<span class="cm">*              type: string</span>
+<span class="cm">*            required: true</span>
+<span class="cm">*            description: id del usuario</span>
+<span class="cm">*      responses:</span>
+<span class="cm">*          200:</span>
+<span class="cm">*              description: se ha eliminado el usuario</span>
+<span class="cm">*          403:</span>
+<span class="cm">*              description: Petición no autorizada</span>
+<span class="cm">*          404:</span>
+<span class="cm">*              description: El usuario no existe</span>
+<span class="cm">*</span>
+<span class="cm">*/</span><span class="w"></span>
+<span class="nx">api</span><span class="p">.</span><span class="ow">delete</span><span class="p">(</span><span class="s2">&quot;/users/:id&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nx">authMiddleware</span><span class="p">.</span><span class="nx">secureRoute</span><span class="p">],</span><span class="w"> </span><span class="nx">userController</span><span class="p">.</span><span class="nx">deleteUser</span><span class="p">);</span><span class="w"></span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">api</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="paso-6-subir-cambios-a-github">
+<h3><a class="toc-backref" href="#id74">Paso 6: Subir cambios a GitHub</a><a class="headerlink" href="#paso-6-subir-cambios-a-github" title="Enlazar permanentemente con este título">¶</a></h3>
+<ul class="simple">
+<li><p>Parar depuración de Visual studio code.</p></li>
+<li><p>Añadir cambios: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span> <span class="pre">.</span></code></p></li>
+<li><p>Realizar un commit: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span> <span class="pre">-am</span> <span class="pre">&quot;Phase</span> <span class="pre">5</span> <span class="pre">complete&quot;</span></code></p></li>
+<li><p>Subir cambios a Github con el nombre de la rama actual: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span> <span class="pre">origin</span> <span class="pre">feature/generate-api-docu</span></code></p></li>
+<li><p>Desde gitHub presionar botón <strong>Compare &amp; pull request</strong>.</p></li>
+<li><p>cambiar rama base <strong>master</strong> por <strong>developer</strong> y pulsar <strong>Create pull request</strong></p></li>
+<li><p>Pulsar en <strong>Merge pull request</strong> y a continuación en <strong>Confirm merge</strong>.</p></li>
+<li><p>Una vez terminado volvemos a local y cambiamos de rama a developer: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">developer</span></code></p></li>
+<li><p>Actualizamos rama developer: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">pull</span> <span class="pre">origin</span> <span class="pre">developer</span></code></p></li>
+</ul>
+<p>Y con esto concluye la quinta fase del proyecto.</p>
+<hr><br></section>
+</section>
+<section id="fase-6-despliegue-de-node-en-heroku-y-base-de-datos-en-mongodb-atlas">
+<h2><a class="toc-backref" href="#id75">Fase 6: Despliegue de Node en Heroku y Base de datos en MongoDB Atlas</a><a class="headerlink" href="#fase-6-despliegue-de-node-en-heroku-y-base-de-datos-en-mongodb-atlas" title="Enlazar permanentemente con este título">¶</a></h2>
+<p>En esta fase vamos a desplegar nuestra app empezando por crear una base de datos en la nube de <strong>MongoDB Atlas</strong> y a continuación subiremos nuestro servidor node a <strong>Heroku</strong></p>
+<section id="paso-1-crear-nueva-base-de-datos-en-mongodb-atlas">
+<h3><a class="toc-backref" href="#id76">Paso 1: Crear nueva base de datos en MongoDB Atlas</a><a class="headerlink" href="#paso-1-crear-nueva-base-de-datos-en-mongodb-atlas" title="Enlazar permanentemente con este título">¶</a></h3>
+<ul class="simple">
+<li><p>Registrarse e iniciar sesión en <a class="reference external" href="https://www.mongodb.com/cloud/atlas/register">https://www.mongodb.com/cloud/atlas/register</a></p></li>
+<li><p>Pinchar en el botón <strong>Build a Database</strong></p></li>
+<li><p>Elegir la opción <strong>shared</strong> que es <strong>FREE</strong> y pinchar en <strong>Create</strong></p></li>
+<li><p>En la siguiente ventana, pinchar abajo a la derecha en <strong>Create Cluster</strong></p></li>
+<li><p>Nos pide crear un usuario y contraseña y luego hacer click en <strong>Create User</strong></p></li>
+<li><p>Abajo a la derecha hacer click en <strong>Finish and Close</strong></p></li>
+</ul>
+</section>
+<section id="paso-2-conectar-la-base-de-datos">
+<h3><a class="toc-backref" href="#id77">Paso 2: Conectar la base de datos</a><a class="headerlink" href="#paso-2-conectar-la-base-de-datos" title="Enlazar permanentemente con este título">¶</a></h3>
+<ul class="simple">
+<li><p>En la página de mongoDB vamos al apartado <strong>Database</strong> (es la primera página que se abre al iniciar sesión).</p></li>
+<li><p>En <strong>Cluster0</strong> pinchamos en <strong>Connect</strong> y elegimos la opción <strong>Connect your application</strong>.</p></li>
+<li><p>Dejamos el driver como esta ya que vamos a usar Node.js y copiamos la url que aparece mas abajo.</p></li>
+<li><p>Antes de nada vamos a editar nuestros archivos <strong>.env</strong> y <strong>.env.dist</strong>:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="s2">&quot;add your random secret key&quot;</span>
+
+<span class="n">EMAIL_HOST</span> <span class="o">=</span> <span class="s2">&quot;smtp email server&quot;</span>
+<span class="n">EMAIL_USER</span> <span class="o">=</span> <span class="s2">&quot;email user&quot;</span>
+<span class="n">EMAIL_PASS</span> <span class="o">=</span> <span class="s2">&quot;email password&quot;</span>
+
+<span class="n">DB_USER</span> <span class="o">=</span> <span class="s2">&quot;database user&quot;</span>
+<span class="n">DB_PASSWORD</span> <span class="o">=</span> <span class="s2">&quot;database password&quot;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Editamos la api en el archivo <strong>index.js</strong>:</p></li>
+</ul>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">mongoose</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;mongoose&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">dotenv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;dotenv&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./app&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">5000</span><span class="p">;</span><span class="w"></span>
+
+<span class="nx">dotenv</span><span class="p">.</span><span class="nx">config</span><span class="p">()</span><span class="w"></span>
+
+<span class="c1">// cambiamos la url de mongoose y tras una barra ponemos el nombre de la base de datos &quot;task-learn&quot;</span><span class="w"></span>
+<span class="nx">mongoose</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="sb">`mongodb+srv://</span><span class="si">${</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">DB_USER</span><span class="si">}</span><span class="sb">:</span><span class="si">${</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">DB_PASSWORD</span><span class="si">}</span><span class="sb">@cluster0.die77rr.mongodb.net/?retryWrites=true&amp;w=majority`</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">err</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;{</span><span class="w"></span>
+<span class="w">    </span><span class="k">try</span><span class="p">{</span><span class="w">                        </span><span class="c1">// nos carga el usuario pero el password tenemos que ponerlo a mano</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span><span class="w"></span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="nx">err</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="k">else</span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Se ha extablecido la conexión a la base de datos&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="k">catch</span><span class="p">(</span><span class="nx">error</span><span class="p">){</span><span class="w"></span>
+<span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">});</span><span class="w"></span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">port</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`Servidor funcionando en: http://localhost:</span><span class="si">${</span><span class="nx">port</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span><span class="w"></span>
+<span class="p">});</span><span class="w"></span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Arrancamos el servidor para comprobar si se ha conectado a la base de datos.</p></li>
+<li><p>Ahora si todo ha ido bien, podemos crear un usuario e intentar hacer login con postman o con la documentación de la api creada en el paso anterior.</p></li>
+</ul>
+</section>
+<section id="paso-3-crear-proyecto-en-heroku">
+<h3><a class="toc-backref" href="#id78">Paso 3: Crear proyecto en Heroku</a><a class="headerlink" href="#paso-3-crear-proyecto-en-heroku" title="Enlazar permanentemente con este título">¶</a></h3>
+<ul class="simple">
+<li><p>Descargar e instalar Heroku CLI: <a class="reference external" href="https://devcenter.heroku.com/articles/heroku-cli">https://devcenter.heroku.com/articles/heroku-cli</a></p></li>
+<li><p>Entrar en la página de Heroku <a class="reference external" href="https://dashboard.heroku.com/">https://dashboard.heroku.com/</a> y hacer click en <strong>Create new app</strong></p></li>
+<li><p>Escribir el nombre en <strong>app-name</strong> (tiene que ser único en la plataforma) ej: nodejstasklearnapi, seleccionamos Europe y pinchamos en <strong>Create app</strong></p></li>
+<li><p>Abrir terminal en pc y ejecutar <code class="docutils literal notranslate"><span class="pre">heroku</span> <span class="pre">login</span></code></p></li>
+</ul>
+</section>
+<section id="paso-4-preparar-aplicacion-para-el-despliegue">
+<h3><a class="toc-backref" href="#id79">Paso 4: Preparar aplicación para el despliegue</a><a class="headerlink" href="#paso-4-preparar-aplicacion-para-el-despliegue" title="Enlazar permanentemente con este título">¶</a></h3>
+<ul class="simple">
+<li><p>Vamos a centralizar la url base creando una nueva propiedad en <strong>.env</strong> y <strong>.env.dist</strong>:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="s2">&quot;add your random secret key&quot;</span>
+
+<span class="n">EMAIL_HOST</span> <span class="o">=</span> <span class="s2">&quot;smtp email server&quot;</span>
+<span class="n">EMAIL_USER</span> <span class="o">=</span> <span class="s2">&quot;email user&quot;</span>
+<span class="n">EMAIL_PASS</span> <span class="o">=</span> <span class="s2">&quot;email password&quot;</span>
+
+<span class="n">DB_USER</span> <span class="o">=</span> <span class="s2">&quot;database user&quot;</span>
+<span class="n">DB_PASSWORD</span> <span class="o">=</span> <span class="s2">&quot;database password&quot;</span>
+
+<span class="n">PORT</span> <span class="o">=</span> <span class="mi">3977</span> <span class="o">//</span> <span class="n">este</span> <span class="n">campo</span> <span class="n">no</span> <span class="n">se</span> <span class="n">añade</span> <span class="n">en</span> <span class="n">local</span> <span class="n">o</span> <span class="n">se</span> <span class="n">cambia</span> <span class="n">a</span> <span class="mi">5000</span>
+<span class="n">HOST_URL</span> <span class="o">=</span> <span class="s2">&quot;https://nodejstasklearnapi.herokuapp.com&quot;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Ajustamos el index para arreglar la url y el puerto en el que va a operar la API, <strong>index.js</strong>:</p></li>
+</ul>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">mongoose</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;mongoose&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">dotenv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;dotenv&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./app&#39;</span><span class="p">);</span><span class="w"></span>
+
+<span class="nx">dotenv</span><span class="p">.</span><span class="nx">config</span><span class="p">()</span><span class="w"></span>
+
+<span class="c1">// movemos despues del dotenv.config los datos de port y host para recuperarlos del .env</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PORT</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="mf">5000</span><span class="p">;</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">host</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">HOST_URL</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="sb">`http://localhost:</span><span class="si">${</span><span class="nx">port</span><span class="si">}</span><span class="sb">`</span><span class="p">;</span><span class="w"> </span><span class="c1">// le pasamos un puerto por las variables de entorno</span><span class="w"></span>
+
+<span class="nx">mongoose</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="sb">`mongodb+srv://</span><span class="si">${</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">DB_USER</span><span class="si">}</span><span class="sb">:</span><span class="si">${</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">DB_PASSWORD</span><span class="si">}</span><span class="sb">@cluster0.die77rr.mongodb.net/?retryWrites=true&amp;w=majority`</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">err</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;{</span><span class="w"></span>
+<span class="w">    </span><span class="k">try</span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span><span class="w"></span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="nx">err</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="k">else</span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Se ha extablecido la conexión a la base de datos&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="k">catch</span><span class="p">(</span><span class="nx">error</span><span class="p">){</span><span class="w"></span>
+<span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">});</span><span class="w"></span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">port</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`Servidor funcionando en: </span><span class="si">${</span><span class="nx">host</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span><span class="w"></span>
+<span class="p">});</span><span class="w"></span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Modificamos la url de la documentación en <strong>app.js</strong>:</p></li>
+</ul>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">express</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;express&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">express</span><span class="p">();</span><span class="w"></span>
+<span class="c1">// importar swaggerUi y swaggerJsDoc:</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">swaggerUi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;swagger-ui-express&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">swaggerJsDoc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;swagger-jsdoc&#39;</span><span class="p">);</span><span class="w"></span>
+
+<span class="c1">// crear las especificaciones:</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">swaggerOptions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">definition</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">openapi</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;3.0.0&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nx">info</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nx">title</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Task Learn API documentation&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nx">version</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;1.0.0&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="p">},</span><span class="w"></span>
+<span class="w">        </span><span class="nx">servers</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w">   </span><span class="c1">// para que la docu funcione cambiamos este campo añadiendo la variable de entorno con la url del host:</span><span class="w"></span>
+<span class="w">                </span><span class="nx">url</span><span class="o">:</span><span class="w"> </span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">HOST_URL</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s2">&quot;http://localhost:5000&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">],</span><span class="w"></span>
+<span class="w">        </span><span class="nx">components</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nx">securitySchemes</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="nx">ApiKeyAuth</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;apiKey&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">                    </span><span class="ow">in</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;header&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">                    </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Authorization&#39;</span><span class="w"></span>
+<span class="w">                </span><span class="p">}</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">},</span><span class="w"></span>
+<span class="w">        </span><span class="nx">security</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="nx">ApiKeyAuth</span><span class="o">:</span><span class="w"> </span><span class="p">[]</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="nx">apis</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;./routes/*.js&quot;</span><span class="p">]</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">swaggerSpec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">swaggerJsDoc</span><span class="p">(</span><span class="nx">swaggerOptions</span><span class="p">);</span><span class="w"></span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">cors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;cors&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span><span class="w"></span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">urlencoded</span><span class="p">({</span><span class="nx">extended</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">}));</span><span class="w"></span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">cors</span><span class="p">());</span><span class="w"></span>
+
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">taskRoutes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./routes/taskRoutes&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">userRoutes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./routes/userRoutes&#39;</span><span class="p">);</span><span class="w"></span>
+
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s2">&quot;/api&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">taskRoutes</span><span class="p">);</span><span class="w"></span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s2">&quot;/api&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">userRoutes</span><span class="p">);</span><span class="w"></span>
+<span class="c1">// creamos una ruta para la documentación:</span><span class="w"></span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s2">&quot;/api/docs&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">swaggerUi</span><span class="p">.</span><span class="nx">serve</span><span class="p">,</span><span class="w"> </span><span class="nx">swaggerUi</span><span class="p">.</span><span class="nx">setup</span><span class="p">(</span><span class="nx">swaggerSpec</span><span class="p">));</span><span class="w"></span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">app</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="paso-5-crear-variables-de-entorno">
+<h3><a class="toc-backref" href="#id80">Paso 5: Crear variables de entorno</a><a class="headerlink" href="#paso-5-crear-variables-de-entorno" title="Enlazar permanentemente con este título">¶</a></h3>
+<ul class="simple">
+<li><p>Antes de hacer el despliegue tenemos que añadir las variables de entorno a Heroku, nos vamos al sitio de Heroku.</p></li>
+<li><p>Vamos a la barra de menú horizontal y hacemos click en <strong>Settings</strong></p></li>
+<li><p>Ahí nos fijamos en el apartado <strong>Config Vars</strong> y pinchamos en <strong>Reveal Config Vars</strong>.</p></li>
+<li><p>Copiamos los datos de nuestro archivo <strong>.env</strong> introduciendo en el campo <strong>KEY</strong> el nombre de la variable, ej: <strong>HOST_URL</strong> y en <strong>VALUE</strong> el dato que tiene ej: <strong>https://nodejstasklearnapi.herokuapp.com</strong>.</p></li>
+<li><p>Con todas las variables de entorno añadidas pinchamos en <strong>Hide Config Vars</strong> y ya podemos desplegar.</p></li>
+</ul>
+</section>
+<section id="paso-6-iniciar-despliegue">
+<h3><a class="toc-backref" href="#id81">Paso 6: Iniciar despliegue</a><a class="headerlink" href="#paso-6-iniciar-despliegue" title="Enlazar permanentemente con este título">¶</a></h3>
+<ul class="simple">
+<li><p>Hacemos un <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span> <span class="pre">.</span></code> para cargar los cambios a la rama.</p></li>
+<li><p>Creamos un commit de los cambios <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span> <span class="pre">-am</span> <span class="pre">&quot;prepare</span> <span class="pre">to</span> <span class="pre">deploy</span> <span class="pre">in</span> <span class="pre">heroku&quot;</span></code></p></li>
+<li><p>Desde consola nos vamos a la raiz del proyecto y ejecutamos <code class="docutils literal notranslate"><span class="pre">heroku</span> <span class="pre">git:remote</span> <span class="pre">-a</span> <span class="pre">nodejstasklearnapi</span></code> (lo último es el nombre de la app)</p></li>
+<li><p>Una vez añadido el repositorio de Heroku subimos la aplicación <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span> <span class="pre">heroku</span> <span class="pre">master</span></code></p></li>
+<li><p>En la pestaña <strong>overview</strong> se verá un panel en el que podemos observar a la derecha el mensaje <strong>Build Succeeded</strong></p></li>
+<li><p>Nos habrá subido la app a la siguiente dirección: <a class="reference external" href="https://nodejstasklearnapi.herokuapp.com/api/docs">https://nodejstasklearnapi.herokuapp.com/api/docs</a></p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>para que funcionen los emails hay que cambiar la ruta a la que redirecciona en su controlador ya que esta va al frontend</p>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Atención</p>
+<p>Heroku solo detecta cambios en master, por lo que hasta que no tengamos la información subida en esa rama nos dará el mensaje <strong>Everything up-to-date</strong>.</p>
+</div>
+</section>
 </section>
 </section>
 

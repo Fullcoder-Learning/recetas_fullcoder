@@ -3159,3 +3159,984 @@ Y con esto concluye la cuarta fase del proyecto.
 .. raw:: html 
 
     <hr><br>
+
+Fase 5: Crear documentación  
+###########################
+
+En esta fase vamos a instalar una librería en el proyecto que genera documentación automáticamente siguiendo las anotaciones que vamos dejando en el código.
+
+Paso 1: Preparar proyecto 
+*************************
+
+- Desde la rama **developer** crear rama **git checkout -b feature/generate-api-docu**
+- Se instalará **JSDoc** para crear documentación: ``npm install jsdoc --save``
+
+Paso 2: Crear archivo de configuración 
+**************************************
+
+- En la raiz del proyecto creamos un nuevo archivo de configuración llamado **jsdoc.json**:
+
+.. code-block:: javascript 
+
+    {   
+        "plugins": [],
+        "source": {
+            "include": [""],
+            "includePattern": ".js$",
+            "excludePattern": "(node_modules|uploads|documents)"
+        },
+        "templates": {
+            "cleverLinks": false,
+            "monospaceLinks": false
+        },
+        "opts": {
+            "destination": "./documents"
+        }
+    }
+
+Lo mas destacado aquí es **source**, donde indicamos en include la carpeta donde revisar los archivos del proyecto, que formato debe buscar ".js" y que carpetas no debe mirar como **node_modules**, **uploads** y la carpeta que se genera llamada **documents**.
+En opts definimos la carpeta de destino donde se va a crear la documentación, en este caso le hemos puesto **documents**.
+
+- Vamos a añadir la carpeta **documents** a **.gitignore**:
+
+.. code-block:: 
+
+    node_modules/
+    .env
+    uploads/
+    documents/
+
+- Ahora creamos un script en **package.json**:
+
+.. code-block:: javascript 
+
+    {
+        "name": "task-learn-api",
+        "version": "0.0.1",
+        "description": "API from Task Learn",
+        "main": "index.js",
+        "scripts": {
+            "test": "echo \"Error: no test specified\" && exit 1",
+            "start": "node index.js",
+            "document": "jsdoc -c jsdoc.json"
+        },
+        "author": "Guillermo Granados Gómez",
+        "license": "MIT",
+        "dependencies": {
+            "bcryptjs": "^2.4.3",
+            "connect-multiparty": "^2.2.0",
+            "cors": "^2.8.5",
+            "dotenv": "^16.0.2",
+            "express": "^4.18.1",
+            "jsdoc": "^3.6.11",
+            "jsonwebtoken": "^8.5.1",
+            "moment": "^2.29.4",
+            "mongoose": "^6.5.4",
+            "nodemailer": "^6.7.8",
+            "underscore": "^1.13.4"
+        },
+        "devDependencies": {
+            "nodemon": "^2.0.19"
+        }
+    }
+
+- Para generar la documentación se ejecuta ahora: ``npm run document``.
+
+- Una vez tengamos la documentación creada creamos un enlace a la misma en **app.js**:
+
+.. code-block:: javascript 
+
+    const express = require("express");
+    const app = express();
+    // cargar librería path:
+    const path = require('path');
+
+    const cors = require('cors');
+    app.use(express.json());
+    app.use(express.urlencoded({extended: true})); 
+    app.use(cors());
+
+
+    const taskRoutes = require('./routes/taskRoutes');
+    const userRoutes = require('./routes/userRoutes');
+
+    app.use("/api", taskRoutes);
+    app.use("/api", userRoutes);
+    // definir donde se encuentra la documentación:
+    app.use('/api/docs', express.static(path.join(__dirname, 'documents')));
+
+    module.exports = app;
+
+Paso 3: Cr
+
+
+
+
+
+Paso 1: Preparar proyecto 
+*************************
+
+- Desde la rama **developer** crear rama **git checkout -b feature/generate-api-docu**
+- Se instalará **Swagger** para crear documentación: ``npm install swagger-ui-express swagger-jsdoc -S``
+- añadimos también el endpoint de **swagger**: ``npm install @types/swagger-jsdoc @types/swagger-ui-express -D``
+- En la raiz crear carpeta **docs**
+
+Paso 2: Crear archivo de configuración 
+**************************************
+
+- Vamos a editar **app.js** para añadir la configuración de **swagger**:
+
+.. code-block:: javascript 
+
+    const express = require("express");
+    const app = express();
+    // importar swaggerUi y swaggerJsDoc:
+    const swaggerUi = require('swagger-ui-express');
+    const swaggerJsDoc = require('swagger-jsdoc');
+
+    // crear las especificaciones:
+    const swaggerOptions = {
+        definition: {
+            openapi: "3.0.0",
+            info: {
+                title: "Task Learn API documentation",
+                version: "1.0.0"
+            },
+            servers: [
+                {
+                    url: "http://localhost:5000"
+                }
+            ],
+            components: {
+                securitySchemes: {
+                    ApiKeyAuth: {
+                        type: 'apiKey',
+                        in: 'header',
+                        name: 'Authorization'
+                    }
+                }
+            },
+            security: [
+                {
+                    ApiKeyAuth: []
+                }
+            ]
+        },
+        apis: ["./routes/*.js"]
+    };
+
+    const swaggerSpec = swaggerJsDoc(swaggerOptions);
+
+    const cors = require('cors');
+    app.use(express.json());
+    app.use(express.urlencoded({extended: true})); 
+    app.use(cors());
+
+
+    const taskRoutes = require('./routes/taskRoutes');
+    const userRoutes = require('./routes/userRoutes');
+
+
+    app.use("/api", taskRoutes);
+    app.use("/api", userRoutes);
+    // creamos una ruta para la documentación:
+    app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+    module.exports = app;
+
+Paso 3: Crear Schema de tareas 
+******************************
+
+- Vamos a crear un schema en el archivo de rutas **taskRouter.js**:
+
+.. code-block:: javascript 
+
+    const express = require('express');
+    const app = require('../app');
+    const api = express.Router();
+    const authMiddleware = require("../middlewares/authMiddleware");
+
+    const taskController = require("../controllers/taskController");
+
+    // añadir el schema de swagger:
+    /**
+    * @swagger
+    * components: 
+    *  schemas:
+    *      Task:
+    *          type: object
+    *          properties:
+    *              name:
+    *                  type: string
+    *                  description: título de la tarea
+    *              description:
+    *                  type: string
+    *                  description: descripción de la tarea
+    *              is_complete:
+    *                  type: boolean
+    *                  description: cambia a true si la tarea esta finalizada
+    *              date_created:
+    *                  type: string
+    *                  description: fecha de creación de la tarea
+    *              date_finish:
+    *                  type: string
+    *                  description: fecha de finalización de la tarea
+    *              owner:
+    *                  type: string
+    *                  description: id del propietario de la tarea
+    *          required:
+    *              - name
+    *              - description
+    *          example:
+    *              name: Comprar galletas
+    *              description: ir a comprar galletas al super           
+    */
+ 
+    api.post("/tasks", [authMiddleware.secureRoute], taskController.postTask);
+    api.get("/tasks", [authMiddleware.secureRoute], taskController.getTasks);
+    api.get("/tasks/:id", [authMiddleware.secureRoute], taskController.getTask);
+    api.put("/tasks/:id", [authMiddleware.secureRoute], taskController.putTask);
+    api.delete("/tasks/:id", [authMiddleware.secureRoute], taskController.deleteTask);
+    api.patch("/tasks/:id", [authMiddleware.secureRoute], taskController.changeTask);
+
+    module.exports = api;
+
+Paso 4: Crear peticiones de las rutas
+*************************************
+
+- Editamos nuevamente el archivo de rutas **taskRouter.js**:
+
+.. code-block:: javascript 
+
+    const express = require('express');
+    const app = require('../app');
+    const api = express.Router();
+    const authMiddleware = require("../middlewares/authMiddleware");
+
+    const taskController = require("../controllers/taskController");
+
+    /**
+    * @swagger
+    * components: 
+    *  schemas:
+    *      Task:
+    *          type: object
+    *          properties:
+    *              name:
+    *                  type: string
+    *                  description: título de la tarea
+    *              description:
+    *                  type: string
+    *                  description: descripción de la tarea
+    *              is_complete:
+    *                  type: boolean
+    *                  description: cambia a true si la tarea esta finalizada
+    *              date_created:
+    *                  type: string
+    *                  description: fecha de creación de la tarea
+    *              date_finish:
+    *                  type: string
+    *                  description: fecha de finalización de la tarea
+    *              owner:
+    *                  type: string
+    *                  description: id del propietario de la tarea
+    *          required:
+    *              - name
+    *              - description
+    *          example:
+    *              name: Comprar galletas
+    *              description: ir a comprar galletas al super           
+    */
+
+
+    // crear una petición post en la documentación:
+    /**
+    * @swagger
+    * /api/tasks:
+    *  post:
+    *      summary: Crear nueva tarea
+    *      tags: [Task]      
+    *      description: Crea una nueva tarea y retorna la misma como resultado.
+    *      requestBody:
+    *          required: true
+    *          content: 
+    *              application/json:
+    *                  schema:
+    *                      type: object
+    *                      $ref: '#/components/schemas/Task'
+    *      responses:
+    *          201:
+    *              description: Retorna la tarea ya creada
+    *          400: 
+    *              description: No se puede crear la tarea
+    *          403: 
+    *              description: No se han provisto las credenciales
+    * 
+    */     
+    api.post("/tasks", [authMiddleware.secureRoute], taskController.postTask);
+
+    // crear una petición get en la documentación:
+    /**
+    * @swagger
+    * /api/tasks:
+    *  get:
+    *      summary: Listado de tareas
+    *      tags: [Task]      
+    *      description: Recuperar listado de tareas de cada usuario.
+    *      responses:
+    *          200:
+    *              description: Retorna un litado de tareas
+    *          400: 
+    *              description: No se puede obtener las tareas
+    *          403: 
+    *              description: No se han provisto las credenciales
+    * 
+    */   
+    api.get("/tasks", [authMiddleware.secureRoute], taskController.getTasks);
+
+    // crear una petición get en la documentación de una tarea:
+    /**
+    * @swagger
+    * /api/tasks/{id}:
+    *  get:
+    *      summary: Recuperar una tarea
+    *      tags: [Task]      
+    *      description: Recuperar tarea de un usuario a través de su id.
+    *      parameters:
+    *          - in: path
+    *            name: id
+    *            schema:
+    *              type: string
+    *            required: true
+    *            description: id de la tarea      
+    *      responses:
+    *          200:
+    *              description: Retorna una tarea
+    *          400: 
+    *              description: No se puede obtener la tarea
+    *          403: 
+    *              description: No se han provisto las credenciales
+    * 
+    */   
+    api.get("/tasks/:id", [authMiddleware.secureRoute], taskController.getTask);
+
+    // crear una petición put en la documentación de una tarea:
+    /**
+    * @swagger
+    * /api/tasks/{id}:
+    *  put:
+    *      summary: Modificar una tarea
+    *      tags: [Task]      
+    *      description: Modificar tarea de un usuario a través de su id.
+    *      parameters:
+    *          - in: path
+    *            name: id
+    *            schema:
+    *              type: string
+    *            required: true
+    *            description: id de la tarea    
+    *      requestBody:
+    *          required: true
+    *          content: 
+    *              application/json:
+    *                  schema:
+    *                      type: object
+    *                      $ref: '#/components/schemas/Task'  
+    *      responses:
+    *          201:
+    *              description: Actualiza una tarea
+    *          400: 
+    *              description: La tarea no existe
+    *          403: 
+    *              description: No se han provisto las credenciales
+    *          404: 
+    *              description: La tarea no existe
+    * 
+    */   
+    api.put("/tasks/:id", [authMiddleware.secureRoute], taskController.putTask);
+
+    // crear una petición put en la documentación de una tarea:
+    /**
+    * @swagger
+    * /api/tasks/{id}:
+    *  delete:
+    *      summary: Eliminar una tarea
+    *      tags: [Task]      
+    *      description: Eliminar tarea de un usuario a través de su id.
+    *      parameters:
+    *          - in: path
+    *            name: id
+    *            schema:
+    *              type: string
+    *            required: true
+    *            description: id de la tarea    
+    *      responses:
+    *          201:
+    *              description: Actualiza una tarea
+    *          400: 
+    *              description: La tarea no existe
+    *          403: 
+    *              description: No se han provisto las credenciales
+    *          404: 
+    *              description: La tarea no existe
+    * 
+    */   
+    api.delete("/tasks/:id", [authMiddleware.secureRoute], taskController.deleteTask);
+
+    // crear una petición put en la documentación de una tarea:
+    /**
+    * @swagger
+    * /api/tasks/{id}:
+    *  patch:
+    *      summary: Finalizar una tarea
+    *      tags: [Task]      
+    *      description: Finaliza la tarea de un usuario a través de su id.
+    *      parameters:
+    *          - in: path
+    *            name: id
+    *            schema:
+    *              type: string
+    *            required: true
+    *            description: id de la tarea    
+    *      responses:
+    *          200:
+    *              description: Actualiza una tarea
+    *          400: 
+    *              description: La tarea no existe
+    *          403: 
+    *              description: No se han provisto las credenciales
+    *          404: 
+    *              description: La tarea no existe
+    * 
+    */   
+    api.patch("/tasks/:id", [authMiddleware.secureRoute], taskController.changeTask);
+
+    module.exports = api;
+
+Paso 5: Crear scheme y peticiones de User
+*****************************************
+
+- Hacemos los dos pasos anteriores en el archivo de rutas **userRequest.js**:
+
+.. code-block:: javascript 
+
+    const express = require("express");
+    const multiparty = require("connect-multiparty");
+    const userController = require('../controllers/userController');
+    const authMiddleware = require('../middlewares/authMiddleware');
+    const uploadAvatarMiddleware = multiparty({uploadDir: './uploads/avatars'});
+
+    const api = express.Router();
+
+    /**
+    * @swagger
+    * components: 
+    *  schemas:
+    *      User:
+    *          type: object
+    *          properties:
+    *              name:
+    *                  type: string
+    *                  description: nombre del usuario
+    *              lastname:
+    *                  type: string
+    *                  description: apellidos del usuario
+    *              email:
+    *                  type: string
+    *                  description: email del usuario (se usa para iniciar sesión)
+    *              password:
+    *                  type: string
+    *                  description: contraseña del usuario
+    *              avatar:
+    *                  type: string
+    *                  description: Imagen para el perfil de usuario
+    *          required:
+    *              - email
+    *              - password
+    *          example:
+    *              email: pytonicus@gmail.com
+    *              password: "1234"           
+    */
+
+
+    // crear una petición post para registro en la documentación:
+    /**
+    * @swagger
+    * /api/register:
+    *  post:
+    *      summary: Crear nuevo usuario
+    *      tags: [User]      
+    *      description: Crea un nuevo usuario a partir de su email y password
+    *      requestBody:
+    *          required: true
+    *          content: 
+    *              application/json:
+    *                  schema:
+    *                      type: object
+    *                      $ref: '#/components/schemas/User'
+    *      responses:
+    *          201:
+    *              description: El usuario ha sido creado
+    *          500:
+    *              description: El email ya existe
+    * 
+    */     
+    api.post("/register", userController.postUser);
+
+    // crear otra petición post para login en la documentación:
+    /**
+    * @swagger
+    * /api/login:
+    *  post:
+    *      summary: Contraseña olvidada
+    *      tags: [User]      
+    *      description: Se le pasa un email al que enviará una url con los datos para crear nueva contraseña.
+    *      requestBody:
+    *          required: true
+    *          content: 
+    *              application/json:
+    *                  schema:
+    *                      type: object
+    *                      $ref: '#/components/schemas/User'      
+    *      responses:
+    *          200:
+    *              description: Se ha enviado el email
+    *          400: 
+    *              description: El email no existe
+    * 
+    */   
+    api.post("/login", userController.login);
+
+    // crear otra petición post para restaurar contraseña en la documentación:
+    /**
+    * @swagger
+    * /api/forgot:
+    *  post:
+    *      summary: Recuperar contraseña
+    *      tags: [User]      
+    *      description: Envía un email para restaurar la contraseña olvidada.
+    *      requestBody:
+    *          required: true
+    *          content: 
+    *              application/json:
+    *                  schema:
+    *                      type: object
+    *                      properties:
+    *                          email:
+    *                              type: string
+    *                              description: email del usuario (para recuperar contraseña)
+    *                  
+    *                      example:
+    *                          email: pytonicus@gmail.com
+    *      responses:
+    *          200:
+    *              description: Se ha iniciado sesión con éxito
+    *          400: 
+    *              description: El email no existe
+    * 
+    */   
+    api.post("/forgot", userController.forgot);
+
+    // crear petición put para restaurar contraseña en la documentación:
+    /**
+    * @swagger
+    * /api/reset/{id}/{token}:
+    *  put:
+    *      summary: Resetear contraseña
+    *      tags: [User]      
+    *      description: Recibe dos contraseñas que deben ser idénticas y genera una nueva contraseña.
+    *      parameters:
+    *          - in: path
+    *            name: id
+    *            schema:
+    *              type: string
+    *            required: true
+    *            description: id de usuario
+    *          - in: path
+    *            name: token
+    *            schema:
+    *              type: string
+    *            required: true
+    *            description: token del usuario otorgado por el endpoint de arriba y que dura 1 hora 
+    *      requestBody:
+    *          required: true
+    *          content: 
+    *              application/json:
+    *                  schema:
+    *                      type: object
+    *                      properties:
+    *                          newPassword:
+    *                              type: string
+    *                              description: contraseña que va a sustituir la antigua.
+    *                          repitePassword:
+    *                              type: string
+    *                              description: contraseña que debe ser exactamente igual a newPassword
+    *                  
+    *                      example:
+    *                          newPassword: "5678"
+    *                          repitePassword: "5678"
+    *      responses:
+    *          200:
+    *              description: La contraseña se ha cambiado con éxito
+    *          400: 
+    *              description: El token ha expirado
+    *          403: 
+    *              description: Petición no autorizada
+    *          404:
+    *              description: El usuario no existe
+    * 
+    */   
+    api.put("/reset/:id/:token", userController.resetPassword);
+
+    // crear una petición get en la documentación:
+    /**
+    * @swagger
+    * /api/users:
+    *  get:
+    *      summary: Recuperar usuario
+    *      tags: [User]      
+    *      description: Recuperar datos del usuario (excepto contraseña)
+    *      responses:
+    *          200:
+    *              description: Retorna los datos del usuario que coinciden con su token
+    *          400: 
+    *              description: El usuario no existe
+    *          403: 
+    *              description: Acceso no autorizado
+    * 
+    */ 
+    api.get("/users", [authMiddleware.secureRoute], userController.getUser);
+
+    // crear petición put para actualizar datos de usuario en la documentación:
+    /**
+    * @swagger
+    * /api/users/{id}:
+    *  put:
+    *      summary: Actualizar usuario
+    *      tags: [User]      
+    *      description: Actualizar datos de usuario mediante formData para poder cargar imágenes en el servidor
+    *      parameters:
+    *          - in: path
+    *            name: id
+    *            schema:
+    *              type: string
+    *            required: true
+    *            description: id de usuario
+    *      requestBody:
+    *          required: true
+    *          content: 
+    *              multipart/form-data:
+    *                  schema:
+    *                      type: object
+    *                      properties:
+    *                          name:
+    *                              type: string
+    *                              description: nombre de usuario.
+    *                          lastname:
+    *                              type: string
+    *                              description: apellidos del usuario.
+    *                          email:
+    *                              type: string
+    *                              description: email del usuario
+    *                          password:
+    *                              type: string
+    *                              description: contraseña del usuario
+    *                          avatar:
+    *                              type: string
+    *                              format: binary
+    *                              description: avatar del usuario
+    *                      example:
+    *                          name: "Guillermo"
+    *                          lastname: "Granados"
+    *                          email: "pytonicus@gmail.com"
+    *                          password: "5678"
+    *                          avatar: "foto.jpg"
+    *      responses:
+    *          201:
+    *              description: El usuario se ha actualizado
+    *          403: 
+    *              description: Petición no autorizada
+    *          404:
+    *              description: El usuario no existe
+    * 
+    */  
+    api.put("/users/:id", [authMiddleware.secureRoute, uploadAvatarMiddleware], userController.putUser);
+
+    // crear una petición get para recuperar imagen en la documentación:
+    /**
+    * @swagger
+    * /api/users/avatar/{avatar}:
+    *  get:
+    *      summary: Recuperar imagen
+    *      tags: [User]      
+    *      description: Recuperar imagen de avatar
+    *      parameters:
+    *          - in: path
+    *            name: avatar
+    *            schema:
+    *              type: string
+    *            required: true
+    *            description: nombre del archivo
+    *      responses:
+    *          200:
+    *              description: Muestra una imagen en el navegador
+    *          404: 
+    *              description: El avatar no existe
+    * 
+    */ 
+    api.get("/users/avatar/:avatarName", userController.getAvatar);
+
+    // crear una petición get para recuperar imagen en la documentación:
+    /**
+    * @swagger
+    * /api/users/{id}:
+    *  delete:
+    *      summary: Elimina un usuario
+    *      tags: [User]      
+    *      description: Elimina por completo a un usuario y todas sus tareas
+    *      parameters:
+    *          - in: path
+    *            name: id
+    *            schema:
+    *              type: string
+    *            required: true
+    *            description: id del usuario
+    *      responses:
+    *          200:
+    *              description: se ha eliminado el usuario
+    *          403:
+    *              description: Petición no autorizada
+    *          404: 
+    *              description: El usuario no existe
+    * 
+    */ 
+    api.delete("/users/:id", [authMiddleware.secureRoute], userController.deleteUser);
+
+    module.exports = api;
+
+Paso 6: Subir cambios a GitHub  
+******************************
+
+- Parar depuración de Visual studio code.
+- Añadir cambios: ``git add .``
+- Realizar un commit: ``git commit -am "Phase 5 complete"``
+- Subir cambios a Github con el nombre de la rama actual: ``git push origin feature/generate-api-docu``
+- Desde gitHub presionar botón **Compare & pull request**.
+- cambiar rama base **master** por **developer** y pulsar **Create pull request**
+- Pulsar en **Merge pull request** y a continuación en **Confirm merge**.
+- Una vez terminado volvemos a local y cambiamos de rama a developer: ``git checkout developer``
+- Actualizamos rama developer: ``git pull origin developer`` 
+
+Y con esto concluye la quinta fase del proyecto.
+
+.. raw:: html 
+
+    <hr><br>
+
+Fase 6: Despliegue de Node en Heroku y Base de datos en MongoDB Atlas  
+#####################################################################
+
+En esta fase vamos a desplegar nuestra app empezando por crear una base de datos en la nube de **MongoDB Atlas** y a continuación subiremos nuestro servidor node a **Heroku**
+
+Paso 1: Crear nueva base de datos en MongoDB Atlas 
+**************************************************
+
+- Registrarse e iniciar sesión en https://www.mongodb.com/cloud/atlas/register
+- Pinchar en el botón **Build a Database**
+- Elegir la opción **shared** que es **FREE** y pinchar en **Create**
+- En la siguiente ventana, pinchar abajo a la derecha en **Create Cluster**
+- Nos pide crear un usuario y contraseña y luego hacer click en **Create User**
+- Abajo a la derecha hacer click en **Finish and Close**
+
+Paso 2: Conectar la base de datos 
+*********************************
+
+- En la página de mongoDB vamos al apartado **Database** (es la primera página que se abre al iniciar sesión).
+- En **Cluster0** pinchamos en **Connect** y elegimos la opción **Connect your application**.
+- Dejamos el driver como esta ya que vamos a usar Node.js y copiamos la url que aparece mas abajo.
+- Antes de nada vamos a editar nuestros archivos **.env** y **.env.dist**:
+
+.. code-block:: 
+
+    SECRET_KEY = "add your random secret key"
+
+    EMAIL_HOST = "smtp email server"
+    EMAIL_USER = "email user"
+    EMAIL_PASS = "email password"
+
+    DB_USER = "database user"
+    DB_PASSWORD = "database password"
+
+- Editamos la api en el archivo **index.js**:
+
+.. code-block:: javascript
+
+    const mongoose = require('mongoose');
+    const dotenv = require('dotenv');
+    const app = require('./app');
+    const port = 5000;
+
+    dotenv.config()
+
+    // cambiamos la url de mongoose y tras una barra ponemos el nombre de la base de datos "task-learn"
+    mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.die77rr.mongodb.net/?retryWrites=true&w=majority`, (err, res) =>{
+        try{                        // nos carga el usuario pero el password tenemos que ponerlo a mano
+            if(err){
+                throw err;
+            }else{
+                console.log("Se ha extablecido la conexión a la base de datos");
+            }
+        }catch(error){
+            console.error(error);
+        }
+    });
+
+    app.listen(port, () => {
+        console.log(`Servidor funcionando en: http://localhost:${port}`);
+    });
+
+- Arrancamos el servidor para comprobar si se ha conectado a la base de datos.
+- Ahora si todo ha ido bien, podemos crear un usuario e intentar hacer login con postman o con la documentación de la api creada en el paso anterior.
+
+Paso 3: Crear proyecto en Heroku  
+********************************
+
+- Descargar e instalar Heroku CLI: https://devcenter.heroku.com/articles/heroku-cli
+- Entrar en la página de Heroku https://dashboard.heroku.com/ y hacer click en **Create new app**
+- Escribir el nombre en **app-name** (tiene que ser único en la plataforma) ej: nodejstasklearnapi, seleccionamos Europe y pinchamos en **Create app**
+- Abrir terminal en pc y ejecutar ``heroku login``
+
+Paso 4: Preparar aplicación para el despliegue
+**********************************************
+
+- Vamos a centralizar la url base creando una nueva propiedad en **.env** y **.env.dist**:
+
+.. code-block:: 
+
+    SECRET_KEY = "add your random secret key"
+
+    EMAIL_HOST = "smtp email server"
+    EMAIL_USER = "email user"
+    EMAIL_PASS = "email password"
+
+    DB_USER = "database user"
+    DB_PASSWORD = "database password"
+
+    PORT = 3977 // este campo no se añade en local o se cambia a 5000
+    HOST_URL = "https://nodejstasklearnapi.herokuapp.com"
+
+- Ajustamos el index para arreglar la url y el puerto en el que va a operar la API, **index.js**:
+
+.. code-block:: javascript 
+
+    const mongoose = require('mongoose');
+    const dotenv = require('dotenv');
+    const app = require('./app');
+
+    dotenv.config()
+
+    // movemos despues del dotenv.config los datos de port y host para recuperarlos del .env
+    const port = process.env.PORT || 5000;
+    const host = process.env.HOST_URL || `http://localhost:${port}`; // le pasamos un puerto por las variables de entorno
+
+    mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.die77rr.mongodb.net/?retryWrites=true&w=majority`, (err, res) =>{
+        try{                       
+            if(err){
+                throw err;
+            }else{
+                console.log("Se ha extablecido la conexión a la base de datos");
+            }
+        }catch(error){
+            console.error(error);
+        }
+    });
+
+    app.listen(port, () => {
+        console.log(`Servidor funcionando en: ${host}`);
+    });
+
+- Modificamos la url de la documentación en **app.js**:
+
+.. code-block:: javascript 
+
+    const express = require("express");
+    const app = express();
+    // importar swaggerUi y swaggerJsDoc:
+    const swaggerUi = require('swagger-ui-express');
+    const swaggerJsDoc = require('swagger-jsdoc');
+
+    // crear las especificaciones:
+    const swaggerOptions = {
+        definition: {
+            openapi: "3.0.0",
+            info: {
+                title: "Task Learn API documentation",
+                version: "1.0.0"
+            },
+            servers: [
+                {   // para que la docu funcione cambiamos este campo añadiendo la variable de entorno con la url del host:
+                    url: process.env.HOST_URL || "http://localhost:5000"
+                }
+            ],
+            components: {
+                securitySchemes: {
+                    ApiKeyAuth: {
+                        type: 'apiKey',
+                        in: 'header',
+                        name: 'Authorization'
+                    }
+                }
+            },
+            security: [
+                {
+                    ApiKeyAuth: []
+                }
+            ]
+        },
+        apis: ["./routes/*.js"]
+    };
+
+    const swaggerSpec = swaggerJsDoc(swaggerOptions);
+
+    const cors = require('cors');
+    app.use(express.json());
+    app.use(express.urlencoded({extended: true})); 
+    app.use(cors());
+
+
+    const taskRoutes = require('./routes/taskRoutes');
+    const userRoutes = require('./routes/userRoutes');
+
+
+    app.use("/api", taskRoutes);
+    app.use("/api", userRoutes);
+    // creamos una ruta para la documentación:
+    app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+    module.exports = app;
+
+Paso 5: Crear variables de entorno 
+**********************************
+
+- Antes de hacer el despliegue tenemos que añadir las variables de entorno a Heroku, nos vamos al sitio de Heroku.
+- Vamos a la barra de menú horizontal y hacemos click en **Settings**
+- Ahí nos fijamos en el apartado **Config Vars** y pinchamos en **Reveal Config Vars**.
+- Copiamos los datos de nuestro archivo **.env** introduciendo en el campo **KEY** el nombre de la variable, ej: **HOST_URL** y en **VALUE** el dato que tiene ej: **https://nodejstasklearnapi.herokuapp.com**.
+- Con todas las variables de entorno añadidas pinchamos en **Hide Config Vars** y ya podemos desplegar.
+
+Paso 6: Iniciar despliegue 
+**************************
+
+- Hacemos un ``git add .`` para cargar los cambios a la rama.
+- Creamos un commit de los cambios ``git commit -am "prepare to deploy in heroku"``
+- Desde consola nos vamos a la raiz del proyecto y ejecutamos ``heroku git:remote -a nodejstasklearnapi`` (lo último es el nombre de la app)
+- Una vez añadido el repositorio de Heroku subimos la aplicación ``git push heroku master``
+- En la pestaña **overview** se verá un panel en el que podemos observar a la derecha el mensaje **Build Succeeded**
+- Nos habrá subido la app a la siguiente dirección: https://nodejstasklearnapi.herokuapp.com/api/docs
+
+.. note::
+    para que funcionen los emails hay que cambiar la ruta a la que redirecciona en su controlador ya que esta va al frontend
+
+.. attention::
+    Heroku solo detecta cambios en master, por lo que hasta que no tengamos la información subida en esa rama nos dará el mensaje **Everything up-to-date**.
+
