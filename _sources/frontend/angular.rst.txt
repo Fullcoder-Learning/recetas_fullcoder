@@ -14,7 +14,7 @@ Frontend aplicación listado de tareas desarrollada con Angular.
 Versión : 14.2.2
 
 - Repositorio proyecto completo: https://github.com/Fullcoder-Learning/angular-task-learn-frontend
-
+ 
 .. contents:: Índice
    
 Fase 1: Diseño de la aplicación   

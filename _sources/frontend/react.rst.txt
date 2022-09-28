@@ -2377,7 +2377,7 @@ Paso 11: Finalizar tarea
             console.log(error);
         });
     }
-
+ 
     async function ListTaskRequest(status){ 
         await axios.get(`${url_base}/tasks`, config) 
         .then(response => {

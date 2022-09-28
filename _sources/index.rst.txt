@@ -19,4 +19,10 @@ Recetas Fullcoder - Agile Learning Practico
    frontend/react
    frontend/angular
 
+.. toctree::
+   :maxdepth: 1
+   :caption: Proyectos Fullstack
+
+   fullstack/task-learn-symfony
+
  
